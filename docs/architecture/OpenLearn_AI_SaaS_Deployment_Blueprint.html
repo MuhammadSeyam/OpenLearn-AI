@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenLearn AI — مخطط النشر السحابي العملي · Cloud SaaS Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<style>
+:root{
+  --bg:#06120f; --bg-2:#0a1a16; --surface:#0f231d; --surface-2:#14302a; --surface-3:#1c3d36;
+  --ink:#e2f5ef; --ink-2:#bfe3d8; --ink-3:#7fa89e; --muted:#5d7a72;
+  --brand:#10b981; --brand-2:#06b6d4; --brand-3:#34d399;
+  --gold:#fbbf24; --success:#22c55e; --warn:#f59e0b; --danger:#ef4444; --info:#3b82f6;
+  --line:#1a3530; --line-2:#28504a;
+  --shadow:0 10px 30px -12px rgba(0,0,0,.5);
+  --shadow-lg:0 20px 60px -20px rgba(16,185,129,.35);
+  --glow:0 0 0 1px rgba(16,185,129,.25), 0 8px 30px -8px rgba(16,185,129,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:'IBM Plex Sans Arabic','Cairo','Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.95;font-size:15px;-webkit-font-smoothing:antialiased;direction:rtl}
+code,pre,.mono{font-family:'JetBrains Mono','Fira Code',monospace;direction:LTR;text-align:left}
+a{color:var(--brand-3);text-decoration:none}
+a:hover{color:var(--brand-2)}
+
+.shell{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:linear-gradient(180deg,#06120f 0%,#0d2a23 100%);color:#bfe3d8;padding:0 0 30px;border-left:1px solid var(--line)}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:3px}
+.main{padding:0;max-width:1280px;margin:0 auto;width:100%}
+
+.side-head{padding:24px 22px 18px;border-bottom:1px solid var(--line);background:rgba(16,185,129,.06)}
+.side-head .brand-row{display:flex;align-items:center;gap:12px}
+.side-head .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#10b981,#06b6d4);display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:var(--glow)}
+.side-head .ttl{font-size:15px;font-weight:800;color:#fff;line-height:1.4}
+.side-head .sub{font-size:11px;color:var(--ink-3);margin-top:2px;font-weight:500}
+.side-head .pill{display:inline-block;margin-top:10px;padding:3px 10px;background:rgba(34,197,94,.15);color:var(--success);border-radius:999px;font-size:10.5px;font-weight:700;border:1px solid rgba(34,197,94,.25)}
+
+.toc{padding:16px 12px}
+.toc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;padding:0 10px 8px;font-weight:700}
+.toc-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--ink-3);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;margin-bottom:2px;line-height:1.5}
+.toc-item:hover{background:rgba(16,185,129,.1);color:var(--ink)}
+.toc-item.active{background:linear-gradient(90deg,rgba(16,185,129,.18),rgba(6,182,212,.08));color:#fff;border-right:3px solid var(--brand)}
+.toc-item .num{width:22px;height:22px;border-radius:6px;background:var(--surface-2);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--brand-3);flex-shrink:0}
+.toc-item.active .num{background:var(--brand);color:#fff}
+
+.hero{padding:48px 56px 40px;background:radial-gradient(ellipse at top right,rgba(16,185,129,.18),transparent 55%),radial-gradient(ellipse at bottom left,rgba(6,182,212,.12),transparent 50%);border-bottom:1px solid var(--line)}
+.hero .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.3);border-radius:999px;color:var(--brand-2);font-size:12px;font-weight:700;margin-bottom:18px}
+.hero h1{font-size:38px;font-weight:900;color:#fff;line-height:1.3;letter-spacing:-.01em;margin-bottom:14px}
+.hero h1 .grad{background:linear-gradient(135deg,#34d399,#22d3ee,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:16px;color:var(--ink-2);max-width:760px;line-height:1.85}
+.hero .meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+.hero .meta .m{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-3)}
+.hero .meta .m i{color:var(--brand-3)}
+.hero .meta .m b{color:var(--ink);font-weight:700}
+
+.section{padding:46px 56px;border-bottom:1px solid var(--line);scroll-margin-top:20px}
+.sec-head{display:flex;align-items:flex-start;gap:18px;margin-bottom:28px}
+.sec-num{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;font-size:22px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:var(--glow)}
+.sec-title h2{font-size:27px;font-weight:800;color:#fff;line-height:1.4;letter-spacing:-.01em}
+.sec-title .sub{font-size:12.5px;color:var(--ink-3);margin-top:5px;font-weight:600;font-family:'JetBrains Mono',monospace;direction:ltr;display:inline-block}
+h3{font-size:20px;font-weight:700;color:#fff;margin:30px 0 14px;line-height:1.5}
+h3 i{color:var(--brand-3);margin-left:8px}
+h4{font-size:16px;font-weight:700;color:var(--ink);margin:22px 0 10px;line-height:1.5}
+h4 i{color:var(--brand-2);margin-left:8px}
+p{margin-bottom:14px;color:var(--ink-2)}
+ul,ol{margin:0 0 18px 0;padding-right:22px}
+li{margin-bottom:8px;color:var(--ink-2);line-height:1.85}
+strong{color:#fff;font-weight:700}
+em{color:var(--brand-3);font-style:normal;font-weight:600}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);transition:all .25s}
+.card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.card h4{margin-top:0}
+.card.t-brand{border-right:4px solid var(--brand)}
+.card.t-success{border-right:4px solid var(--success)}
+.card.t-warn{border-right:4px solid var(--warn)}
+.card.t-danger{border-right:4px solid var(--danger)}
+.card.t-info{border-right:4px solid var(--info)}
+.card.t-purple{border-right:4px solid #a855f7}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+
+.callout{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(6,182,212,.04));border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:18px 20px;margin:18px 0}
+.callout .ttl{font-weight:800;color:#fff;margin-bottom:8px;display:flex;align-items:center;gap:8px;font-size:14.5px}
+.callout.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)}
+.callout.warn .ttl{color:var(--warn)}
+.callout.danger{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)}
+.callout.danger .ttl{color:var(--danger)}
+.callout.success{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)}
+.callout.success .ttl{color:var(--success)}
+.callout.info{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.3)}
+.callout.info .ttl{color:var(--info)}
+
+.table-wrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface)}
+th{background:var(--surface-2);color:#fff;font-weight:700;padding:12px 14px;text-align:right;border-bottom:1px solid var(--line-2);font-size:12.5px;white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+tr:hover td{background:rgba(16,185,129,.04)}
+tr:last-child td{border-bottom:none}
+.t-num{font-family:'JetBrains Mono',monospace;color:var(--brand-3);font-weight:700}
+.t-pos{color:var(--success);font-weight:700}
+.t-neg{color:var(--danger);font-weight:700}
+.t-warn{color:var(--warn);font-weight:700}
+
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;margin:0 4px 4px 0}
+.tag.brand{background:rgba(16,185,129,.15);color:var(--brand);border:1px solid rgba(16,185,129,.3)}
+.tag.success{background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.3)}
+.tag.warn{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid rgba(245,158,11,.3)}
+.tag.danger{background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
+.tag.info{background:rgba(59,130,246,.15);color:var(--info);border:1px solid rgba(59,130,246,.3)}
+.tag.purple{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.3)}
+.tag.gold{background:rgba(251,191,36,.15);color:var(--gold);border:1px solid rgba(251,191,36,.3)}
+
+.progress{margin:10px 0}
+.progress .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-bottom:5px;font-weight:600}
+.progress .lbl b{color:var(--ink);font-weight:700}
+.progress .bar{height:9px;background:var(--surface-3);border-radius:999px;overflow:hidden;position:relative}
+.progress .bar .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:width 1s}
+.progress .bar .fill.s{background:linear-gradient(90deg,var(--success),#4ade80)}
+.progress .bar .fill.w{background:linear-gradient(90deg,var(--warn),#fbbf24)}
+.progress .bar .fill.d{background:linear-gradient(90deg,var(--danger),#f87171)}
+
+.rate-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px 14px;background:var(--surface);border-radius:10px;border:1px solid var(--line)}
+.rate-row .name{flex:1;font-weight:600;color:var(--ink);font-size:13.5px}
+.rate-row .score{font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--brand-3);font-size:15px;min-width:55px;text-align:left}
+.stars{display:inline-flex;gap:2px}
+.stars i{color:var(--gold);font-size:11px}
+
+.timeline{position:relative;padding-right:24px;margin:18px 0}
+.timeline::before{content:'';position:absolute;right:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--brand),var(--brand-2),transparent)}
+.tl-item{position:relative;padding-bottom:22px;padding-right:24px}
+.tl-item::before{content:'';position:absolute;right:-19px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--brand);border:3px solid var(--bg);box-shadow:0 0 0 2px var(--brand)}
+.tl-item .tl-date{font-size:11px;color:var(--brand-3);font-weight:700;font-family:'JetBrains Mono',monospace;direction:ltr;display:inline-block;margin-bottom:4px}
+.tl-item .tl-title{font-weight:700;color:#fff;font-size:14.5px;margin-bottom:4px}
+.tl-item .tl-desc{font-size:13px;color:var(--ink-3);line-height:1.7}
+
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;margin:18px 0;overflow-x:auto}
+.diagram-title{font-size:12.5px;color:var(--ink-3);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;text-align:center}
+
+.arch-layer{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative}
+.arch-layer .lhead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.arch-layer .lic{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:15px;color:#fff;flex-shrink:0}
+.arch-layer .ltitle{font-weight:700;color:#fff;font-size:14px}
+.arch-layer .lsub{font-size:11px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;direction:ltr}
+.arch-layer .lboxes{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arch-layer .lbox{background:var(--surface-3);border:1px solid var(--line-2);border-radius:6px;padding:5px 10px;font-size:11.5px;color:var(--ink-2);font-weight:500}
+
+.flow-vertical{display:flex;flex-direction:column;align-items:center;gap:8px}
+.flow-node{background:var(--surface-2);border:1.5px solid var(--brand);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;color:#fff;text-align:center;min-width:200px;position:relative}
+.flow-node.alt{border-color:var(--brand-2)}
+.flow-node.dec{border-color:var(--warn);background:rgba(245,158,11,.08)}
+.flow-node.end{border-color:var(--success);background:rgba(34,197,94,.08)}
+.flow-arrow{color:var(--brand-3);font-size:18px;line-height:1}
+
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden}
+details[open]{border-color:var(--line-2)}
+summary{padding:13px 18px;cursor:pointer;font-weight:700;color:#fff;font-size:14px;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;font-size:12px;color:var(--ink-3);transition:transform .2s}
+details[open] summary::after{transform:rotate(180deg)}
+summary i.fa{color:var(--brand-3);margin-left:8px}
+details .body{padding:0 18px 16px}
+
+pre{background:#04130f;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:12.5px;line-height:1.7;color:#86efac;margin:14px 0}
+code{background:var(--surface-3);padding:2px 6px;border-radius:4px;font-size:12.5px;color:#67e8f9}
+pre code{background:transparent;padding:0;color:inherit}
+
+.cost-card{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line-2);border-radius:14px;padding:22px;margin:14px 0}
+.cost-card .total{font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--brand-3),var(--brand));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-family:'JetBrains Mono',monospace;direction:ltr;display:inline-block}
+.cost-card .total .cur{font-size:14px;color:var(--ink-3);-webkit-text-fill-color:var(--ink-3);margin-right:6px}
+.cost-card .lbl{font-size:12px;color:var(--ink-3);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+
+.mermaid{background:#fff;border-radius:12px;padding:20px;margin:18px 0;text-align:center}
+
+.rec-item{display:flex;gap:12px;padding:11px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:6px;transition:all .2s}
+.rec-item:hover{border-color:var(--brand);background:rgba(16,185,129,.04)}
+.rec-item .rn{width:30px;height:30px;border-radius:8px;background:var(--surface-3);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:var(--brand-3);flex-shrink:0}
+.rec-item .rt{font-size:13.5px;color:var(--ink);line-height:1.6;flex:1}
+.rec-item .save{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;flex-shrink:0;align-self:center;background:rgba(34,197,94,.15);color:var(--success)}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
+.stat-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.stat-box .v{font-size:28px;font-weight:900;color:#fff;font-family:'JetBrains Mono',monospace;direction:ltr;line-height:1}
+.stat-box .v.grad{background:linear-gradient(135deg,var(--brand-3),var(--brand-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-box .l{font-size:11.5px;color:var(--ink-3);margin-top:6px;font-weight:600}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.compare .col{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.compare .col h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.compare .col.bad{border-color:rgba(239,68,68,.3)}
+.compare .col.good{border-color:rgba(34,197,94,.3)}
+@media (max-width:768px){.compare{grid-template-columns:1fr}}
+
+.menu-toggle{display:none}
+@media (max-width:1024px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:fixed;top:0;right:-320px;width:300px;z-index:1000;transition:right .3s}
+  .sidebar.open{right:0}
+  .menu-toggle{display:block;position:fixed;top:14px;right:14px;z-index:1001;width:42px;height:42px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line-2);color:#fff;font-size:18px;cursor:pointer}
+  .hero,.section{padding:32px 22px}
+  .hero h1{font-size:26px}
+  .sec-title h2{font-size:21px}
+}
+@media (max-width:600px){
+  .hero h1{font-size:22px}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+
+.footer{padding:32px 56px;background:var(--bg-2);border-top:1px solid var(--line);text-align:center;color:var(--ink-3);font-size:12.5px}
+.footer .brand{font-weight:800;color:var(--brand-3);font-size:14px;margin-bottom:6px}
+
+/* Provider Card */
+.prov-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;transition:all .2s}
+.prov-card:hover{border-color:var(--brand)}
+.prov-card .pc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.prov-card .pc-name{font-weight:800;color:#fff;font-size:15px}
+.prov-card .pc-name i{color:var(--brand-3);margin-left:8px}
+.prov-card .pc-url{font-size:11px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;direction:ltr;margin-top:2px}
+.prov-card .pc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.prov-card .pc-cell{background:var(--surface-2);border-radius:6px;padding:8px 10px;font-size:12px}
+.prov-card .pc-cell .l{font-size:10px;color:var(--ink-3);font-weight:600;margin-bottom:2px}
+.prov-card .pc-cell .v{color:var(--ink);font-weight:600;font-size:12.5px}
+
+/* Decision Tree */
+.decision-tree{padding:14px 0}
+.dec-node{background:var(--surface-2);border:1.5px solid var(--brand);border-radius:10px;padding:12px 16px;margin:6px auto;max-width:560px;text-align:center;font-weight:600;color:#fff;font-size:13.5px}
+.dec-node.q{border-color:var(--gold);background:rgba(251,191,36,.08)}
+.dec-node.y{border-color:var(--success);background:rgba(34,197,94,.08)}
+.dec-node.n{border-color:var(--danger);background:rgba(239,68,68,.08)}
+.dec-branches{display:flex;justify-content:center;gap:80px;margin:10px 0}
+.dec-branch{flex:1;max-width:280px}
+.dec-label{font-size:11px;color:var(--ink-3);font-weight:700;text-align:center;margin-bottom:6px}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+<div class="shell">
+<aside class="sidebar">
+  <div class="side-head">
+    <div class="brand-row">
+      <div class="logo"><i class="fa-solid fa-cloud"></i></div>
+      <div>
+        <div class="ttl">OpenLearn SaaS</div>
+        <div class="sub">Cloud API Blueprint · v1.0</div>
+      </div>
+    </div>
+    <span class="pill"><i class="fa-solid fa-circle-check"></i> Cloud-Only · API-First</span>
+  </div>
+  <nav class="toc">
+    <div class="toc-label">جدول المحتويات</div>
+    <a class="toc-item" href="#s1"><span class="num">1</span><span>المعمارية السحابية</span></a>
+    <a class="toc-item" href="#s2"><span class="num">2</span><span>تفكيك مهام الـ AI</span></a>
+    <a class="toc-item" href="#s3"><span class="num">3</span><span>بحث النماذج المفتوحة</span></a>
+    <a class="toc-item" href="#s4"><span class="num">4</span><span>تحليل مقدمي API</span></a>
+    <a class="toc-item" href="#s5"><span class="num">5</span><span>الـ Stack النهائي</span></a>
+    <a class="toc-item" href="#s6"><span class="num">6</span><span>اقتصاد الـ Tokens</span></a>
+    <a class="toc-item" href="#s7"><span class="num">7</span><span>محاكاة التكاليف</span></a>
+    <a class="toc-item" href="#s8"><span class="num">8</span><span>استراتيجية الـ Free Tier</span></a>
+    <a class="toc-item" href="#s9"><span class="num">9</span><span>50+ تقنية توفير</span></a>
+    <a class="toc-item" href="#s10"><span class="num">10</span><span>خارطة نشر الطلاب</span></a>
+    <a class="toc-item" href="#s11"><span class="num">11</span><span>نقد التقرير السابق</span></a>
+    <a class="toc-item" href="#s12"><span class="num">12</span><span>توصية الـ CTO النهائية</span></a>
+  </nav>
+</aside>
+
+<main class="main">
+<div class="hero">
+  <span class="badge"><i class="fa-solid fa-rocket"></i> مخطط نشر سحابي · للطلاب · بميزانية صفر</span>
+  <h1>هل يمكن تشغيل <span class="grad">OpenLearn AI</span> كمنصة SaaS باستخدام APIs فقط؟</h1>
+  <p>تقرير عملي يحلّل الجدوى التقنية والمالية لنشر OpenLearn AI كمنصة تعلّم سحابية تعتمد حصراً على APIs لنماذج مفتوحة المصدر. لا نماذج محلية. لا GPU. لا استثمار أولي. مُصمّم لفريق طلاب جامعيين بميزانية تتراوح بين <strong>0$ و 500$ شهرياً</strong>. يحتوي 12 قسماً، 5 سيناريوهات تكلفة، تحليل 9 عائلات نماذج، 12+ مزوّد API، و50+ تقنية توفير مصنّفة حسب الأثر.</p>
+  <div class="meta">
+    <div class="m"><i class="fa-solid fa-calendar"></i> <span>التاريخ: <b>14 يوليو 2026</b></span></div>
+    <div class="m"><i class="fa-solid fa-cloud"></i> <span>النمط: <b>Cloud-Only APIs</b></span></div>
+    <div class="m"><i class="fa-solid fa-users"></i> <span>الفريق: <b>طلاب جامعيون</b></span></div>
+    <div class="m"><i class="fa-solid fa-coins"></i> <span>الميزانية: <b>0$ — 500$/شهر</b></span></div>
+    <div class="m"><i class="fa-solid fa-scale-balanced"></i> <span>السؤال: <b>هل هو قابل للتطبيق؟</b></span></div>
+  </div>
+</div>
+
+<!-- ============================ SECTION 1 ============================ -->
+<section id="s1" class="section">
+  <div class="sec-head">
+    <div class="sec-num">1</div>
+    <div class="sec-title">
+      <h2>المعمارية السحابية الكاملة — Online AI Architecture</h2>
+      <div class="sub">No Local Models · API-Only · Multi-Provider Fallback</div>
+    </div>
+  </div>
+
+  <p>القرار الجوهري في هذا التقرير: <strong>لا نماذج محلية إطلاقاً</strong>. كل استدعاء LLM، كل embedding، كل OCR يتم عبر APIs سحابية لنماذج مفتوحة المصدر. هذا القرار له تبعات عميقة: لا حاجة لـ GPU، لا VRAM، لا Ollama، لكن في المقابل نحن رهائنون لـ rate limits وpricing وتوفر الـ providers. هذا القسم يقدّم التصميم الكامل لطبقة الـ AI مع شرح كل مكوّن وتدفّق البيانات.</p>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-lightbulb"></i> لماذا API-Only هو القرار الصحيح لفريق طلاب؟</div>
+    <p>ثلاثة أسباب قاهرة: (1) <strong>تكلفة ثابتة منخفضة</strong> — لا GPU server بـ 200$/شهر، بل 20-50$/شهر APIs. (2) <strong>لا DevOps معقّد</strong> — لا إدارة CUDA، لا model loading، لا VRAM tuning. (3) <strong>scalability فوري</strong> — الـ provider يتوسّع تلقائياً، لا نحتاج نسخ خوادم. العيب الوحيد: <em>الاعتماد على طرف ثالث</em> — وهذا نعالجه بـ Multi-Provider Fallback.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-sitemap"></i> 1.1 المخطط المعماري الكامل</h3>
+  <div class="diagram">
+    <div class="diagram-title">Cloud-Only AI Architecture · 9 Layers</div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#3b82f6"><i class="fa-solid fa-laptop-code"></i></div><div><div class="ltitle">Layer 1 — Frontend (Next.js)</div><div class="lsub">SSR · Streaming UI · PWA</div></div></div>
+      <div class="lboxes"><span class="lbox">Next.js 16 App Router</span><span class="lbox">React 19 RSC</span><span class="lbox">TanStack Query</span><span class="lbox">shadcn/ui</span><span class="lbox">SSE Client</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#a855f7"><i class="fa-solid fa-shield-halved"></i></div><div><div class="ltitle">Layer 2 — API Gateway (FastAPI)</div><div class="lsub">Auth · Rate Limit · Validation</div></div></div>
+      <div class="lboxes"><span class="lbox">JWT Auth</span><span class="lbox">Pydantic v2</span><span class="lbox">Rate Limit (Redis)</span><span class="lbox">Audit Logs</span><span class="lbox">SSE Streaming</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#10b981"><i class="fa-solid fa-route"></i></div><div><div class="ltitle">Layer 3 — AI Gateway (LiteLLM)</div><div class="lsub">Unified API · Cost Tracking · Fallback</div></div></div>
+      <div class="lboxes"><span class="lbox">LiteLLM Router</span><span class="lbox">Provider Selection</span><span class="lbox">Automatic Fallback</span><span class="lbox">Cost &amp; Token Logging</span><span class="lbox">Rate Limit Aggregation</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#06b6d4"><i class="fa-solid fa-cloud"></i></div><div><div class="ltitle">Layer 4 — Provider Layer (Multi-Source)</div><div class="lsub">Open-Source Models via Cloud APIs</div></div></div>
+      <div class="lboxes"><span class="lbox">Groq (Llama/Qwen)</span><span class="lbox">OpenRouter (universal)</span><span class="lbox">Cloudflare AI</span><span class="lbox">HuggingFace Inference</span><span class="lbox">Together AI</span><span class="lbox">Cerebras</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#f59e0b"><i class="fa-solid fa-pen-fancy"></i></div><div><div class="ltitle">Layer 5 — Prompt Layer</div><div class="lsub">Templates · Few-Shot · Compression</div></div></div>
+      <div class="lboxes"><span class="lbox">Jinja2 Templates</span><span class="lbox">Few-Shot Library</span><span class="lbox">Prompt Compression</span><span class="lbox">System Prompt Hardening</span><span class="lbox">JSON Schema Enforcement</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#ef4444"><i class="fa-solid fa-vector-square"></i></div><div><div class="ltitle">Layer 6 — Embedding Layer</div><div class="lsub">BGE-m3 · Hybrid Storage</div></div></div>
+      <div class="lboxes"><span class="lbox">BGE-m3 (HuggingFace)</span><span class="lbox">Cohere Embed v3 (fallback)</span><span class="lbox">Voyage AI (backup)</span><span class="lbox">Batch Embedding</span><span class="lbox">Cache in Redis</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#8b5cf6"><i class="fa-solid fa-database"></i></div><div><div class="ltitle">Layer 7 — Vector Search + Reranker</div><div class="lsub">Qdrant · Hybrid BM25 · Cross-Encoder</div></div></div>
+      <div class="lboxes"><span class="lbox">Qdrant Cloud (free 1GB)</span><span class="lbox">BM25 Hybrid (Qdrant built-in)</span><span class="lbox">Cohere Rerank (free 1000/mo)</span><span class="lbox">Jina Reranker (backup)</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#22c55e"><i class="fa-solid fa-eye"></i></div><div><div class="ltitle">Layer 8 — OCR &amp; Vision</div><div class="lsub">Cloud APIs Only</div></div></div>
+      <div class="lboxes"><span class="lbox">Cloudflare Workers AI (Mistral OCR)</span><span class="lbox">HuggingFace (Surya)</span><span class="lbox">Google Vision (premium fallback)</span><span class="lbox">Tesseract via Cloud Run (emergency)</span></div>
+    </div>
+    <div class="arch-layer">
+      <div class="lhead"><div class="lic" style="background:#64748b"><i class="fa-solid fa-bolt"></i></div><div><div class="ltitle">Layer 9 — Caching &amp; Fallback</div><div class="lsub">Semantic Cache · Provider Failover</div></div></div>
+      <div class="lboxes"><span class="lbox">Redis Semantic Cache</span><span class="lbox">GPTCache</span><span class="lbox">Provider Failover Chain</span><span class="lbox">Circuit Breakers</span><span class="lbox">Langfuse Tracing</span></div>
+    </div>
+  </div>
+
+  <h3><i class="fa-solid fa-diagram-project"></i> 1.2 مخطط تدفّق البيانات (Request Lifecycle)</h3>
+  <div class="mermaid">
+sequenceDiagram
+    participant U as 👤 المستخدم
+    participant F as Frontend
+    participant API as FastAPI
+    participant Cache as Redis Cache
+    participant Router as LiteLLM Router
+    participant Prov1 as Provider A
+    participant Prov2 as Provider B
+    participant Langfuse as Langfuse
+    
+    U->>F: يرسل سؤال
+    F->>API: POST /chat (JWT)
+    API->>API: Rate Limit + Auth Check
+    API->>Cache: Semantic cache lookup
+    alt Cache Hit
+        Cache-->>API: cached response
+        API-->>F: stream cached (SSE)
+    else Cache Miss
+        API->>Router: chat(prompt, model="qwen2.5-7b")
+        Router->>Prov1: try Groq first
+        alt Groq OK
+            Prov1-->>Router: streamed tokens
+        else Groq Fail/Rate
+            Router->>Prov2: fallback OpenRouter
+            Prov2-->>Router: streamed tokens
+        end
+        Router->>Langfuse: log trace + cost
+        Router-->>API: streamed tokens
+        API->>Cache: store response (TTL 24h)
+        API-->>F: stream (SSE)
+    end
+    F-->>U: عرض streaming
+  </div>
+
+  <h3><i class="fa-solid fa-list-check"></i> 1.3 شرح كل طبقة بتفصيل</h3>
+
+  <details open>
+    <summary><i class="fa-solid fa-route"></i> AI Gateway (LiteLLM) — قلب المعمارية</summary>
+    <div class="body">
+      <p>الـ AI Gateway هو نقطة الدخول الوحيدة لكل استدعاءات الـ LLM. بدل أن نكتب adapter لكل provider، نستخدم <strong>LiteLLM</strong> — مكتبة Python مفتوحة المصدر توحّد الـ API لأكثر من 100+ provider. الفوائد: (1) كود واحد يعمل مع Groq و OpenRouter و Together وغيرها. (2) Automatic fallback عند فشل provider. (3) Cost tracking تلقائي. (4) Rate limit aggregation عبر providers. (5) Retry logic ذكي.</p>
+      <pre><code># مثال: استدعاء Qwen عبر LiteLLM مع fallback
+from litellm import completion
+response = completion(
+    model="groq/qwen-2.5-7b-instruct",
+    messages=[{"role":"user","content":"اشرح الانحدار اللوجستي"}],
+    fallbacks=["openrouter/qwen/qwen-2.5-7b-instruct", "together-ai/Qwen/Qwen2.5-7B-Instruct"],
+    api_key=...,
+)</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary><i class="fa-solid fa-cloud"></i> Provider Layer — متعدد المصادر</summary>
+    <div class="body">
+      <p>لا تعتمد على provider واحد. كل provider له نقاط ضعف: Groq rate limits صارمة، OpenRouter أبطأ، Together أحياناً يفشل، Cloudflare AI queue بطيء. الحل: <strong>قائمة providers مرتّبة حسب الأولوية</strong> لكل مهمة. مثلاً للـ Chat: Groq → OpenRouter → Together. للـ Embeddings: HuggingFace → Cohere → Voyage. الـ LiteLLM Router يحاولهم بالترتيب.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><i class="fa-solid fa-pen-fancy"></i> Prompt Layer — القاعدة الذهبية للـ Tokens</summary>
+    <div class="body">
+      <p>كل token يُكلّف مالاً. الـ Prompt Layer مسؤول عن: (1) <strong>Templates</strong> — لا تنسخ نفس الـ system prompt في كل طلب، استخدم template مُخزّن. (2) <strong>Prompt Compression</strong> — استخدم LLMLingua لضغط الـ prompt بنسبة 50% دون خسارة جوهرية في الجودة. (3) <strong>Few-Shot Library</strong> — أمثلة عربية مُختارة بعناية، تُضاف فقط عند الحاجة. (4) <strong>JSON Schema Enforcement</strong> — اطلب JSON صارم لتقليل post-processing.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><i class="fa-solid fa-vector-square"></i> Embedding Layer — الأرخص ممكن</summary>
+    <div class="body">
+      <p>Embeddings هي أكثر ما يُستهلك في النظام (آلاف chunks لكل PDF). الحل الأمثل: <strong>HuggingFace Inference API (مجاني جزئياً)</strong> مع <code>BAAI/bge-m3</code>. fallback إلى <code>Cohere embed-multilingual-v3</code> (0.10$/1M tokens، free tier 1000 calls/شهر). <strong>تقنية التوفير الكبرى:</strong> cache الـ embeddings في Redis بـ key = hash(text). لنفس المادة، الـ embedding يُحسب مرة واحدة فقط.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><i class="fa-solid fa-database"></i> Vector Search + Reranker</summary>
+    <div class="body">
+      <p><strong>Qdrant Cloud</strong> — free tier 1GB (يكفي لـ ~100,000 chunks بـ 1024-dim). Hybrid search مدمج (Vector + BM25). للـ Reranker: <strong>Cohere Rerank</strong> free 1000 calls/شهر، أو <strong>Jina Reranker v2</strong> (1M tokens free). عند تجاوز الـ free tier، استخدم Qdrant's built-in reranker (أقل دقة لكن مجاني).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><i class="fa-solid fa-bolt"></i> Caching — لماذا هو حاسم؟</summary>
+    <div class="body">
+      <p>الـ caching يقلّل تكاليف الـ API بـ 30-60%. ثلاث طبقات: (1) <strong>Exact cache</strong> — hash(prompt) في Redis، TTL 24h. (2) <strong>Semantic cache</strong> — GPTCache يطابق prompts مشابهة دلالياً (تجاوز 90% similarity). (3) <strong>Embedding cache</strong> — لا تُعد حساب embedding لنفس الـ chunk. تقدير التوفير: 40-50% من استدعاءات الـ LLM، 80% من استدعاءات الـ embedding.</p>
+    </div>
+  </details>
+
+  <h3><i class="fa-solid fa-shield"></i> 1.4 استراتيجية الـ Fallback</h3>
+  <div class="mermaid">
+flowchart TB
+  Start["📞 استدعاء AI"] --> Try1{"المزوّد الأول<br>Groq"}
+  Try1 -- "نجح" --> OK["✅ استجابة"]
+  Try1 -- "فشل / Rate Limit" --> Try2{"المزوّد الثاني<br>OpenRouter"}
+  Try2 -- "نجح" --> OK
+  Try2 -- "فشل" --> Try3{"المزوّد الثالث<br>Together AI"}
+  Try3 -- "نجح" --> OK
+  Try3 -- "فشل" --> Cache{"Semantic Cache<br>لديه إجابة مشابهة؟"}
+  Cache -- "نعم" --> Approx["⚠️ استجابة قريبة + تنبيه"]
+  Cache -- "لا" --> Fail["❌ اعتذار + retry لاحقاً"]
+  style OK fill:#dcfce7
+  style Approx fill:#fef3c7
+  style Fail fill:#fecaca
+  </div>
+
+  <div class="callout info">
+    <div class="ttl"><i class="fa-solid fa-circle-info"></i> الخلاصة المعمارية</div>
+    <p>هذه المعمارية <strong>قابلة للتشغيل بـ 0$ شهرياً</strong> (عبر free tiers فقط) حتى 50-100 مستخدم، ومع نمو الاستخدام تنتقل بسلاسة إلى 20-100$/شهر لـ 1000 مستخدم. لا GPU، لا model management، لا DevOps معقّد. كل ما يحتاجه الفريق: خادم backend صغير ($5-15/شهر) + قاعدة بيانات managed + Redis. الـ AI كله عبر APIs.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 2 ============================ -->
+<section id="s2" class="section">
+  <div class="sec-head">
+    <div class="sec-num">2</div>
+    <div class="sec-title">
+      <h2>تفكيك مهام الـ AI — Task Decomposition</h2>
+      <div class="sub">هل كل مهمة تحتاج LLM فعلاً؟</div>
+    </div>
+  </div>
+
+  <p>أكبر خطأ في مشاريع AI هو استخدام LLM لكل شيء. هذا يُكلّف mucho، يُبطّئ النظام، ويُدخّل hallucination لا داعي له. كثير من المهام يمكن حلّها بـ <strong>خوارزميات كلاسيكية</strong> أو <strong>embeddings فقط</strong> أو <strong>rules engine</strong> — بدون LLM إطلاقاً. هذا القسم يفكّك 15 مهمة في OpenLearn AI، وللأهمية: يحدّد أيها يستحق LLM وأيها لا.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>المهمة</th>
+          <th>تحتاج LLM؟</th>
+          <th>بدائل بدون AI</th>
+          <th>Embeddings كافٍ؟</th>
+          <th>التعقيد</th>
+          <th>Tokens/طلب</th>
+          <th>التوصية</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>① Chat (RAG Q&amp;A)</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>—</td>
+          <td>لا (يحتاج generation)</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~1500</td>
+          <td>LLM إجباري. Qwen 2.5 7B عبر Groq.</td>
+        </tr>
+        <tr>
+          <td><strong>② Summaries</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>Extractive (TextRank)</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~800</td>
+          <td>LLM للـ "exam summary". TextRank للـ "quick".</td>
+        </tr>
+        <tr>
+          <td><strong>③ MCQ Generation</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>Templates + Cloze</td>
+          <td>لا</td>
+          <td><span class="tag warn">عالٍ</span></td>
+          <td>~2500</td>
+          <td>LLM ضروري للـ distractors ذكية.</td>
+        </tr>
+        <tr>
+          <td><strong>④ True/False</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>Templates + sentence swap</td>
+          <td>لا</td>
+          <td><span class="tag success">منخفض</span></td>
+          <td>~600</td>
+          <td>استخدم templates 70% + LLM 30%.</td>
+        </tr>
+        <tr>
+          <td><strong>⑤ Fill-in-Blank</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>NER + Cloze deletion</td>
+          <td>لا</td>
+          <td><span class="tag success">منخفض</span></td>
+          <td>~400</td>
+          <td>NER عربي (AraBERT) + LLM للـ polish.</td>
+        </tr>
+        <tr>
+          <td><strong>⑥ Flashcards</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>Templates</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~700</td>
+          <td>LLM للـ Q/A pairs عالية الجودة.</td>
+        </tr>
+        <tr>
+          <td><strong>⑦ Exam Generation (CAT)</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>IRT + Item Bank</td>
+          <td>لا</td>
+          <td><span class="tag danger">عالٍ جداً</span></td>
+          <td>~0 (item selection)</td>
+          <td>خوارزمية IRT. LLM فقط لتوليد أسئلة جديدة.</td>
+        </tr>
+        <tr>
+          <td><strong>⑧ Knowledge Graph</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>NER + Rule-based</td>
+          <td>لا</td>
+          <td><span class="tag warn">عالٍ</span></td>
+          <td>~3000</td>
+          <td>LLM للـ relation extraction. NER للـ concepts.</td>
+        </tr>
+        <tr>
+          <td><strong>⑨ Mind Maps</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>Hierarchical clustering</td>
+          <td><span class="tag success">نعم</span></td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0 (embedding-based)</td>
+          <td>Embedding clustering يكفي 80% من الحالات.</td>
+        </tr>
+        <tr>
+          <td><strong>⑩ OCR</strong></td>
+          <td><span class="tag danger">لا (نماذج متخصصة)</span></td>
+          <td>Tesseract/Surya</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0 (vision API)</td>
+          <td>نماذج vision متخصصة (Surya) — لا LLM.</td>
+        </tr>
+        <tr>
+          <td><strong>⑪ Image Understanding</strong></td>
+          <td><span class="tag success">نعم (VLM)</span></td>
+          <td>—</td>
+          <td>لا</td>
+          <td><span class="tag warn">عالٍ</span></td>
+          <td>~1200</td>
+          <td>VLM (Qwen-VL) لتفسير الرسوم. ميزة مؤجّلة.</td>
+        </tr>
+        <tr>
+          <td><strong>⑫ Adaptive Recommendations</strong></td>
+          <td><span class="tag danger">لا</span></td>
+          <td>Rules + BKT</td>
+          <td><span class="tag success">نعم (للـ similarity)</span></td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0</td>
+          <td>خوارزميات deterministic + BKT. لا LLM إطلاقاً.</td>
+        </tr>
+        <tr>
+          <td><strong>⑬ Difficulty Estimation</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>IRT + Flesch-Kincaid</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0 (formula)</td>
+          <td>قراءة النص + IRT. LLM فقط للـ initial labeling.</td>
+        </tr>
+        <tr>
+          <td><strong>⑭ Translation</strong></td>
+          <td><span class="tag success">نعم</span></td>
+          <td>Google Translate API</td>
+          <td>لا</td>
+          <td><span class="tag success">منخفض</span></td>
+          <td>~500</td>
+          <td>NLLB-200 (مفتوح) أو Google Translate API.</td>
+        </tr>
+        <tr>
+          <td><strong>⑮ Concept Extraction</strong></td>
+          <td><span class="tag warn">أحياناً</span></td>
+          <td>NER (AraBERT)</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0 (NER model)</td>
+          <td>NER للـ initial. LLM للـ expansion/disambiguation.</td>
+        </tr>
+        <tr>
+          <td><strong>⑯ Learning Analytics</strong></td>
+          <td><span class="tag danger">لا</span></td>
+          <td>SQL aggregations</td>
+          <td>لا</td>
+          <td><span class="tag success">منخفض</span></td>
+          <td>~0</td>
+          <td>Queries SQL. لا AI إطلاقاً.</td>
+        </tr>
+        <tr>
+          <td><strong>⑰ Student Modeling (BKT/IRT)</strong></td>
+          <td><span class="tag danger">لا</span></td>
+          <td>Bayesian formulas</td>
+          <td>لا</td>
+          <td><span class="tag info">متوسط</span></td>
+          <td>~0</td>
+          <td>صيغ رياضية صرفة. لا LLM إطلاقاً.</td>
+        </tr>
+        <tr>
+          <td><strong>⑱ Spaced Repetition (SM-2)</strong></td>
+          <td><span class="tag danger">لا</span></td>
+          <td>SM-2 algorithm</td>
+          <td>لا</td>
+          <td><span class="tag success">منخفض</span></td>
+          <td>~0</td>
+          <td>خوارزمية Anki الشهيرة. لا AI.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-pie"></i> 2.1 توزيع المهام حسب الحاجة لـ LLM</h3>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="v grad">7</div><div class="l">مهام تحتاج LLM إجباري</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--warn),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent">5</div><div class="l">مهام LLM اختياري</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--danger),#f87171);-webkit-background-clip:text;-webkit-text-fill-color:transparent">6</div><div class="l">مهام لا تحتاج LLM</div></div>
+    <div class="stat-box"><div class="v">~65%</div><div class="l">توفير بتجنّب LLM</div></div>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الاكتشاف الأهم</div>
+    <p>من أصل 18 مهمة، <strong>فقط 7 (39%)</strong> تحتاج LLM فعلاً. الـ 11 المتبقية يمكن حلها بـ NER، SQL، خوارزميات كلاسيكية، أو embeddings. هذا يعني أن <strong>تكلفة الـ AI يمكن تخفيضها بـ 60-70%</strong> بمجرد تطبيق هذا التفكيك بدل "استخدم LLM لكل شيء". الأمثلة: Adaptive Engine = pure rules + BKT (0 tokens). Analytics = SQL (0 tokens). Mind Maps = embedding clustering (0 LLM tokens).</p>
+  </div>
+
+  <h3><i class="fa-solid fa-lightbulb"></i> 2.2 أمثلة تفصيلية</h3>
+
+  <h4>مثال: Adaptive Recommendations بدون LLM</h4>
+  <pre><code>def recommend_next_concept(student_skm, kg, csp):
+    candidates = [c for c in kg.concepts 
+                  if c.mastery &lt; 0.7  # ضعيف أو متوسط
+                  and all(p.mastery &gt; 0.5 for p in kg.prereqs(c))]
+    
+    score = lambda c: (
+        0.4 * (1 - c.mastery) +             # حاجة
+        0.3 * kg.unlocks_count(c) +          # قيمة المستقبل
+        0.2 * forgetting_risk(c) +           # خطر النسيان
+        0.1 * goal_alignment(c, csp.goals)   # توافق مع الأهداف
+    )
+    return sorted(candidates, key=score, reverse=True)[:3]
+# تكلفة الـ tokens: 0$. زمن التنفيذ: 50ms.</code></pre>
+
+  <h4>مثال: Mind Map من Embeddings</h4>
+  <p>بدل سؤال LLM "ارسم خريطة ذهنية"، استخدم: (1) استخراج الجمل المفتاحية بـ YAKE (مجاني). (2) embeddings لها بـ BGE-m3. (3) hierarchical clustering بـ scikit-learn. (4) عرض بـ D3.js. النتيجة: mind map في ثانيتين، 0 LLM tokens، 0$ تكلفة.</p>
+
+  <h4>مثال: Difficulty Estimation بدون LLM</h4>
+  <p>للنصوص العربية، استخدم: (1) <strong>Flesch Reading Ease</strong> المكيّف للعربية (طول الجملة، الكلمات المعقّدة). (2) نسبة الكلمات خارج قائمة الـ 3000 كلمة الأكثر شيوعاً. (3) IRT لاحقاً عند توفر بيانات الطلاب. <strong>لا LLM. لا tokens. لا تكلفة.</strong></p>
+</section>
+
+<!-- ============================ SECTION 3 ============================ -->
+<section id="s3" class="section">
+  <div class="sec-head">
+    <div class="sec-num">3</div>
+    <div class="sec-title">
+      <h2>بحث النماذج المفتوحة — Open-Source Models Research</h2>
+      <div class="sub">9 عائلات · 30+ نماذج · مقارنة عميقة</div>
+    </div>
+  </div>
+
+  <p>كل نماذج هذا التقرير <strong>مفتوحة المصدر</strong> (Apache 2.0، MIT، أو رخص مشابهة). لا GPT-4. لا Claude. لا Gemini. السبب: (1) تكلفة منخفضة على providers مفتوحة. (2) توفر على多家 providers (مرونة). (3) مبدأ المشروع: Open Source. هذا القسم يقارن 9 عائلات نماذج عبر 15 معياراً، ويحدّد الأنسب لكل مهمة.</p>
+
+  <h3><i class="fa-solid fa-table"></i> 3.1 المقارنة الشاملة للعائلات</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>العائلة</th>
+          <th>أفضل نماذجها</th>
+          <th>العربية</th>
+          <th>الإنجليزية</th>
+          <th>Reasoning</th>
+          <th>JSON Output</th>
+          <th>Tool Calling</th>
+          <th>Long Context</th>
+          <th>متاح على APIs؟</th>
+          <th>الترخيص</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Qwen</strong></td>
+          <td>Qwen 2.5 7B/14B/72B, Qwen-Math</td>
+          <td class="t-pos">10/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">128K</td>
+          <td class="t-pos">Groq, OpenRouter, Together, HF</td>
+          <td>Apache 2.0</td>
+        </tr>
+        <tr>
+          <td><strong>DeepSeek</strong></td>
+          <td>DeepSeek V3, R1, Coder</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-pos">10/10</td>
+          <td class="t-pos">10/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">64K</td>
+          <td class="t-pos">OpenRouter, Together, HF, Fireworks</td>
+          <td>MIT</td>
+        </tr>
+        <tr>
+          <td><strong>Llama</strong></td>
+          <td>Llama 3.1 8B/70B/405B, Llama 3.2</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-pos">10/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-pos">128K</td>
+          <td class="t-pos">Groq, OpenRouter, Together, Fireworks, Cerebras</td>
+          <td>Llama 3 License</td>
+        </tr>
+        <tr>
+          <td><strong>Mistral</strong></td>
+          <td>Mistral 7B, Mixtral 8x7B, Mistral Nemo</td>
+          <td class="t-warn">6/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">32K-128K</td>
+          <td class="t-pos">OpenRouter, Together, HF, Cloudflare</td>
+          <td>Apache 2.0</td>
+        </tr>
+        <tr>
+          <td><strong>Gemma</strong></td>
+          <td>Gemma 2 9B/27B, Gemma 3</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-warn">6/10</td>
+          <td class="t-warn">8K</td>
+          <td class="t-pos">OpenRouter, Together, HF, Cloudflare</td>
+          <td>Gemma License</td>
+        </tr>
+        <tr>
+          <td><strong>Phi</strong></td>
+          <td>Phi-3.5 Mini, Phi-3 Medium</td>
+          <td class="t-warn">5/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-warn">6/10</td>
+          <td class="t-warn">5/10</td>
+          <td class="t-pos">128K</td>
+          <td class="t-pos">OpenRouter, HF, Azure</td>
+          <td>MIT</td>
+        </tr>
+        <tr>
+          <td><strong>OLMo</strong></td>
+          <td>OLMo 2 7B/13B</td>
+          <td class="t-neg">4/10</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-warn">5/10</td>
+          <td class="t-neg">3/10</td>
+          <td class="t-warn">4K</td>
+          <td class="t-warn">HF فقط</td>
+          <td>Apache 2.0 (fully open)</td>
+        </tr>
+        <tr>
+          <td><strong>Aya</strong> (Cohere)</td>
+          <td>Aya 8B, Aya 23, Aya Expanse</td>
+          <td class="t-pos">9/10</td>
+          <td class="t-pos">8/10</td>
+          <td class="t-warn">7/10</td>
+          <td class="t-warn">6/10</td>
+          <td class="t-warn">5/10</td>
+          <td class="t-warn">8K</td>
+          <td class="t-warn">HF, Cohere Platform</td>
+          <td>CC-BY-NC (تجاري محدود)</td>
+        </tr>
+        <tr>
+          <td><strong>SmolLM</strong></td>
+          <td>SmolLM2 135M/360M/1.7B</td>
+          <td class="t-neg">3/10</td>
+          <td class="t-warn">6/10</td>
+          <td class="t-neg">4/10</td>
+          <td class="t-neg">4/10</td>
+          <td class="t-neg">2/10</td>
+          <td class="t-warn">8K</td>
+          <td class="t-warn">HF فقط</td>
+          <td>Apache 2.0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-microscope"></i> 3.2 التحليل التفصيلي لكل عائلة</h3>
+
+  <div class="card t-brand">
+    <h4><i class="fa-solid fa-crown"></i> Qwen 2.5 — الفائز العام للعربية</h4>
+    <p><strong>لماذا يفوز:</strong> Qwen 2.5 هو <em>النموذج الوحيد</em> في فئته (7B-72B) الذي يدعم العربية بجودة قريبة من GPT-4. مُدرَّب على 18 trillion tokens منها نسبة كبيرة من العربية. JSON output ممتاز (يدعم structured outputs natively). Tool calling مستقر. متاح على كل providers الكبرى.</p>
+    <p><strong>الإصدارات الموصى بها:</strong> Qwen 2.5 7B Instruct (للـ chat العادي)، Qwen 2.5 14B (للـ MCQ)، Qwen 2.5 72B (للـ KG extraction المهم). <strong>التوفر:</strong> Groq (مجاني بـ rate limits)، OpenRouter ($0.15/M input)، Together AI ($0.20/M).</p>
+  </div>
+
+  <div class="card t-brand">
+    <h4><i class="fa-solid fa-brain"></i> DeepSeek V3/R1 — ملك الـ Reasoning</h4>
+    <p><strong>لماذا مميز:</strong> DeepSeek R1 يتفوّق على GPT-4 في مهام الـ reasoning المجربة (MATH، GSM8K، MMLU). للأهداف التعليمية المتقدمة (إثبات نظرية، حل مسائل معقّدة)، لا منافس له في فئة الـ open-source. <strong>السلب:</strong> العربية أقل من Qwen بـ 2 نقاط. الـ API أبطأ (reasoing chain طويلة).</p>
+    <p><strong>التوفر:</strong> OpenRouter ($0.55/M input)، DeepSeek official ($0.14/M input — أرخص 4x من OpenRouter)، Fireworks. <strong>الاستخدام في OpenLearn:</strong> صعوبة المسائل، توليد إثباتات، شرح خطوات الحل المعقّدة.</p>
+  </div>
+
+  <div class="card t-brand">
+    <h4><i class="fa-solid fa-fire"></i> Llama 3.1 — الأكثر شعبية</h4>
+    <p><strong>الميزة:</strong> أكبر مجتمع، أكثر providers، استقرار أسطوري. متاح بـ speeds مذهلة على Groq (500+ tokens/s) و Cerebras (1000+ tokens/s). <strong>السلب:</strong> العربية جودة متوسطة. يكتب عربي لكن أحياناً بإيقاع إنجليزي، ويخلط LTR/RTL.</p>
+    <p><strong>الاستخدام:</strong> المهام التي لا تحتاج عربياً عالي الجودة — paraphrasing، تصحيح الكود، استخراج البيانات.</p>
+  </div>
+
+  <div class="card t-brand">
+    <h4><i class="fa-solid fa-wind"></i> Mistral — الخيار الأوروبي</h4>
+    <p><strong>الميزة:</strong> Mixtral 8x7B MoE — جودة عالية مع سرعة عالية. Mistral Nemo 12B خيار وسط ممتاز. <strong>السلب:</strong> العربية أضعف من Qwen وLlama. الـ JSON output متوسط الجودة.</p>
+    <p><strong>التوفر:</strong> Together، OpenRouter، Cloudflare AI (مجاني!). <strong>الاستخدام:</strong> المهام الثانوية، الـ classification، الترجمة.</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4><i class="fa-solid fa-triangle-exclamation"></i> Gemma — محدود للعربية</h4>
+    <p><strong>المشكلة:</strong> Gemma 2 9B جودة جيدة للإنجليزية، لكن العربية ضعيفة (7/10). context قصير (8K) يمنع استخدامه للـ RAG مع PDFs طويلة. <strong>الاستخدام الوحيد الموصى به:</strong> المهام الإنجليزية البحتة (شرح كود، paraphrasing تقني).</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4>Phi-3.5 — سريع لكن محدود</h4>
+    <p>نماذج صغيرة (3.8B) سريعة جداً وبتكلفة منخفضة. <strong>السلب:</strong> جودة العربية منخفضة (5/10). لا يدعم tool calling بشكل مستقر. <strong>الاستخدام:</strong> مهام بسيطة جداً (classification، short answers).</p>
+  </div>
+
+  <div class="card t-danger">
+    <h4><i class="fa-solid fa-ban"></i> OMo، Aya، SmolLM — لا للتشغيل السحابي</h4>
+    <p><strong>OLMo:</strong> fully open لكن العربية ضعيفة جداً (4/10)، context قصير، لا يدعم APIs تجارية. <strong>Aya:</strong> عربي ممتاز لكن رخصة CC-BY-NC تمنع الاستخدام التجاري. <strong>SmolLM:</strong> صغير جداً، غير مناسب للمهام التعليمية الجادة. <strong>التوصية:</strong> لا تستخدمهم في OpenLearn SaaS.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-bar"></i> 3.3 التقييم النهائي حسب المهمة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المهمة</th><th>النموذج الأمثل</th><th>السبب</th><th>البديل</th></tr></thead>
+      <tbody>
+        <tr><td>Chat بالعربية</td><td><strong>Qwen 2.5 7B</strong></td><td>أفضل عربي + سريع</td><td>Llama 3.1 8B</td></tr>
+        <tr><td>Chat معقّد / Reasoning</td><td><strong>DeepSeek R1</strong></td><td>أفضل reasoning مفتوح</td><td>Qwen 2.5 72B</td></tr>
+        <tr><td>MCQ Generation</td><td><strong>Qwen 2.5 14B</strong></td><td>JSON output ممتاز + عربي</td><td>DeepSeek V3</td></tr>
+        <tr><td>Summaries عربية</td><td><strong>Qwen 2.5 7B</strong></td><td>كافٍ وسريع</td><td>Mistral Nemo</td></tr>
+        <tr><td>Flashcards</td><td><strong>Qwen 2.5 7B</strong></td><td>JSON mode + عربي</td><td>Phi-3.5 (مبسّط)</td></tr>
+        <tr><td>KG Extraction</td><td><strong>Qwen 2.5 72B</strong></td><td>أعلى دقة لاستخراج العلاقات</td><td>DeepSeek V3</td></tr>
+        <tr><td>Concept Extraction</td><td><strong>AraBERT (NER)</strong></td><td>متخصص، لا LLM</td><td>Qwen 2.5 7B</td></tr>
+        <tr><td>Translation</td><td><strong>NLLB-200</strong></td><td>مفتوح، مجاني، 200 لغة</td><td>Qwen 2.5 7B</td></tr>
+        <tr><td>OCR</td><td><strong>Surya</strong></td><td>أفضل OCR عربي مفتوح</td><td>Tesseract</td></tr>
+        <tr><td>Embeddings</td><td><strong>BGE-m3</strong></td><td>متعدد اللغات + 8K context</td><td>Cohere Embed v3</td></tr>
+        <tr><td>Reranker</td><td><strong>bge-reranker-v2-m3</strong></td><td>متخصص، مجاني</td><td>Cohere Rerank</td></tr>
+        <tr><td>Adaptive Engine</td><td><strong>لا LLM (rules + BKT)</strong></td><td>0 tokens، deterministic</td><td>—</td></tr>
+        <tr><td>Analytics</td><td><strong>SQL queries</strong></td><td>0 tokens</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الخلاصة</div>
+    <p><strong>Qwen 2.5 يفوز بـ 6 من 10 مهام تحتاج LLM</strong> — هو النموذج الرئيسي لـ OpenLearn SaaS. DeepSeek R1 للمهام الصعبة. كل النماذج مفتوحة المصدر ومتاحة على多家 providers. لا اعتماد على OpenAI/Anthropic. التكلفة: $0.15-0.55/M tokens بدل $3-15/M لـ GPT-4/Claude — <strong>توفير 95%</strong>.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 4 ============================ -->
+<section id="s4" class="section">
+  <div class="sec-head">
+    <div class="sec-num">4</div>
+    <div class="sec-title">
+      <h2>تحليل مقدمي API — Provider Analysis</h2>
+      <div class="sub">12+ providers · free tiers · pricing · reliability</div>
+    </div>
+  </div>
+
+  <p>الـ provider هو العامل الحاسم بين "النظام يعمل بـ 0$" و"النظام يكلّف 500$/شهر". كل provider له نقاط قوة (سرعة، سعر، free tier) وضعف (rate limits، استقرار، توفر). هذا القسم يحلّل 12+ providers يقدّمون نماذج مفتوحة عبر APIs، ويوصي بالأفضل لـ OpenLearn.</p>
+
+  <h3><i class="fa-solid fa-table"></i> 4.1 مصفوفة المقارنة الشاملة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>المزوّد</th>
+          <th>النماذج المدعومة</th>
+          <th>Free Tier</th>
+          <th>Rate Limit</th>
+          <th>سرعة</th>
+          <th>سعر الـ 7B</th>
+          <th>بطاقة ائتمان؟</th>
+          <th>تجاري؟</th>
+          <th>الأولوية</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Groq</strong></td><td>Llama 3.1, Qwen 2.5, Mixtral</td><td class="t-pos">نعم (سخي)</td><td class="t-warn">30 req/min, 14K tok/day</td><td class="t-pos">500+ tok/s</td><td>مجاني</td><td>لا</td><td class="t-pos">نعم</td><td><span class="tag success">P0 — أساسي</span></td></tr>
+        <tr><td><strong>OpenRouter</strong></td><td>كل العائلات</td><td class="t-pos">free models</td><td class="t-pos">معقول</td><td class="t-warn">متوسط</td><td>$0.15/M</td><td>نعم ($10)</td><td class="t-pos">نعم</td><td><span class="tag success">P0 — أساسي</span></td></tr>
+        <tr><td><strong>Cloudflare Workers AI</strong></td><td>Llama, Mistral, Qwen</td><td class="t-pos">10K neurons/day مجاناً</td><td class="t-pos">معقول</td><td class="t-warn">متوسط</td><td>~$0.11/M</td><td>لا</td><td class="t-pos">نعم</td><td><span class="tag success">P0 — أساسي</span></td></tr>
+        <tr><td><strong>HuggingFace Inference</strong></td><td>كل النماذج</td><td class="t-pos">free (queue)</td><td class="t-warn">queue بطيء</td><td class="t-neg">بطيء</td><td>$0.05-0.20/M</td><td>لا (free)</td><td class="t-pos">نعم</td><td><span class="tag info">P1</span></td></tr>
+        <tr><td><strong>Together AI</strong></td><td>Llama, Qwen, DeepSeek</td><td class="t-warn">$5 credit</td><td class="t-pos">معقول</td><td class="t-pos">سريع</td><td>$0.20/M</td><td>نعم</td><td class="t-pos">نعم</td><td><span class="tag info">P1</span></td></tr>
+        <tr><td><strong>Fireworks AI</strong></td><td>Llama, Qwen, DeepSeek</td><td class="t-warn">$1 credit</td><td class="t-pos">معقول</td><td class="t-pos">سريع جداً</td><td>$0.20/M</td><td>نعم</td><td class="t-pos">نعم</td><td><span class="tag info">P1</span></td></tr>
+        <tr><td><strong>Cerebras</strong></td><td>Llama 3.1, Qwen</td><td class="t-pos">free tier</td><td class="t-warn">محدود</td><td class="t-pos">1000+ tok/s</td><td>مجاني (free)</td><td>لا</td><td class="t-pos">نعم</td><td><span class="tag info">P1</span></td></tr>
+        <tr><td><strong>GitHub Models</strong></td><td>Llama, Phi, Mistral, GPT-4o-mini</td><td class="t-pos">free للمطورين</td><td class="t-warn">low (preview)</td><td class="t-warn">متوسط</td><td>مجاني</td><td>GitHub account</td><td class="t-warn">preview only</td><td><span class="tag warn">P2</span></td></tr>
+        <tr><td><strong>NVIDIA NIM</strong></td><td>Llama, Mistral, Qwen</td><td class="t-warn">1000 credits</td><td class="t-pos">معقول</td><td class="t-pos">سريع جداً</td><td>$0.20-0.40/M</td><td>نعم</td><td class="t-pos">نعم</td><td><span class="tag warn">P2</span></td></tr>
+        <tr><td><strong>SambaNova</strong></td><td>Llama, Qwen (Meta)</td><td class="t-pos">free API</td><td class="t-warn">محدود</td><td class="t-pos">سريع جداً</td><td>مجاني</td><td>لا</td><td class="t-warn">research use</td><td><span class="tag warn">P2</span></td></tr>
+        <tr><td><strong>DeepSeek official</strong></td><td>DeepSeek V3/R1</td><td class="t-warn">$0.14/M فقط</td><td class="t-pos">معقول</td><td class="t-warn">متوسط</td><td>—</td><td>نعم ($10)</td><td class="t-pos">نعم</td><td><span class="tag info">P1</span></td></tr>
+        <tr><td><strong>Chutes AI</strong></td><td>كل النماذج المفتوحة</td><td class="t-pos">free tier</td><td class="t-warn">محدود</td><td class="t-warn">متوسط</td><td>~$0.10/M</td><td>لا</td><td class="t-pos">نعم</td><td><span class="tag warn">P2</span></td></tr>
+        <tr><td><strong>Cohere</strong></td><td>Command R, Aya, Embed, Rerank</td><td class="t-pos">1000 calls/شهر</td><td class="t-pos">معقول</td><td class="t-warn">متوسط</td><td>$0.50/M</td><td>لا (trial)</td><td class="t-pos">نعم</td><td><span class="tag info">P1 (Embed/Rerank)</span></td></tr>
+        <tr><td><strong>Voyage AI</strong></td><td>Voyage Embeddings</td><td class="t-pos">200M tokens free</td><td class="t-pos">معقول</td><td class="t-pos">سريع</td><td>$0.05/M</td><td>لا (trial)</td><td class="t-pos">نعم</td><td><span class="tag info">P1 (Embeddings)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-microscope"></i> 4.2 تحليل الـ Top 5 بعمق</h3>
+
+  <div class="prov-card">
+    <div class="pc-head">
+      <div>
+        <div class="pc-name"><i class="fa-solid fa-bolt"></i> Groq</div>
+        <div class="pc-url">groq.com · LPU-based inference</div>
+      </div>
+      <span class="tag success">P0 — أساسي</span>
+    </div>
+    <div class="pc-grid">
+      <div class="pc-cell"><div class="l">Free Tier</div><div class="v">نعم، سخي (30 req/min)</div></div>
+      <div class="pc-cell"><div class="l">السرعة</div><div class="v">500-1000 tok/s (الأسرع)</div></div>
+      <div class="pc-cell"><div class="l">النماذج</div><div class="v">Llama 3.1 8B/70B, Qwen 2.5, Mixtral</div></div>
+      <div class="pc-cell"><div class="l">بطاقة ائتمان</div><div class="v">لا — التسجيل بـ GitHub/Google</div></div>
+      <div class="pc-cell"><div class="l">تجاري</div><div class="v">نعم بدون قيود</div></div>
+      <div class="pc-cell"><div class="l">المشكلة</div><div class="v">Rate limits صارمة، يتوقف عند الذروة</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-3)"><strong>التوصية:</strong> المزوّد الافتراضي للـ chat و الـ flashcards. يتصدّى 70% من الـ requests. fallback تلقائي عند rate limit.</p>
+  </div>
+
+  <div class="prov-card">
+    <div class="pc-head">
+      <div>
+        <div class="pc-name"><i class="fa-solid fa-route"></i> OpenRouter</div>
+        <div class="pc-url">openrouter.ai · موحّد لكل النماذج</div>
+      </div>
+      <span class="tag success">P0 — أساسي</span>
+    </div>
+    <div class="pc-grid">
+      <div class="pc-cell"><div class="l">Free Tier</div><div class="v">free models + $10 credit مبدئي</div></div>
+      <div class="pc-cell"><div class="l">النماذج</div><div class="v">كل النماذج (Qwen, Llama, DeepSeek, Mistral, Gemma...)</div></div>
+      <div class="pc-cell"><div class="l">السعر</div><div class="v">$0.15/M (7B) - $0.80/M (72B)</div></div>
+      <div class="pc-cell"><div class="l">بطاقة ائتمان</div><div class="v">نعم ($10 حد أدنى)</div></div>
+      <div class="pc-cell"><div class="l">الميزة الكبرى</div><div class="v">API واحد لكل النماذج</div></div>
+      <div class="pc-cell"><div class="l">المشكلة</div><div class="v">أبطأ من Groq بـ 3x، overhead بسيط</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-3)"><strong>التوصية:</strong> fallback رئيسي لـ Groq، والمزوّد الافتراضي للنماذج الكبيرة (Qwen 72B, DeepSeek R1) غير المتاحة على Groq.</p>
+  </div>
+
+  <div class="prov-card">
+    <div class="pc-head">
+      <div>
+        <div class="pc-name"><i class="fa-solid fa-cloud"></i> Cloudflare Workers AI</div>
+        <div class="pc-url">cloudflare.com · edge inference</div>
+      </div>
+      <span class="tag success">P0 — أساسي</span>
+    </div>
+    <div class="pc-grid">
+      <div class="pc-cell"><div class="l">Free Tier</div><div class="v">10K neurons/day (≈ 10K tokens)</div></div>
+      <div class="pc-cell"><div class="l">النماذج</div><div class="v">Llama 3, Mistral, Qwen, Gemma, BGE-m3</div></div>
+      <div class="pc-cell"><div class="l">السعر</div><div class="v">$0.11/M neurons (بأسعار رخيصة)</div></div>
+      <div class="pc-cell"><div class="l">بطاقة ائتمان</div><div class="v">لا للـ free</div></div>
+      <div class="pc-cell"><div class="l">الميزة</div><div class="v">Edge — استدعاءات من قريب جغرافياً</div></div>
+      <div class="pc-cell"><div class="l">المشكلة</div><div class="v">cold starts، queue أحياناً</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-3)"><strong>التوصية:</strong> الافتراضي للـ embeddings (BGE-m3 متاح، مجاني ضمن limit). ومناسب للـ OCR عبر Mistral.</p>
+  </div>
+
+  <div class="prov-card">
+    <div class="pc-head">
+      <div>
+        <div class="pc-name"><i class="fa-solid fa-brain"></i> Cerebras</div>
+        <div class="pc-url">cerebras.ai · WSE-based inference</div>
+      </div>
+      <span class="tag info">P1</span>
+    </div>
+    <div class="pc-grid">
+      <div class="pc-cell"><div class="l">Free Tier</div><div class="v">نعم (generous)</div></div>
+      <div class="pc-cell"><div class="l">السرعة</div><div class="v">1000-2500 tok/s (الأسرع عالمياً)</div></div>
+      <div class="pc-cell"><div class="l">النماذج</div><div class="v">Llama 3.1 8B/70B, Qwen</div></div>
+      <div class="pc-cell"><div class="l">بطاقة ائتمان</div><div class="v">لا</div></div>
+      <div class="pc-cell"><div class="l">المشكلة</div><div class="v">في beta، rate limit strict، قليل من النماذج</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-3)"><strong>التوصية:</strong> fallback سريع لـ Groq. مفيد للمهام التي تحتاج latency منخفض جداً.</p>
+  </div>
+
+  <div class="prov-card">
+    <div class="pc-head">
+      <div>
+        <div class="pc-name"><i class="fa-solid fa-flask"></i> HuggingFace Inference API</div>
+        <div class="pc-url">huggingface.co · أكبر مكتبة نماذج</div>
+      </div>
+      <span class="tag info">P1</span>
+    </div>
+    <div class="pc-grid">
+      <div class="pc-cell"><div class="l">Free Tier</div><div class="v">نعم مع queue</div></div>
+      <div class="pc-cell"><div class="l">النماذج</div><div class="v">كل النماذج المفتوحة + embeddings + vision</div></div>
+      <div class="pc-cell"><div class="l">السعر</div><div class="v">$0.05-0.20/M (Inference Endpoints مدفوع)</div></div>
+      <div class="pc-cell"><div class="l">بطاقة ائتمان</div><div class="v">لا للـ free</div></div>
+      <div class="pc-cell"><div class="l">الميزة</div><div class="v">NLLB، BGE-m3، AraBERT، Surya — كلها متاحة</div></div>
+      <div class="pc-cell"><div class="l">المشكلة</div><div class="v">Free tier بطيء (queue)، لا ضمان uptime</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:13px;color:var(--ink-3)"><strong>التوصية:</strong> الافتراضي للـ Embeddings (BGE-m3) و OCR (Surya) و Translation (NLLB). $9/شهر Inference Endpoints عند الحاجة لـ dedicated.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-trophy"></i> 4.3 Stack الـ Providers الموصى به</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المهمة</th><th>Primary</th><th>Fallback 1</th><th>Fallback 2</th><th>سبب الترتيب</th></tr></thead>
+      <tbody>
+        <tr><td>Chat (Qwen 2.5 7B)</td><td>Groq</td><td>Cerebras</td><td>OpenRouter</td><td>سرعة + مجاني</td></tr>
+        <tr><td>Chat (Qwen 2.5 72B)</td><td>OpenRouter</td><td>Together</td><td>Fireworks</td><td>متوفر فقط هنا</td></tr>
+        <tr><td>Reasoning (DeepSeek R1)</td><td>DeepSeek official</td><td>OpenRouter</td><td>Fireworks</td><td>أرخص 4x</td></tr>
+        <tr><td>MCQ (Qwen 2.5 14B)</td><td>OpenRouter</td><td>Together</td><td>—</td><td>JSON mode مستقر</td></tr>
+        <tr><td>Embeddings (BGE-m3)</td><td>HuggingFace</td><td>Cloudflare AI</td><td>Voyage AI</td><td>مجاني + سريع</td></tr>
+        <tr><td>Reranker</td><td>Cohere (free 1K/mo)</td><td>Jina</td><td>—</td><td>free tier كافٍ</td></tr>
+        <tr><td>OCR (Surya)</td><td>HuggingFace</td><td>Cloudflare (Mistral OCR)</td><td>—</td><td>مجاني</td></tr>
+        <tr><td>Translation (NLLB)</td><td>HuggingFace</td><td>—</td><td>—</td><td>مجاني</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الاستراتيجية الذهبية</div>
+    <p><strong>Groq + OpenRouter + HuggingFace + Cloudflare</strong> — هذا الرباعي يغطي 95% من احتياجات OpenLearn بـ <strong>0$ شهرياً</strong> حتى 50-100 مستخدم نشط. عند تجاوز الـ free tiers، التكلفة تتراوح بين 20-50$/شهر لـ 1000 مستخدم. <strong>لا بطاقات ائتمان إلزامية</strong> — متطلب حاسم لفريق طلاب.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 5 ============================ -->
+<section id="s5" class="section">
+  <div class="sec-head">
+    <div class="sec-num">5</div>
+    <div class="sec-title">
+      <h2>الـ Stack النهائي — Ultimate Model Stack</h2>
+      <div class="sub">مهمة ← نموذج ← مزوّد ← سبب</div>
+    </div>
+  </div>
+
+  <p>هذا هو القرار النهائي. لكل مهمة في OpenLearn AI: نموذج واحد رئيسي، مزوّد واحد رئيسي، سبب واضح، وبدائل للطوارئ. <strong>لا تختار نموذجاً واحداً لكل المهام</strong> — هذا يخسّر الجودة أو يضخّم التكلفة. التخصص هو المفتاح: نموذج رخيص للمهام البسيطة، نموذج قوي للمهام الصعبة.</p>
+
+  <h3><i class="fa-solid fa-layer-group"></i> 5.1 الـ Stack الكامل (Master Table)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>المهمة</th>
+          <th>النموذج</th>
+          <th>المزوّد الأساسي</th>
+          <th>المزوّد البديل</th>
+          <th>التكلفة/طلب</th>
+          <th>الـ Latency</th>
+          <th>السبب</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Chat (RAG Q&amp;A)</td>
+          <td><strong>Qwen 2.5 7B Instruct</strong></td>
+          <td>Groq (free)</td>
+          <td>Cerebras → OpenRouter</td>
+          <td>$0.00 — $0.0003</td>
+          <td>1-3s</td>
+          <td>أفضل عربي + سريع جداً + مجاني</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Chat معقّد (Math/Logic)</td>
+          <td><strong>DeepSeek R1 Distill 32B</strong></td>
+          <td>DeepSeek API ($0.14/M)</td>
+          <td>OpenRouter</td>
+          <td>$0.001</td>
+          <td>5-15s</td>
+          <td>أفضل reasoning مفتوح</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Quick Summary</td>
+          <td><strong>Qwen 2.5 7B</strong></td>
+          <td>Groq (free)</td>
+          <td>Cerebras</td>
+          <td>$0.00</td>
+          <td>3-5s</td>
+          <td>كافٍ وسريع ومجاني</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Exam Summary</td>
+          <td><strong>Qwen 2.5 14B</strong></td>
+          <td>OpenRouter ($0.15/M)</td>
+          <td>Together AI</td>
+          <td>$0.0005</td>
+          <td>8-15s</td>
+          <td>أعلى جودة لاستخراج النقاط الحرجة</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>MCQ Generation</td>
+          <td><strong>Qwen 2.5 14B</strong></td>
+          <td>OpenRouter</td>
+          <td>Together AI</td>
+          <td>$0.001</td>
+          <td>10-20s</td>
+          <td>JSON mode مستقر + عربي ممتاز</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>True/False</td>
+          <td><strong>Qwen 2.5 7B</strong></td>
+          <td>Groq (free)</td>
+          <td>Cloudflare AI</td>
+          <td>$0.00</td>
+          <td>3-5s</td>
+          <td>مهمة بسيطة، 7B يكفي</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Fill-in-Blank</td>
+          <td><strong>AraBERT (NER)</strong> + Qwen polish</td>
+          <td>HuggingFace</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>1-2s</td>
+          <td>NER لاستخراج الكلمات المفتاحية</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Flashcards</td>
+          <td><strong>Qwen 2.5 7B</strong></td>
+          <td>Groq (free)</td>
+          <td>Cerebras</td>
+          <td>$0.00</td>
+          <td>5-8s</td>
+          <td>JSON mode + عربي + سريع</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Knowledge Graph Extraction</td>
+          <td><strong>Qwen 2.5 72B</strong></td>
+          <td>OpenRouter ($0.80/M)</td>
+          <td>Together AI</td>
+          <td>$0.005</td>
+          <td>30-60s</td>
+          <td>أعلى دقة لاستخراج العلاقات</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Concept Extraction</td>
+          <td><strong>AraBERT NER</strong></td>
+          <td>HuggingFace (free)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>1-2s</td>
+          <td>متخصص للعربية، أسرع بـ 50x من LLM</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Mind Maps</td>
+          <td><strong>YAKE + BGE-m3 + Clustering</strong></td>
+          <td>محلي (خوارزمي)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>1-3s</td>
+          <td>0 LLM، embeddings كافية</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>OCR (PDFs ممسوحة)</td>
+          <td><strong>Surya</strong></td>
+          <td>HuggingFace (free)</td>
+          <td>Cloudflare (Mistral OCR)</td>
+          <td>$0.00</td>
+          <td>10-30s</td>
+          <td>أفضل OCR عربي مفتوح</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>Embeddings</td>
+          <td><strong>BGE-m3</strong></td>
+          <td>HuggingFace (free)</td>
+          <td>Cloudflare → Voyage AI</td>
+          <td>$0.00</td>
+          <td>50ms/chunk</td>
+          <td>متعدد اللغات + 8K context</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>Reranker</td>
+          <td><strong>bge-reranker-v2-m3</strong></td>
+          <td>HuggingFace (free)</td>
+          <td>Cohere (1K free)</td>
+          <td>$0.00</td>
+          <td>500ms-2s</td>
+          <td>مجاني + متخصص</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Translation (EN ↔ AR)</td>
+          <td><strong>NLLB-200</strong></td>
+          <td>HuggingFace (free)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>1-3s</td>
+          <td>مفتوح، مجاني، 200 لغة</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>Adaptive Engine</td>
+          <td><strong>قواعد + BKT</strong></td>
+          <td>محلي (Python)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>50ms</td>
+          <td>0 LLM. deterministic + 0 cost</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>Student Modeling (BKT)</td>
+          <td><strong>pyBKT</strong></td>
+          <td>محلي (Python)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>5ms</td>
+          <td>خوارزمية Bayesian، 0 LLM</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>Spaced Repetition (SM-2)</td>
+          <td><strong>SM-2 algorithm</strong></td>
+          <td>محلي (Python)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>1ms</td>
+          <td>صيغة Anki، 0 LLM</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>Learning Analytics</td>
+          <td><strong>SQL aggregations</strong></td>
+          <td>PostgreSQL</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>200ms</td>
+          <td>queries مباشرة، 0 LLM</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>Difficulty Estimation</td>
+          <td><strong>Flesch + IRT</strong></td>
+          <td>محلي (Python)</td>
+          <td>—</td>
+          <td>$0.00</td>
+          <td>100ms</td>
+          <td>قراءة النص + IRT، 0 LLM</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-diagram-project"></i> 5.2 مخطط الـ Stack البصري</h3>
+  <div class="mermaid">
+flowchart TB
+  subgraph LLM["🤖 LLM Tasks (7 مهام)"]
+    Chat["Chat<br>Qwen 2.5 7B<br>Groq (free)"]
+    Math["Math Chat<br>DeepSeek R1<br>DeepSeek API"
+    ]
+    Sum1["Quick Summary<br>Qwen 2.5 7B<br>Groq (free)"]
+    Sum2["Exam Summary<br>Qwen 2.5 14B<br>OpenRouter"]
+    MCQ["MCQ Gen<br>Qwen 2.5 14B<br>OpenRouter"]
+    TF["True/False<br>Qwen 2.5 7B<br>Groq (free)"]
+    Flash["Flashcards<br>Qwen 2.5 7B<br>Groq (free)"]
+    KG["KG Extract<br>Qwen 2.5 72B<br>OpenRouter"]
+  end
+  subgraph Spec["🎯 Specialized Models (5 مهام)"]
+    Emb["Embeddings<br>BGE-m3<br>HF (free)"]
+    Rer["Reranker<br>bge-reranker-v2<br>HF (free)"]
+    OCR["OCR<br>Surya<br>HF (free)"]
+    NER["NER<br>AraBERT<br>HF (free)"]
+    Tr["Translation<br>NLLB-200<br>HF (free)"]
+  end
+  subgraph NoAI["⚙️ No AI (8 مهام)"]
+    Adapt["Adaptive Engine<br>Rules + BKT"]
+    SKM["Student Model<br>pyBKT"]
+    SR["Spaced Repetition<br>SM-2"]
+    Ana["Analytics<br>SQL"]
+    Diff["Difficulty<br>Flesch + IRT"]
+    MM["Mind Maps<br>YAKE + clustering"]
+    Path["Learning Path<br>Graph + weights"]
+    Rec["Recommendations<br>Scoring formula"]
+  end
+  LLM --> |"$0-0.005/req"| Cost1["💰 التكلفة المتغيرة"]
+  Spec --> |"$0 (free tiers)"| Cost2["💰 مجاني"]
+  NoAI --> |"$0"| Cost3["💰 مجاني 100%"]
+  </div>
+
+  <h3><i class="fa-solid fa-calculator"></i> 5.3 التكلفة المتوسطة لكل جلسة طالب</h3>
+  <p>جلسة طالب نموذجية (1 ساعة دراسة) تتضمن:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>النشاط</th><th>المهمة</th><th>النموذج</th><th>Tokens</th><th>التكلفة</th></tr></thead>
+      <tbody>
+        <tr><td>رفع PDF (200 صفحة)</td><td>OCR + Embeddings</td><td>Surya + BGE-m3</td><td>0 LLM</td><td>$0.00</td></tr>
+        <tr><td>سؤال في Chat</td><td>RAG Q&amp;A</td><td>Qwen 7B (Groq)</td><td>~1500</td><td>$0.00</td></tr>
+        <tr><td>توليد ملخص سريع</td><td>Summary</td><td>Qwen 7B (Groq)</td><td>~800</td><td>$0.00</td></tr>
+        <tr><td>توليد 10 MCQ</td><td>Question Gen</td><td>Qwen 14B (OpenRouter)</td><td>~3000</td><td>$0.001</td></tr>
+        <tr><td>توليد 10 بطاقات</td><td>Flashcards</td><td>Qwen 7B (Groq)</td><td>~700</td><td>$0.00</td></tr>
+        <tr><td>مراجعة 5 مفاهيم (SR)</td><td>Spaced Repetition</td><td>SM-2 algorithm</td><td>0</td><td>$0.00</td></tr>
+        <tr><td>عرض Analytics</td><td>Dashboard</td><td>SQL</td><td>0</td><td>$0.00</td></tr>
+        <tr><td>توصية دراسة</td><td>Adaptive</td><td>Rules + BKT</td><td>0</td><td>$0.00</td></tr>
+        <tr><td><strong>إجمالي الجلسة</strong></td><td colspan="3"></td><td><strong>~$0.001</strong></td></tr>
+        <tr><td><strong>شهرياً (30 جلسة)</strong></td><td colspan="3"></td><td><strong>~$0.03</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الاكتشاف المذهل</div>
+    <p>بتطبيق الـ stack الصحيح: <strong>تكلفة طالب واحد شهرياً = ~3 سنتات</strong>. هذا يعني 1000 طالب = $30/شهر، 10000 طالب = $300/شهر. <strong>ميزانية الـ APIs وحدها</strong> — لا تشمل الـ hosting. هذا أرخص بـ <strong>100x</strong> من استخدام GPT-4 لكل شيء، وأرخص بـ <strong>50x</strong> من الـ ChatPDF subscription. <strong>السر:</strong> 60% من المهام بـ 0$ (لا AI أو free tier)، 30% بـ Groq (free)، 10% بـ OpenRouter (رخيص).</p>
+  </div>
+
+  <h3><i class="fa-solid fa-arrows-rotate"></i> 5.4 قواعد الـ Fallback الصارمة</h3>
+  <ol>
+    <li><strong>أولوية الـ Free:</strong> جرّب Groq أولاً دائماً (إن كان يدعم النموذج).</li>
+    <li><strong>ثم الـ Cheap:</strong> OpenRouter للنماذج غير المتاحة على Groq.</li>
+    <li><strong>ثم الـ Backup:</strong> Together AI / Fireworks عند فشل OpenRouter.</li>
+    <li><strong>ثم الـ Cache:</strong> ابحث في Semantic Cache قبل الاعتذار.</li>
+    <li><strong>أخيراً الاعتذار:</strong> "خدمة الـ AI مشغولة الآن، حاول بعد دقيقة".</li>
+  </ol>
+</section>
+
+<!-- ============================ SECTION 6 ============================ -->
+<section id="s6" class="section">
+  <div class="sec-head">
+    <div class="sec-num">6</div>
+    <div class="sec-title">
+      <h2>اقتصاد الـ Tokens — Token Economy Analysis</h2>
+      <div class="sub">حساب دقيق · تحسين · توفير</div>
+    </div>
+  </div>
+
+  <p>كل token يُكلّف مالاً (أو rate limit). فهم استهلاك الـ tokens لكل ميزة هو مفتاح التحكّم في التكلفة. هذا القسم يحسب الـ tokens المتوقعة لكل ميزة، يحدّد الـ worst case، ويقدّم 8 تقنيات لخفض الاستهلاك.</p>
+
+  <h3><i class="fa-solid fa-table"></i> 6.1 تقدير الـ Tokens لكل ميزة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>الميزة</th>
+          <th>System Prompt</th>
+          <th>Context/Chunks</th>
+          <th>Query</th>
+          <th>Response (متوسط)</th>
+          <th>Total/طلب</th>
+          <th>Worst Case</th>
+          <th>شهرياً (1000 مستخدم)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Chat (RAG)</td>
+          <td>200</td>
+          <td>2000 (5 chunks × 400)</td>
+          <td>50</td>
+          <td>500</td>
+          <td>~2750</td>
+          <td>6000</td>
+          <td>~8M (3 reqs/user)</td>
+        </tr>
+        <tr>
+          <td>Quick Summary</td>
+          <td>150</td>
+          <td>3000</td>
+          <td>20</td>
+          <td>400</td>
+          <td>~3570</td>
+          <td>8000</td>
+          <td>~7M (2 reqs/user)</td>
+        </tr>
+        <tr>
+          <td>Exam Summary</td>
+          <td>250</td>
+          <td>5000</td>
+          <td>30</td>
+          <td>800</td>
+          <td>~6080</td>
+          <td>12000</td>
+          <td>~6M (1 req/user)</td>
+        </tr>
+        <tr>
+          <td>MCQ (10 أسئلة)</td>
+          <td>300</td>
+          <td>2500</td>
+          <td>50</td>
+          <td>2000</td>
+          <td>~4850</td>
+          <td>10000</td>
+          <td>~5M (1 req/user)</td>
+        </tr>
+        <tr>
+          <td>True/False (10)</td>
+          <td>200</td>
+          <td>2000</td>
+          <td>30</td>
+          <td>800</td>
+          <td>~3030</td>
+          <td>6000</td>
+          <td>~3M (1 req/user)</td>
+        </tr>
+        <tr>
+          <td>Flashcards (10)</td>
+          <td>200</td>
+          <td>2500</td>
+          <td>30</td>
+          <td>1000</td>
+          <td>~3730</td>
+          <td>7000</td>
+          <td>~4M (1 req/user)</td>
+        </tr>
+        <tr>
+          <td>KG Extraction</td>
+          <td>400</td>
+          <td>8000</td>
+          <td>50</td>
+          <td>4000</td>
+          <td>~12450</td>
+          <td>25000</td>
+          <td>~12M (1 req/material)</td>
+        </tr>
+        <tr>
+          <td>Concept Expansion</td>
+          <td>200</td>
+          <td>1000</td>
+          <td>50</td>
+          <td>500</td>
+          <td>~1750</td>
+          <td>3000</td>
+          <td>~2M</td>
+        </tr>
+        <tr>
+          <td><strong>الإجمالي شهرياً (1000 مستخدم)</strong></td>
+          <td colspan="6"></td>
+          <td><strong>~47M tokens</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-calculator"></i> 6.2 تحويل الـ Tokens إلى تكلفة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>السيناريو</th><th>Tokens شهرياً</th><th>توزيع الـ Stack</th><th>التكلفة الشهرية</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>كل شيء على Groq (free)</td>
+          <td>47M</td>
+          <td>100% Groq free</td>
+          <td class="t-pos">$0 (إن لم يتجاوز limits)</td>
+        </tr>
+        <tr>
+          <td>الواقعي (70% Groq + 30% OpenRouter)</td>
+          <td>47M</td>
+          <td>33M Groq + 14M OpenRouter</td>
+          <td>~$3 (OpenRouter فقط)</td>
+        </tr>
+        <tr>
+          <td>بعد تجاوز Groq limits</td>
+          <td>47M</td>
+          <td>20M Groq + 27M OpenRouter</td>
+          <td>~$6</td>
+        </tr>
+        <tr>
+          <td>كل شيء على OpenRouter (بديل)</td>
+          <td>47M</td>
+          <td>100% OpenRouter Qwen 7B</td>
+          <td>~$10</td>
+        </tr>
+        <tr>
+          <td>كل شيء على GPT-4o (للمقارنة)</td>
+          <td>47M</td>
+          <td>100% GPT-4o</td>
+          <td class="t-neg">~$235 (95x أغلى)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-bolt"></i> 6.3 تقنيات خفض الـ Tokens (8 تقنيات أساسية)</h3>
+
+  <h4>① Prompt Compression (LLMLingua)</h4>
+  <p>أداة LLMLingua من Microsoft تضغط الـ prompt بنسبة 50-70% دون خسارة جوهرية في الجودة. <strong>كيف يعمل:</strong> يحسب أهمية كل token ويحذف الأقل أهمية. <strong>التطبيق:</strong> اضغط الـ system prompt والـ context قبل الإرسال. <strong>التوفير:</strong> 40-60% من input tokens.</p>
+  <pre><code>from llmlingua import PromptCompressor
+compressor = PromptCompressor(model_name="bge-m3")
+compressed = compressor.compress_prompt(
+    original_prompt,
+    rate=0.5  # احتفظ بـ 50%
+)
+# result: original 2000 tokens → compressed 1000 tokens</code></pre>
+
+  <h4>② Context Compression (RAG)</h4>
+  <p>لا تُرسل كل الـ chunks للـ LLM. <strong>القاعدة:</strong> Top-5 chunks بعد re-ranking، كل chunk بحد أقصى 400 tokens. <strong>التوفير:</strong> 60-80% من input. <strong>التطبيق:</strong> بعد الـ retrieval، اقطع الـ chunks عند أقرب جملة كاملة.</p>
+
+  <h4>③ Chunk Compression</h4>
+  <p>كل chunk قبل الإرسال للـ LLM: (1) إزالة الـ headers/footers، (2) تطبيع المسافات، (3) إزالة الـ citations/references. <strong>التوفير:</strong> 20-30% من chunk size.</p>
+
+  <h4>④ RAG Optimization (Smarter Retrieval)</h4>
+  <p>كلما كان الـ retrieval أدق، قلّ عدد الـ chunks المطلوبة. <strong>التقنيات:</strong> Hybrid search (BM25 + Vector)، Cross-encoder reranking، Query rewriting. <strong>التوفير:</strong> 30-50% من الـ context tokens.</p>
+
+  <h4>⑤ Caching (Exact + Semantic)</h4>
+  <p>الأقوى: <strong>GPTCache</strong> للـ semantic caching. <strong>كيف:</strong> احسب embedding لكل query، ابحث عن query مشابه بـ cosine similarity > 0.92، أرجع الـ response المُخزّن. <strong>التوفير:</strong> 30-50% من استدعاءات الـ LLM. <strong>مثال:</strong> "ما هو الانحدار اللوجستي؟" و"عرف الانحدار اللوجستي" → نفس الإجابة من cache.</p>
+
+  <h4>⑥ Conversation Memory (Sliding Window)</h4>
+  <p>في الـ chat متعدد الـ turns، لا تُرسل كل الـ history. <strong>القاعدة:</strong> آخر 4 messages + ملخص (summary) للسابق. <strong>التوفير:</strong> 50-70% من input في الجلسات الطويلة.</p>
+
+  <h4>⑦ JSON-Only Generation (Structured Outputs)</h4>
+  <p>اطلب من الـ LLM JSON صارم بدل نص حر. <strong>الفائدة:</strong> (1) لا tokens ضائعة في الـ formatting. (2) لا حاجة لـ parsing. (3) validation فوري. <strong>التقنية:</strong> استخدم <code>response_format={"type":"json_object"}</code> في OpenRouter/Groq. <strong>التوفير:</strong> 15-25% من output tokens.</p>
+
+  <h4>⑧ Streaming + Early Stopping</h4>
+  <p>Streaming يُظهر الإجابة كلمة بكلمة. <strong>إضافة قوية:</strong> أوقف الـ generation عند اكتمال JSON أو الوصول لـ max_tokens محدّد. <strong>التوفير:</strong> 10-20% من output (إيقاف الإجابات الطويلة بلا داعٍ).</p>
+
+  <h3><i class="fa-solid fa-chart-bar"></i> 6.4 أثر التقنيات مجتمعة</h3>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="v grad">47M</div><div class="l">tokens قبل التحسين</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--warn),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent">~15M</div><div class="l">tokens بعد التحسين</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--success),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent">68%</div><div class="l">خفض في الـ tokens</div></div>
+    <div class="stat-box"><div class="v">$2-5</div><div class="l">تكلفة شهرية (1000 مستخدم)</div></div>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-lightbulb"></i> الخلاصة</div>
+    <p>بتطبيق التقنيات الثمانية: <strong>47M tokens → 15M tokens شهرياً لـ 1000 مستخدم</strong>. التكلفة المتاحة: $2-5/شهر فقط للـ APIs. هذا يعني أن <strong>تكلفة الـ AI لكل طالب = 0.2-0.5 سنت شهرياً</strong>. ميزانية الـ AI تصبح ضئيلة مقارنة بـ hosting الـ backend.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 7 ============================ -->
+<section id="s7" class="section">
+  <div class="sec-head">
+    <div class="sec-num">7</div>
+    <div class="sec-title">
+      <h2>محاكاة التكاليف الشهرية — Cost Simulation</h2>
+      <div class="sub">5 سيناريوهات · 50 إلى 10,000 طالب</div>
+    </div>
+  </div>
+
+  <p>هذا القسم يجيب عن السؤال الأهم: <strong>كم يكلّف تشغيل OpenLearn AI فعلياً؟</strong>. سيناريوهات مفصّلة، كل بند تكلفة محسوب، مع الإجمالي الشهري والسنوي والتكلفة لكل طالب.</p>
+
+  <h3><i class="fa-solid fa-1"></i> 7.1 السيناريو A — 50 طالب (Graduation Project)</h3>
+  <div class="cost-card">
+    <div class="lbl">التكلفة الشهرية الإجمالية</div>
+    <div class="total">~5<span class="cur">USD/شهر</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>البند</th><th>المزوّد</th><th>التكلفة/شهر</th><th>ملاحظات</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Namecheap / Cloudflare</td><td>$1</td><td>.com domain سنوي مقسّم</td></tr>
+        <tr><td>Backend Hosting</td><td>Render / Railway free</td><td>$0</td><td>free tier يكفي</td></tr>
+        <tr><td>Frontend Hosting</td><td>Vercel free</td><td>$0</td><td>Next.js deployment مجاني</td></tr>
+        <tr><td>Database</td><td>Neon / Supabase free</td><td>$0</td><td>0.5GB PostgreSQL مجاني</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud free</td><td>$0</td><td>1GB free</td></tr>
+        <tr><td>Redis</td><td>Upstash free</td><td>$0</td><td>10K cmds/day</td></tr>
+        <tr><td>Object Storage</td><td>Cloudflare R2</td><td>$0</td><td>10GB free</td></tr>
+        <tr><td>CDN</td><td>Cloudflare free</td><td>$0</td><td>unlimited bandwidth</td></tr>
+        <tr><td>Email</td><td>Resend free</td><td>$0</td><td>3000/month</td></tr>
+        <tr><td>AI APIs (Groq + OpenRouter)</td><td>free tiers</td><td>$2</td><td>أغلبه Groq free</td></tr>
+        <tr><td>Monitoring</td><td>Sentry developer free</td><td>$0</td><td>5K errors/month</td></tr>
+        <tr><td>LLM Tracing</td><td>Langfuse self-hosted (Render)</td><td>$0</td><td>ضمن Render free</td></tr>
+        <tr><td>Backups</td><td>ضمن Neon/Supabase</td><td>$0</td><td>PITR مجاني</td></tr>
+        <tr><td>Bandwidth</td><td>ضمن Vercel/Cloudflare</td><td>$0</td><td>100GB/month</td></tr>
+        <tr><td><strong>الإجمالي الشهري</strong></td><td></td><td><strong>~$5</strong></td><td></td></tr>
+        <tr><td><strong>السنوي</strong></td><td></td><td><strong>~$60</strong></td><td></td></tr>
+        <tr><td><strong>التكلفة/طالب/شهر</strong></td><td></td><td><strong>$0.10</strong></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-2"></i> 7.2 السيناريو B — 200 طالب (Private Beta)</h3>
+  <div class="cost-card">
+    <div class="lbl">التكلفة الشهرية الإجمالية</div>
+    <div class="total">~25<span class="cur">USD/شهر</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>البند</th><th>المزوّد</th><th>التكلفة/شهر</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Cloudflare</td><td>$1</td></tr>
+        <tr><td>Backend (Render Pro / Railway)</td><td>Render</td><td>$7</td></tr>
+        <tr><td>Frontend</td><td>Vercel Pro</td><td>$0 (free يكفي)</td></tr>
+        <tr><td>Database (Neon Pro)</td><td>Neon</td><td>$0 (free 3GB)</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud free</td><td>$0</td></tr>
+        <tr><td>Redis (Upstash)</td><td>Upstash</td><td>$0 (10K cmds/day)</td></tr>
+        <tr><td>Object Storage (R2)</td><td>Cloudflare</td><td>$1</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>$0</td></tr>
+        <tr><td>Email</td><td>Resend</td><td>$0 (5K free)</td></tr>
+        <tr><td>AI APIs</td><td>Groq + OpenRouter</td><td>$15</td></tr>
+        <tr><td>Monitoring (Sentry Team)</td><td>Sentry</td><td>$0 (free 10K)</td></tr>
+        <tr><td>LLM Tracing (Langfuse Cloud free)</td><td>Langfuse</td><td>$0</td></tr>
+        <tr><td>Backups + Logging</td><td>ضمن الخدمات</td><td>$0</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$1</td></tr>
+        <tr><td><strong>الإجمالي الشهري</strong></td><td></td><td><strong>~$25</strong></td></tr>
+        <tr><td><strong>السنوي</strong></td><td></td><td><strong>~$300</strong></td></tr>
+        <tr><td><strong>التكلفة/طالب/شهر</strong></td><td></td><td><strong>$0.125</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-3"></i> 7.3 السيناريو C — 1,000 طالب (University Launch)</h3>
+  <div class="cost-card">
+    <div class="lbl">التكلفة الشهرية الإجمالية</div>
+    <div class="total">~120<span class="cur">USD/شهر</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>البند</th><th>المزوّد</th><th>التكلفة/شهر</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Cloudflare</td><td>$1</td></tr>
+        <tr><td>Backend (Render Pro 2GB)</td><td>Render</td><td>$15</td></tr>
+        <tr><td>Frontend (Vercel Pro)</td><td>Vercel</td><td>$20</td></tr>
+        <tr><td>Database (Neon Launch)</td><td>Neon</td><td>$19</td></tr>
+        <tr><td>Vector DB (Qdrant Cloud 1GB)</td><td>Qdrant</td><td>$0 (free)</td></tr>
+        <tr><td>Redis (Upstash Pay-as-you-go)</td><td>Upstash</td><td>$10</td></tr>
+        <tr><td>Object Storage (R2 50GB)</td><td>Cloudflare</td><td>$1</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>$5</td></tr>
+        <tr><td>Email (Resend 50K)</td><td>Resend</td><td>$20</td></tr>
+        <tr><td>AI APIs</td><td>Groq + OpenRouter + DeepSeek</td><td>$25</td></tr>
+        <tr><td>Monitoring (Sentry Team)</td><td>Sentry</td><td>$0 (free 10K)</td></tr>
+        <tr><td>LLM Tracing (Langfuse Cloud)</td><td>Langfuse</td><td>$0 (free)</td></tr>
+        <tr><td>Backups (B2 50GB)</td><td>Backblaze</td><td>$0.50</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$3.50</td></tr>
+        <tr><td><strong>الإجمالي الشهري</strong></td><td></td><td><strong>~$120</strong></td></tr>
+        <tr><td><strong>السنوي</strong></td><td></td><td><strong>~$1,440</strong></td></tr>
+        <tr><td><strong>التكلفة/طالب/شهر</strong></td><td></td><td><strong>$0.12</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-4"></i> 7.4 السيناريو D — 5,000 طالب (Public Release)</h3>
+  <div class="cost-card">
+    <div class="lbl">التكلفة الشهرية الإجمالية</div>
+    <div class="total">~500<span class="cur">USD/شهر</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>البند</th><th>المزوّد</th><th>التكلفة/شهر</th></tr></thead>
+      <tbody>
+        <tr><td>Domain + DNS</td><td>Cloudflare</td><td>$5</td></tr>
+        <tr><td>Backend (Render Pro 4GB × 2)</td><td>Render</td><td>$50</td></tr>
+        <tr><td>Frontend (Vercel Pro)</td><td>Vercel</td><td>$20</td></tr>
+        <tr><td>Database (Neon Scale)</td><td>Neon</td><td>$69</td></tr>
+        <tr><td>Vector DB (Qdrant Cloud 5GB)</td><td>Qdrant</td><td>$25</td></tr>
+        <tr><td>Redis (Upstash Pro)</td><td>Upstash</td><td>$30</td></tr>
+        <tr><td>Object Storage (R2 250GB)</td><td>Cloudflare</td><td>$5</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>$20</td></tr>
+        <tr><td>Email (Resend 100K)</td><td>Resend</td><td>$50</td></tr>
+        <tr><td>AI APIs</td><td>Groq + OpenRouter + DeepSeek + Cohere</td><td>$150</td></tr>
+        <tr><td>Monitoring (Sentry Team)</td><td>Sentry</td><td>$26</td></tr>
+        <tr><td>LLM Tracing (Langfuse Cloud Pro)</td><td>Langfuse</td><td>$0 (free 50K)</td></tr>
+        <tr><td>Backups (B2 200GB)</td><td>Backblaze</td><td>$1</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$49</td></tr>
+        <tr><td><strong>الإجمالي الشهري</strong></td><td></td><td><strong>~$500</strong></td></tr>
+        <tr><td><strong>السنوي</strong></td><td></td><td><strong>~$6,000</strong></td></tr>
+        <tr><td><strong>التكلفة/طالب/شهر</strong></td><td></td><td><strong>$0.10</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-5"></i> 7.5 السيناريو E — 10,000 طالب (Scaling)</h3>
+  <div class="cost-card">
+    <div class="lbl">التكلفة الشهرية الإجمالية</div>
+    <div class="total">~1,100<span class="cur">USD/شهر</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>البند</th><th>المزوّد</th><th>التكلفة/شهر</th></tr></thead>
+      <tbody>
+        <tr><td>Domain + DNS</td><td>Cloudflare Business</td><td>$200 (سنة)</td></tr>
+        <tr><td>Backend (Render Pro × 3)</td><td>Render</td><td>$75</td></tr>
+        <tr><td>Frontend (Vercel Pro)</td><td>Vercel</td><td>$20</td></tr>
+        <tr><td>Database (Neon Scale + Read Replica)</td><td>Neon</td><td>$110</td></tr>
+        <tr><td>Vector DB (Qdrant Cloud 15GB)</td><td>Qdrant</td><td>$75</td></tr>
+        <tr><td>Redis (Upstash Pro)</td><td>Upstash</td><td>$60</td></tr>
+        <tr><td>Object Storage (R2 500GB)</td><td>Cloudflare</td><td>$10</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>$50</td></tr>
+        <tr><td>Email (Resend 500K)</td><td>Resend</td><td>$80</td></tr>
+        <tr><td>AI APIs</td><td>Groq + OpenRouter + DeepSeek + Cohere</td><td>$320</td></tr>
+        <tr><td>Monitoring (Sentry Team)</td><td>Sentry</td><td>$26</td></tr>
+        <tr><td>LLM Tracing (Langfuse Cloud)</td><td>Langfuse</td><td>$53</td></tr>
+        <tr><td>Backups (B2 500GB)</td><td>Backblaze</td><td>$2.50</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$18.50</td></tr>
+        <tr><td><strong>الإجمالي الشهري</strong></td><td></td><td><strong>~$1,100</strong></td></tr>
+        <tr><td><strong>السنوي</strong></td><td></td><td><strong>~$13,200</strong></td></tr>
+        <tr><td><strong>التكلفة/طالب/شهر</strong></td><td></td><td><strong>$0.11</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-line"></i> 7.6 المقارنة الشاملة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>السيناريو</th><th>الطلاب</th><th>شهري</th><th>سنوي</th><th>للطالب/شهر</th><th>لكل 1000 طلب</th></tr></thead>
+      <tbody>
+        <tr><td>A — Graduation</td><td>50</td><td>$5</td><td>$60</td><td>$0.10</td><td>$0.01</td></tr>
+        <tr><td>B — Beta</td><td>200</td><td>$25</td><td>$300</td><td>$0.125</td><td>$0.02</td></tr>
+        <tr><td>C — University</td><td>1,000</td><td>$120</td><td>$1,440</td><td>$0.12</td><td>$0.015</td></tr>
+        <tr><td>D — Public</td><td>5,000</td><td>$500</td><td>$6,000</td><td>$0.10</td><td>$0.012</td></tr>
+        <tr><td>E — Scale</td><td>10,000</td><td>$1,100</td><td>$13,200</td><td>$0.11</td><td>$0.013</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-bar"></i> 7.7 الرسم البياني للتكاليف (تقديري)</h3>
+  <div class="diagram">
+    <div class="diagram-title">نمو التكلفة مع نمو المستخدمين</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>50 طالب</span><span>$5/شهر</span></div><div class="bar" style="height:14px;background:var(--surface-3)"><div class="fill" style="width:0.5%;background:var(--success);height:100%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>200 طالب</span><span>$25/شهر</span></div><div class="bar" style="height:14px;background:var(--surface-3)"><div class="fill" style="width:2.3%;background:var(--brand);height:100%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>1,000 طالب</span><span>$120/شهر</span></div><div class="bar" style="height:14px;background:var(--surface-3)"><div class="fill" style="width:11%;background:var(--brand-2);height:100%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>5,000 طالب</span><span>$500/شهر</span></div><div class="bar" style="height:14px;background:var(--surface-3)"><div class="fill" style="width:45%;background:var(--warn);height:100%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>10,000 طالب</span><span>$1,100/شهر</span></div><div class="bar" style="height:14px;background:var(--surface-3)"><div class="fill" style="width:100%;background:var(--danger);height:100%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الاكتشاف المذهل</div>
+    <p>التكلفة لكل طالب تبقى مستقرة عند <strong>$0.10-0.13/شهر</strong> عبر كل السيناريوهات. هذا يعني أن <strong>5$ شهرياً من اشتراك مدفوع يغطي تكلفة 50 طالب</strong>. أو أن 1000 طالب يدفعون $1/شهر = إيراد $1000/شهر مقابل تكلفة $120 = <strong>هامش ربح 88%</strong>. هذه أعلى ربحية في فئة EdTech.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 8 ============================ -->
+<section id="s8" class="section">
+  <div class="sec-head">
+    <div class="sec-num">8</div>
+    <div class="sec-title">
+      <h2>استراتيجية الـ Free Tier — تشغيل بـ 0$</h2>
+      <div class="sub">هل يمكن تشغيل OpenLearn مجاناً؟</div>
+    </div>
+  </div>
+
+  <p>السؤال الجوهري: <strong>إذا كان فريق الطلاب لا يملك أي ميزانية، هل يمكن تشغيل OpenLearn AI فعلاً؟</strong> هذا القسم يجيب بصراحة: نعم، مع قيود. يحلّل كل free tier متاح، يحسب الحد الأقصى للمستخدمين، ويحدّد نقاط الفشل.</p>
+
+  <h3><i class="fa-solid fa-table"></i> 8.1 كل Free Tiers المتاحة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>الخدمة</th><th>المزوّد</th><th>الـ Free Tier</th><th>الحد الأقصى للاستخدام</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend Hosting</td><td>Vercel</td><td>100GB bandwidth, unlimited deployments</td><td>يكفي لـ ~10K زائر/شهر</td></tr>
+        <tr><td>Backend Hosting</td><td>Render</td><td>750 ساعة/شهر (sleeps after 15min idle)</td><td>يكفي لـ MVP منخفض traffic</td></tr>
+        <tr><td>Backend Hosting (بديل)</td><td>Railway</td><td>$5 credit شهرياً</td><td>يكفي لـ 200 مستخدم</td></tr>
+        <tr><td>Backend Hosting (بديل 2)</td><td>Fly.io</td><td>3 shared-cpu 256MB VMs</td><td>يكفي لـ prototype</td></tr>
+        <tr><td>Database</td><td>Neon</td><td>0.5GB, 100 compute hours</td><td>يكفي لـ ~1000 مستخدم</td></tr>
+        <tr><td>Database (بديل)</td><td>Supabase</td><td>500MB, 50K MAU</td><td>يكفي لـ 50K مستخدم</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud</td><td>1GB, 1 collection</td><td>يكفي لـ ~100K chunks</td></tr>
+        <tr><td>Redis</td><td>Upstash</td><td>10K commands/day, 256MB</td><td>يكفي لـ ~200 مستخدم</td></tr>
+        <tr><td>Object Storage</td><td>Cloudflare R2</td><td>10GB + 1M Class A ops</td><td>يكفي لـ ~2000 PDFs</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>غير محدود</td><td>يكفي لأي traffic</td></tr>
+        <tr><td>Email</td><td>Resend</td><td>3000/month, 100/day</td><td>يكفي لـ ~300 مستخدم نشط</td></tr>
+        <tr><td>LLM API</td><td>Groq</td><td>30 req/min, 14K tok/min, ~1M tok/day</td><td>يكفي لـ ~200-500 مستخدم</td></tr>
+        <tr><td>LLM API (بديل)</td><td>Cerebras</td><td>free tier (محدود)</td><td>يكفي لـ ~100 مستخدم</td></tr>
+        <tr><td>LLM API (بديل 2)</td><td>Cloudflare Workers AI</td><td>10K neurons/day</td><td>يكفي لـ ~50-100 مستخدم</td></tr>
+        <tr><td>LLM API (بديل 3)</td><td>HuggingFace Inference</td><td>free (queue بطيء)</td><td>يكفي لـ ~50 مستخدم</td></tr>
+        <tr><td>Embeddings</td><td>HuggingFace</td><td>free (queue)</td><td>عملياً غير محدود (بطيء)</td></tr>
+        <tr><td>Reranker</td><td>Cohere</td><td>1000 calls/شهر</td><td>يكفي لـ ~30 مستخدم</td></tr>
+        <tr><td>OCR</td><td>HuggingFace (Surya)</td><td>free (queue)</td><td>بطيء لكن يعمل</td></tr>
+        <tr><td>Monitoring</td><td>Sentry</td><td>5K errors/شهر</td><td>يكفي لـ MVP</td></tr>
+        <tr><td>LLM Tracing</td><td>Langfuse Cloud</td><td>50K observations/شهر</td><td>يكفي لـ ~500 مستخدم</td></tr>
+        <tr><td>Product Analytics</td><td>PostHog Cloud</td><td>1M events/شهر</td><td>يكفي لـ ~5000 مستخدم</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-calculator"></i> 8.2 الحد الأقصى لكل مزوّد LLM</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المزوّد</th><th>الحد اليومي</th><th>الحد الشهري</th><th>عدد الطلاب القابل خدمتهم</th></tr></thead>
+      <tbody>
+        <tr><td>Groq (free)</td><td>~1M tokens</td><td>~30M tokens</td><td>~600 طالب (3 جلسات × 5K tokens)</td></tr>
+        <tr><td>Cerebras (free)</td><td>~500K tokens</td><td>~15M tokens</td><td>~300 طالب</td></tr>
+        <tr><td>Cloudflare Workers AI</td><td>10K neurons</td><td>300K neurons</td><td>~50 طالب (LLM فقط)</td></tr>
+        <tr><td>HuggingFace (free)</td><td>queue</td><td>queue</td><td>~50-100 طالب (بطيء)</td></tr>
+        <tr><td>GitHub Models</td><td>low (preview)</td><td>—</td><td>~20 طالب (تجريبي)</td></tr>
+        <tr><td>SambaNova</td><td>~500 req/day</td><td>15K req</td><td>~100 طالب</td></tr>
+        <tr><td><strong>الإجمالي الممكن</strong></td><td colspan="2"></td><td><strong>~700-1100 طالب</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-trophy"></i> 8.3 السيناريو الأمثل لـ 0$</h3>
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الحد الأقصى العملي بـ 0$</div>
+    <p>بتجميع كل الـ free tiers: <strong>500-700 طالب نشط شهرياً</strong> (3 جلسات × 10 طلبات × 1500 token = 45K token/طالب). هذا يكفي لـ <strong>جامعة متوسطة الحجم</strong> أو <strong>مشروع تخرّج بكل فخر</strong>. تكلفة شهرية حقيقية: <strong>$0.00</strong>. لكن مع قيود صارمة (Rate limiting بطيء أحياناً، queue على HuggingFace، cold starts على Render).</p>
+  </div>
+
+  <h3><i class="fa-solid fa-diagram-project"></i> 8.4 الـ Stack العملي لـ 0$</h3>
+  <div class="mermaid">
+flowchart TB
+  subgraph Hosting["💾 Hosting (0$)"]
+    Vercel["Vercel (Frontend)"]
+    Render["Render (Backend)"]
+  end
+  subgraph Data["📊 Data (0$)"]
+    Neon["Neon (PostgreSQL)"]
+    Qdrant["Qdrant Cloud"]
+    Upstash["Upstash (Redis)"]
+    R2["Cloudflare R2"]
+  end
+  subgraph AI["🤖 AI APIs (0$)"]
+    Groq["Groq (chat/flashcards)"]
+    Cerebras["Cerebras (fallback)"]
+    HF["HuggingFace (embed/OCR/NER)"]
+    CF["Cloudflare AI (backup)"]
+    Cohere["Cohere (rerank 1K/mo)"]
+  end
+  subgraph Ops["⚙️ Ops (0$)"]
+    Sentry["Sentry (errors)"]
+    Langfuse["Langfuse (LLM trace)"]
+    PostHog["PostHog (analytics)"]
+    Cloudflare["Cloudflare CDN"]
+  end
+  Hosting --> Data
+  Hosting --> AI
+  AI --> Data
+  Ops -.monitoring.-> Hosting
+  </div>
+
+  <h3><i class="fa-solid fa-triangle-exclamation"></i> 8.5 نقاط الفشل المحتملة</h3>
+  <div class="grid-2">
+    <div class="card t-danger">
+      <h4>① Render Sleep Problem</h4>
+      <p>Render free tier ينام بعد 15min من الخمول. أول طلب بعد النوم يأخذ 30-50 ثانية (cold start). <strong>الحل:</strong> استخدم UptimeRobot لـ ping كل 10 دقائق، أو انتقل لـ Railway ($5/month).</p>
+    </div>
+    <div class="card t-danger">
+      <h4>② Groq Rate Limits</h4>
+      <p>Groq free يحدّ 30 req/min و 14K tok/min. عند ذروة الاستخدام (امتحانات)، قد يفشل الطلاب. <strong>الحل:</strong> Multi-provider fallback لـ Cerebras ثم Cloudflare AI.</p>
+    </div>
+    <div class="card t-warn">
+      <h4>③ HuggingFace Queue</h4>
+      <p>HF free inference queue قد يأخذ 30-60 ثانية. غير مقبول لـ UX. <strong>الحل:</strong> استخدمه للـ background jobs (embeddings، OCR)، وليس للـ interactive chat.</p>
+    </div>
+    <div class="card t-warn">
+      <h4>④ Cohere Rerank Limit</h4>
+      <p>1000 call/شهر فقط. سينفد بسرعة. <strong>الحل:</strong> استخدمه فقط للـ premium queries، وللـ default استخدم bge-reranker على HF.</p>
+    </div>
+    <div class="card t-warn">
+      <h4>⑤ R2 Storage Cap</h4>
+      <p>10GB free. PDFs كبيرة قد تتجاوز. <strong>الحل:</strong> ضغط PDFs قبل التخزين، حذف المواد غير المستخدمة بعد 90 يوماً.</p>
+    </div>
+    <div class="card t-warn">
+      <h4>⑥ Neon Compute Hours</td></h4>
+      <p>100 compute hours/شهر. قد ينفد عند الـ heavy queries. <strong>الحل:</strong> connection pooling، cache نتائج SQL في Redis.</p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="ttl"><i class="fa-solid fa-triangle-exclamation"></i> الحقيقة القاسية</div>
+    <p>التشغيل بـ 0$ <strong>ممكن تقنياً لكنه هشّ</strong>. أيّ من: تجاوز rate limit، فشل provider، نمو سريع غير متوقع → تجربة مستخدم سيئة. <strong>التوصية:</strong> ابدأ بـ 0$ لـ MVP، انتقل لـ $20/شهر فور تجاوز 200 مستخدم. ميزانية $20 تحلّ 80% من مشاكل الـ free tiers.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 9 ============================ -->
+<section id="s9" class="section">
+  <div class="sec-head">
+    <div class="sec-num">9</div>
+    <div class="sec-title">
+      <h2>50+ تقنية توفير — Cost Reduction Strategies</h2>
+      <div class="sub">مرتّبة حسب الأثر المتوقّع</div>
+    </div>
+  </div>
+
+  <p>التوفير ليس ميزة واحدة — هو تراكم 50+ تقنية صغيرة. كل تقنية توفّر 1-30% من التكلفة. مجتمعة، تخفض التكلفة بـ 80-95%. هذا القسم يصنّف 55 تقنية حسب الأثر، مع شرح كل واحدة.</p>
+
+  <h3><i class="fa-solid fa-fire"></i> Tier 1 — تأثير عالٍ جداً (توفير 20%+ لكل تقنية)</h3>
+  <div class="rec-item"><div class="rn">1</div><div class="rt"><strong>Semantic Caching (GPTCache):</strong> مطابقة دلالية للاستعلامات. توفير 30-50% من استدعاءات الـ LLM.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">2</div><div class="rt"><strong>Prompt Compression (LLMLingua):</strong> ضغط الـ prompt بنسبة 50%. توفير 40-60% من input tokens.</div><div class="save">~50%</div></div>
+  <div class="rec-item"><div class="rn">3</div><div class="rt"><strong>Context Compression:</strong> Top-5 chunks فقط بدل Top-20. توفير 60-80% من الـ context.</div><div class="save">~70%</div></div>
+  <div class="rec-item"><div class="rn">4</div><div class="rt"><strong>Embedding Caching:</strong> hash(text) في Redis. لا تُعد حساب embedding لنفس الـ chunk. توفير 80% من استدعاءات الـ embedding.</div><div class="save">~80%</div></div>
+  <div class="rec-item"><div class="rn">5</div><div class="rt"><strong>Multi-Provider Fallback:</strong> استخدم Groq (free) أولاً، OpenRouter ($0.15/M) كـ fallback. توفير 70-90% من تكاليف الـ LLM.</div><div class="save">~80%</div></div>
+  <div class="rec-item"><div class="rn">6</div><div class="rt"><strong>Task Decomposition:</strong> 11 من 18 مهمة بدون LLM. توفير 60-70% من استدعاءات الـ AI.</div><div class="save">~65%</div></div>
+  <div class="rec-item"><div class="rn">7</div><div class="rt"><strong>JSON-Only Outputs:</strong> لا tokens ضائعة في formatting. توفير 15-25% من output.</div><div class="save">~20%</div></div>
+  <div class="rec-item"><div class="rn">8</div><div class="rt"><strong>Conversation Memory (Sliding Window):</strong> آخر 4 رسائل + summary. توفير 50-70% في الجلسات الطويلة.</div><div class="save">~60%</div></div>
+
+  <h3><i class="fa-solid fa-bolt"></i> Tier 2 — تأثير عالٍ (توفير 10-20% لكل تقنية)</h3>
+  <div class="rec-item"><div class="rn">9</div><div class="rt"><strong>Hybrid Search (Vector + BM25):</strong> استرجاع أدق = chunks أقل. توفير 30-50% من الـ context.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">10</div><div class="rt"><strong>Cross-Encoder Reranking:</strong> Top-5 دقيق بدل Top-20. توفير 30-50% من الـ context.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">11</div><div class="rt"><strong>Streaming + Early Stopping:</strong> أوقف عند اكتمال JSON. توفير 10-20% من output.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">12</div><div class="rt"><strong>Query Rewriting:</strong> أعد صياغة السؤال بدل إرساله خام. يحسّن retrieval فلا تحتاج chunks إضافية.</div><div class="save">~25%</div></div>
+  <div class="rec-item"><div class="rn">13</div><div class="rt"><strong>Chunk Reuse عبر المستخدمين:</strong> نفس PDF مرفوع من 10 طلاب = embeddings مرة واحدة. توفير 90%.</div><div class="save">~90%</div></div>
+  <div class="rec-item"><div class="rn">14</div><div class="rt"><strong>Background Workers:</strong> المهام الثقيلة async. لا حاجة لـ LLM أثناء انتظار المستخدم.</div><div class="save">~30%</div></div>
+  <div class="rec-item"><div class="rn">15</div><div class="rt"><strong>Rate Limiting (Per-User):</strong> 100 req/user/day. يحمي من الـ abuse.</div><div class="save">~25%</div></div>
+  <div class="rec-item"><div class="rn">16</div><div class="rt"><strong>Daily Quotas:</strong> حد يومي لكل مستخدم. يمنع الـ runaway usage.</div><div class="save">~30%</div></div>
+  <div class="rec-item"><div class="rn">17</div><div class="rt"><strong>Lazy Generation:</strong> ولّد الأسئلة/البطاقات عند الطلب فقط، ليس دفعة واحدة.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">18</div><div class="rt"><strong>Pre-computation:</strong> KG extraction مرة واحدة لكل مادة. وليس في كل استعلام.</div><div class="save">~95%</div></div>
+
+  <h3><i class="fa-solid fa-arrow-up-right-dots"></i> Tier 3 — تأثير متوسط (توفير 5-15% لكل تقنية)</h3>
+  <div class="rec-item"><div class="rn">19</div><div class="rt"><strong>Chunk Size Optimization:</strong> 300-500 كلمة بدل 1000. chunks أدق، context أقل.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">20</div><div class="rt"><strong>Model Routing:</strong> نموذج 7B للبسيط، 14B للمتوسط، 72B للمعقّد فقط. لا overkill.</div><div class="save">~25%</div></div>
+  <div class="rec-item"><div class="rn">21</div><div class="rt"><strong>Provider Routing:</strong> Groq لـ Qwen 7B (free)، OpenRouter لـ Qwen 72B. كل مزوّد لأرخص مهمة.</div><div class="save">~30%</div></div>
+  <div class="rec-item"><div class="rn">22</div><div class="rt"><strong>Adaptive Context:</strong> سؤال بسيط = chunks أقل. سؤال معقّد = chunks أكثر.</div><div class="save">~20%</div></div>
+  <div class="rec-item"><div class="rn">23</div><div class="rt"><strong>Response Caching (HTTP):</strong> cache GET responses في CDN. توفير bandwidth.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">24</div><div class="rt"><strong>Database Optimization:</strong> indexes، partitioning، materialized views. أقل compute.</div><div class="save">~20%</div></div>
+  <div class="rec-item"><div class="rn">25</div><div class="rt"><strong>Request Batching (Embeddings):</strong> أرسل 100 chunks في طلب واحد بدل 100 طلب.</div><div class="save">~50%</div></div>
+  <div class="rec-item"><div class="rn">26</div><div class="rt"><strong>Shared Embeddings Across Users:</strong> نفس الكتاب مرفوع من 5 طلاب = embeddings مرة واحدة.</div><div class="save">~80%</div></div>
+  <div class="rec-item"><div class="rn">27</div><div class="rt"><strong>Compress PDFs قبل التخزين:</strong> يقلل R2 storage بـ 50-70%.</div><div class="save">~60%</div></div>
+  <div class="rec-item"><div class="rn">28</div><div class="rt"><strong>Image Optimization:</strong> WebP بدل PNG. يقلل bandwidth 40%.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">29</div><div class="rt"><strong>Connection Pooling:</strong> PgBouncer. يقلل DB connections من 1000 لـ 50.</div><div class="save">~25%</div></div>
+  <div class="rec-item"><div class="rn">30</div><div class="rt"><strong>Gzip/Brotli Compression:</strong> ضغط HTTP responses. يقلل bandwidth 70%.</div><div class="save">~70%</div></div>
+
+  <h3><i class="fa-solid fa-seedling"></i> Tier 4 — تحسينات صغيرة (توفير 1-10% لكل تقنية)</h3>
+  <div class="rec-item"><div class="rn">31</div><div class="rt"><strong>Token Counting Accurate:</strong> استخدم tiktoken بدل تقدير. تجنّب الـ over-generation.</div><div class="save">~5%</div></div>
+  <div class="rec-item"><div class="rn">32</div><div class="rt"><strong>Few-Shot Pruning:</strong> أمثلة أقل في الـ prompt عند الحاجة فقط.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">33</div><div class="rt"><strong>System Prompt Caching:</strong> Groq و OpenRouter يدعمونها. أرسل system prompt مرة.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">34</div><div class="rt"><strong>Stop Sequences:</strong> أوقف الـ generation عند ["</answer>"] مثلاً.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">35</div><div class="rt"><strong>Temperature=0.3:</strong> أقل من 0.7 الافتراضي. إجابات أقصر وأكثر تركيزاً.</div><div class="save">~8%</div></div>
+  <div class="rec-item"><div class="rn">36</div><div class="rt"><strong>Max Tokens Limits:</strong> 500 لـ chat، 2000 لـ MCQ. يمنع الـ runaway.</div><div class="save">~12%</div></div>
+  <div class="rec-item"><div class="rn">37</div><div class="rt"><strong>Idle Session Cleanup:</strong> امسح sessions بعد 24h. يقلل Redis.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">38</div><div class="rt"><strong>Image Lazy Loading:</strong> في الـ frontend. يقلل bandwidth.</div><div class="save">~20%</div></div>
+  <div class="rec-item"><div class="rn">39</div><div class="rt"><strong>Static Generation:</strong> Next.js SSG للصفحات الثابتة. يقلل load على الـ backend.</div><div class="save">~30%</div></div>
+  <div class="rec-item"><div class="rn">40</div><div class="rt"><strong>Edge Caching:</strong> Cloudflare cache للـ API responses غير الديناميكية.</div><div class="save">~25%</div></div>
+
+  <h3><i class="fa-solid fa-leaf"></i> Tier 5 — تحسينات إدارية</h3>
+  <div class="rec-item"><div class="rn">41</div><div class="rt"><strong>Spam Detection:</strong> احجب الـ bots. يقلل استهلاك الـ API بـ 10-30%.</div><div class="save">~20%</div></div>
+  <div class="rec-item"><div class="rn">42</div><div class="rt"><strong>Captcha on Signup:</strong> منع الـ fake accounts.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">43</div><div class="rt"><strong>Email Verification:</strong> منع الـ duplicate accounts.</div><div class="save">~8%</div></div>
+  <div class="rec-item"><div class="rn">44</div><div class="rt"><strong>Free Tier Quotas:</strong> 50 req/day للمجاني، 500 للمدفوع. يحدّ الاستهلاك.</div><div class="save">~35%</div></div>
+  <div class="rec-item"><div class="rn">45</div><div class="rt"><strong>Off-Peak Scheduling:</strong> المهام الثقيلة (KG، OCR) في الليل. أحسن استغلال للـ free tiers.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">46</div><div class="rt"><strong>CDN للـ Static PDFs:</strong> Cloudflare cache. لا download مرتين.</div><div class="save">~50%</div></div>
+  <div class="rec-item"><div class="rn">47</div><div class="rt"><strong>Database Vacuum Tuning:</strong> autovacuum settings. أداء أعلى.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">48</div><div class="rt"><strong>Redis Persistence Off:</strong> للـ cache فقط، لا يحتاج persistence.</div><div class="save">~5%</div></div>
+  <div class="rec-item"><div class="rn">49</div><div class="rt"><strong>Log Sampling:</strong> لا تسجّل كل request. عيّن 10% فقط.</div><div class="save">~15%</div></div>
+  <div class="rec-item"><div class="rn">50</div><div class="rt"><strong>Image OCR Caching:</strong> hash(image) → لا OCR مرتين لنفس الصورة.</div><div class="save">~30%</div></div>
+  <div class="rec-item"><div class="rn">51</div><div class="rt"><strong>Deduplication of Materials:</strong> hash(PDF). لا معالجة نفس PDF مرتين.</div><div class="save">~40%</div></div>
+  <div class="rec-item"><div class="rn">52</div><div class="rt"><strong>Smart Prefetch:</strong> حمّل ملخصات الفصل التالي في الخلفية.</div><div class="save">~10%</div></div>
+  <div class="rec-item"><div class="rn">53</div><div class="rt"><strong>Question Bank:</strong> ولّد 100 سؤال offline، أعد استخدامها بدل توليد جديد.</div><div class="save">~70%</div></div>
+  <div class="rec-item"><div class="rn">54</div><div class="rt"><strong>Vector Quantization:</strong> استخدم 8-bit بدل 32-bit. ذاكرة أقل بـ 4x.</div><div class="save">~75%</div></div>
+  <div class="rec-item"><div class="rn">55</div><div class="rt"><strong>Smart Model Selection:</strong> ابدأ بـ 7B، إن فشل اترق لـ 14B. تجنّب overkill.</div><div class="save">~20%</div></div>
+
+  <h3><i class="fa-solid fa-chart-bar"></i> 9.1 الأثر المركّب للتقنيات</h3>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="v grad">55</div><div class="l">تقنية توفير</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--success),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent">~95%</div><div class="l">خفض التكلفة الإجمالي</div></div>
+    <div class="stat-box"><div class="v">8</div><div class="l">تقنيات Tier 1 (الأقوى)</div></div>
+    <div class="stat-box"><div class="v">$0.001</div><div class="l">تكلفة جلسة طالب</div></div>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> القاعدة الذهبية</div>
+    <p>طبّق <strong>Tier 1 فقط (8 تقنيات)</strong> = خفض التكلفة بـ 80%. هذا يكفي لـ MVP. أضف Tier 2 (10 تقنيات) = خفض 90%. Tier 3+ للـ scaling فقط. <strong>لا تحاول تطبيق كل 55 دفعة واحدة</strong> — ابدأ بـ Tier 1، قِس الأثر، ثم انتقل.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 10 ============================ -->
+<section id="s10" class="section">
+  <div class="sec-head">
+    <div class="sec-num">10</div>
+    <div class="sec-title">
+      <h2>خارطة النشر الواقعية — Realistic Student Deployment Plan</h2>
+      <div class="sub">4 مراحل · Graduation → Public Release</div>
+    </div>
+  </div>
+
+  <p>هذه ليست خارطة طريق نظرية — هي خطة واقعية لفريق طلاب جامعيين يتحوّلون من مشروع تخرّج إلى startup. كل مرحلة لها: عدد المستخدمين، التكلفة، الـ infrastructure، المخاطر، استراتيجية التمويل.</p>
+
+  <h3><i class="fa-solid fa-route"></i> 10.1 الخارطة الزمنية</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">المرحلة 1 — شهر 1-6 (مشروع التخرّج)</div>
+      <div class="tl-title">Phase 1: Graduation Project</div>
+      <div class="tl-desc">
+        <strong>الهدف:</strong> إثبات الفكرة + اجتياز المناقشة.<br>
+        <strong>المستخدمون:</strong> 30-50 طالب (زملاء، أصدقاء).<br>
+        <strong>التكلفة:</strong> $5-10/شهر.<br>
+        <strong>البنية:</strong> Vercel + Render free + Neon free + Qdrant free + Groq free.<br>
+        <strong>المخاطر:</strong> Render cold starts، Groq rate limits أحياناً.<br>
+        <strong>التمويل:</strong> ميزانية شخصية للفريق (تكاد تكون صفر).
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">المرحلة 2 — شهر 7-9 (Beta خاص)</div>
+      <div class="tl-title">Phase 2: Private Beta</div>
+      <div class="tl-desc">
+        <strong>الهدف:</strong> اختبار على نطاق أوسع، جمع feedback.<br>
+        <strong>المستخدمون:</strong> 200-500 طالب (جامعة الفريق).<br>
+        <strong>التكلفة:</strong> $25-50/شهر.<br>
+        <strong>البنية:</strong> Render Pro + Neon free + Qdrant free + Upstash $10 + Groq free + OpenRouter $20.<br>
+        <strong>المخاطر:</strong> تجاوز Groq limits في الذروة.<br>
+        <strong>التمويل:</strong> جائزة جامعية، منحة بحثية، أو دفع شخصي.
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">المرحلة 3 — شهر 10-12 (إطلاق جامعي)</div>
+      <div class="tl-title">Phase 3: University Launch</div>
+      <div class="tl-desc">
+        <strong>الهدف:</strong> اعتماد من جامعة واحدة على الأقل.<br>
+        <strong>المستخدمون:</strong> 1000-2000 طالب.<br>
+        <strong>التكلفة:</strong> $120-180/شهر.<br>
+        <strong>البنية:</strong> Render Pro 2GB + Neon Launch + Qdrant Cloud + Upstash Pro + Groq + OpenRouter + DeepSeek.<br>
+        <strong>المخاطر:</strong> DB bottlenecks، Vercel bandwidth.<br>
+        <strong>التمويل:</strong> اتفاقية مع جامعة ($500-2000/شهر) أو Tier مدفوع ($3/طالب/شهر).
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">المرحلة 4 — شهر 13-18 (إطلاق عام)</div>
+      <div class="tl-title">Phase 4: Public Release</div>
+      <div class="tl-desc">
+        <strong>الهدف:</strong> إطلاق للجمهور + أول إيرادات حقيقية.<br>
+        <strong>المستخدمون:</strong> 5000-10000 طالب.<br>
+        <strong>التكلفة:</strong> $500-1100/شهر.<br>
+        <strong>البنية:</strong> Render Pro × 3 + Neon Scale + Qdrant Cloud paid + Upstash Pro + Multi-provider AI.<br>
+        <strong>المخاطر:</strong> scaling issues، customer support load.<br>
+        <strong>التمويل:</strong> premium tier ($5/شهر لـ 1000 مدفوع = $5000/شهر إيراد).
+      </div>
+    </div>
+  </div>
+
+  <h3><i class="fa-solid fa-table"></i> 10.2 المقارنة الشاملة</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>المرحلة</th>
+          <th>المدة</th>
+          <th>المستخدمون</th>
+          <th>التكلفة/شهر</th>
+          <th>المطلوب إتقانه</th>
+          <th>مصدر التمويل</th>
+          <th>المخاطر الرئيسية</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>P1 — Graduation</strong></td>
+          <td>6 أشهر</td>
+          <td>30-50</td>
+          <td>$5</td>
+          <td>FastAPI + Next.js + LiteLLM + RAG basics</td>
+          <td>شخصي</td>
+          <td>تأخير في التطوير، bugs في المناقشة</td>
+        </tr>
+        <tr>
+          <td><strong>P2 — Beta</strong></td>
+          <td>3 أشهر</td>
+          <td>200-500</td>
+          <td>$25-50</td>
+          <td>Caching + Multi-provider + Monitoring</td>
+          <td>منحة جامعية</td>
+          <td>Rate limits، UX issues</td>
+        </tr>
+        <tr>
+          <td><strong>P3 — University</strong></td>
+          <td>3 أشهر</td>
+          <td>1K-2K</td>
+          <td>$120-180</td>
+          <td>Scaling + Auth + Payment integration</td>
+          <td>اتفاقية جامعة</td>
+          <td>DB bottlenecks، customer support</td>
+        </tr>
+        <tr>
+          <td><strong>P4 — Public</strong></td>
+          <td>6 أشهر</td>
+          <td>5K-10K</td>
+          <td>$500-1100</td>
+          <td>K8s basics + Multi-region + Marketing</td>
+          <td>Seed funding / revenue</td>
+          <td>Cash flow، scaling، churn</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-coins"></i> 10.3 استراتيجية التمويل لكل مرحلة</h3>
+  <div class="grid-2">
+    <div class="card t-brand">
+      <h4>P1: ميزانية شخصية ($60 سنوياً)</h4>
+      <ul>
+        <li>تكلفة Domain فقط ($10-15/سنة).</li>
+        <li>كل شيء else على free tiers.</li>
+        <li>قد يحتاج الفريق $20 إضافية لـ OpenRouter عند الذروة.</li>
+        <li>الإجمالي: $30-60/سنة. أي طالب جامعي يقدر.</li>
+      </ul>
+    </div>
+    <div class="card t-brand">
+      <h4>P2: منح صغيرة ($300-600)</h4>
+      <ul>
+        <li>منح جامعية للابتكار (شائعة في الجامعات العربية).</li>
+        <li>مسابقات طلابية (TechStars Student, MIT Arab).</li>
+        <li>GitHub Accelerator (open source projects).</li>
+        <li>Sponsorship من شركات تقنية محلية.</li>
+      </ul>
+    </div>
+    <div class="card t-brand">
+      <h4>P3: اتفاقيات B2B ($1500-3000/شهر)</h4>
+      <ul>
+        <li>اتفاقية مع جامعة لتوفير المنصة لطلابها ($500-2000/شهر).</li>
+        <li>اتفاقية مع مدرسة لـ 500 طالب ($300/شهر).</li>
+        <li>إيرادات Freemium: 5% يدفعون $5/شهر = $250-1000/شهر.</li>
+        <li>إجمالي محتمل: $1000-3000/شهر.</li>
+      </ul>
+    </div>
+    <div class="card t-brand">
+      <h4>P4: Seed funding + revenue ($5000-15000/شهر)</h4>
+      <ul>
+        <li>Seed round من مستثمر ملائكي عربي ($50-200K).</li>
+        <li>Revenue من premium: 1000 مدفوع × $5 = $5000/شهر.</li>
+        <li>Enterprise deals: 5 شركات × $500 = $2500/شهر.</li>
+        <li>إجمالي: $7500-15000/شهر.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><i class="fa-solid fa-triangle-exclamation"></i> 10.4 المخاطر الحرجة لكل مرحلة</h3>
+  <div class="grid-2">
+    <div class="card t-danger">
+      <h4>مخاطر P1 (مشروع التخرّج)</h4>
+      <ul>
+        <li><strong>التأخير الزمني:</strong> قد يتجاوز 6 أشهر. الحل: نطاق صارم.</li>
+        <li><strong>Bugs في العرض:</strong> الحل: اختبار الـ demo 20+ مرة.</li>
+        <li><strong>اعتماد على طالب واحد:</strong> الحل: توثيق شامل.</li>
+        <li><strong>فشل الـ free tier:</strong> الحل: قائمة providers بديلة.</li>
+      </ul>
+    </div>
+    <div class="card t-danger">
+      <h4>مخاطر P2 (Beta)</h4>
+      <ul>
+        <li><strong>Groq rate limits:</strong> قد تفشل في ذروة الامتحانات.</li>
+        <li><strong>UX issues:</strong> قد يترك الطلاب بسبب البطء.</li>
+        <li><strong>تسريب بيانات:</strong> بدون أمان كافٍ. الحل: JWT + rate limits.</li>
+        <li><strong>انعدام الدعم:</strong> الطلاب يحتاجون مساعدة سريعة.</li>
+      </ul>
+    </div>
+    <div class="card t-warn">
+      <h4>مخاطر P3 (إطلاق جامعي)</h4>
+      <ul>
+        <li><strong>DB bottlenecks:</strong> 1000+ مستخدم يضغطون PostgreSQL.</li>
+        <li><strong>تبعات قانونية:</strong> حقوق نشر PDFs المرفوعة.</li>
+        <li><strong>دعم العملاء:</strong> يحتاج فريق (مطوّر + support).</li>
+        <li><strong>انتقال المنصة:</strong> migration من free tiers.</li>
+      </ul>
+    </div>
+    <div class="card t-warn">
+      <h4>مخاطر P4 (إطلاق عام)</h4>
+      <ul>
+        <li><strong>cash flow:</strong> $1100/شهر قد يفوق الإيرادات.</li>
+        <li><strong>scaling issues:</strong> 10K user يحتاج K8s.</li>
+        <li><strong>churn rate:</strong> قد يصل 30% شهرياً.</li>
+        <li><strong>منافسة:</strong> شركات كبرى قد تدخل السوق.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> الخلاصة</div>
+    <p>الانتقال من <strong>0$ شهرياً</strong> (مشروع تخرّج) إلى <strong>$1100/شهر</strong> (10K مستخدم) يستغرق <strong>12-18 شهراً</strong>. كل مرحلة لها تمويلها الخاص — لا تحتاج استثمار خارجي حتى P4. <strong>القاعدة:</strong> لا تنتقل للمرحلة التالية قبل تحقيق إيرادات تغطي تكاليف المرحلة الحالية.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 11 ============================ -->
+<section id="s11" class="section">
+  <div class="sec-head">
+    <div class="sec-num">11</div>
+    <div class="sec-title">
+      <h2>نقد التقرير السابق — Self-Critique</h2>
+      <div class="sub">مراجعة صارمة للـ Master Blueprint</div>
+    </div>
+  </div>
+
+  <p>التقرير السابق (Master Technical Blueprint) كان طموحاً وشاملاً، لكنه كان يحمل <strong>أخطاء جوهرية</strong> من منظور فريق طلاب بميزانية محدودة. هذا القسم ينتقد بصراحة: ما هي الافتراضات الخاطئة؟ ما الـ overengineering؟ ما التقنيات المكلفة دون داعٍ؟ ما الميزات المؤجّلة؟</p>
+
+  <h3><i class="fa-solid fa-table"></i> 11.1 قائمة الانتقادات</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>القرار في التقرير السابق</th>
+          <th>المشكلة</th>
+          <th>التصحيح في هذا التقرير</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>اقترح Ollama + Qwen 7B محلياً (GPU server)</td>
+          <td>GPU server يكلّف $150-500/شهر. مستحيل لفريق طلاب.</td>
+          <td>API-only عبر Groq (free) + OpenRouter ($0.15/M). تكلفة أقل بـ 100x.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>اقترح Neo4j للـ Knowledge Graph</td>
+          <td>1GB RAM زائدة، تعقيد إدارة، غير ضروري.</td>
+          <td>Apache AGE في PostgreSQL. أو حتى JSONB للعلاقات.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>اقترح Kubernetes في الإنتاج</td>
+          <td>Overkill حتى 10K مستخدم. تعقيد هائل.</td>
+          <td>Render / Railway حتى 5K. K8s فقط عند 10K+.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>اقترح Claude 3.5 Sonnet للـ MCQ ($0.02-0.05/سؤال)</td>
+          <td>1000 طالب × 10 أسئلة × 30 يوم = $6000-15000/شهر.</td>
+          <td>Qwen 2.5 14B عبر OpenRouter ($0.15/M). نفس الجودة بـ 1/100 السعر.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>اقترح Qdrant Cloud مدفوع ($25/شهر) للإنتاج</td>
+          <td>Qdrant Cloud free tier (1GB) يكفي لـ ~100K chunks.</td>
+          <td>ابدأ بـ free tier. ادفع فقط عند تجاوز 1GB.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>اقترح Sentry Team + Langfuse Pro ($26 + $53/شهر)</td>
+          <td>$80/شهر للـ monitoring في MVP = مبالغة.</td>
+          <td>Sentry free (5K errors) + Langfuse Cloud free (50K obs).</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>اقترح Managed PostgreSQL من البداية ($25-300/شهر)</td>
+          <td>Neon free (0.5GB) + Supabase free (500MB) يكفيان حتى 1000 مستخدم.</td>
+          <td>ابدأ free. انتقل لـ paid عند 1000+.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>اقترح Deep Knowledge Tracing (DKT) كبحث مستقبلي</td>
+          <td>يحتاج 100K+ attempts. غير واقعي لـ MVP.</td>
+          <td>BKT فقط في v1.0. DKT ورقة بحثية منفصلة.</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>اقترح Multi-Region deployment عند 200K+ MAU</td>
+          <td>غير واقعي حتى 18-24 شهر.</td>
+          <td>Single region حتى 10K. Multi-region عند 50K+.</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>اقترح vLLM بدل Ollama للإنتاج</td>
+          <td>يحتاج GPU server مخصص. مستحيل لفريق طلاب.</td>
+          <td>API-only. لا vLLM، لا Ollama. LiteLLM + providers.</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>اقترح "100 توصية" — كثيرة جداً للتنفيذ</td>
+          <td>فريق صغير لا يطبّق 100 توصية. شلل تحليلي.</td>
+          <td>55 تقنية توفير مرتّبة بـ Tiers. ابدأ بـ Tier 1 (8 فقط).</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>اقترح Tesseract للـ OCR العربي</td>
+          <td>دقة 75% فقط. غير مقبول للإنتاج.</td>
+          <td>Surya عبر HuggingFace (مجاني، دقة 88%).</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>اقترح Apache AGE للـ KG لكنه ما زال يتحدث عن Neo4j كبديل</td>
+          <td>Apache AGE في beta. ليس مستقراً للإنتاج.</td>
+          <td>JSONB + recursive CTEs في PostgreSQL. أبسط، أسرع، أكثر استقراراً.</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>اقترح Team Burnout كـ "risk"</td>
+          <td>هذا ليس risk — هو حتمية لفريق طلاب.</td>
+          <td>نطاق صارم (MVP صغير)، schedules واقعية، no gold plating.</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>اقترح $420,000 سنوياً لـ 100K مستخدم</td>
+          <td>هذا يستبق التخطيط بـ 3-5 سنوات. غير واقعي.</td>
+          <td>ركّز على $13K سنوياً لـ 10K (المرحلة القريبة).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-arrows-rotate"></i> 11.2 ما الذي سأعيد تصميمه اليوم؟</h3>
+
+  <div class="card t-danger">
+    <h4>① إسقاط Neo4j نهائياً</h4>
+    <p>في التقرير السابق، أبقيت على Neo4j كـ "optional". اليوم: <strong>أحذفه نهائياً من التصميم</strong>. PostgreSQL + JSONB + recursive CTEs يكفي لـ KG حتى 100K عقدة. أي إشارة لـ Neo4j تضيف تعقيداً لا داعي له.</p>
+  </div>
+
+  <div class="card t-danger">
+    <h4>② إسقاط LangChain فوراً</h4>
+    <p>التقرير السابق اقترح "الاستبدال التدريجي". اليوم: <strong>لا تستخدم LangChain إطلاقاً من اليوم الأول</strong>. LiteLLM + httpx مباشرةً. وفّر 50% من الـ latency، تجنّب الـ bugs.</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4>③ إسقاط Kubernetes حتى 10K مستخدم</h4>
+    <p>التقرير السابق اقترح K8s في "Stage 3". اليوم: <strong>Render / Railway حتى 5-10K مستخدم</strong>. K8s overhead هائل (محوّلات DevOps، Helm، monitoring). ليس لفريق 2-4 طلاب.</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4>④ إسقاط Multi-Region حتى 50K مستخدم</h4>
+    <p>Single region (Frankfurt أو Virginia) يكفي حتى 50K MAU. Multi-region يضاعف التكلفة والتعقيد.</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4>⑤ إسقاط Celery Beat للحظة الـ MVP</h4>
+    <p>جدولة المراجعات يمكن أن تتم بـ cron job بسيط على Render. لا حاجة لـ Celery Beat حتى 1000 مستخدم.</p>
+  </div>
+
+  <div class="card t-danger">
+    <h4>⑥ إسقاط DeepSeek R1 من MVP</h4>
+    <p>التقرير السابق اقترح DeepSeek R1 لـ "Math/Logic". اليوم: <strong>Qwen 2.5 7B يكفي لـ 95% من الحالات</strong>. DeepSeek R1 مكلف وبطيء. أضِفه فقط كـ Premium feature لاحقاً.</p>
+  </div>
+
+  <div class="card t-warn">
+    <h4>⑦ إسقاط "100 توصية" — ركّز على 20</h4>
+    <p>100 توصية = شلل تحليلي. التركيز على <strong>20 توصية فقط (Tier 1 + Tier 2)</strong> يحقق 90% من الفائدة.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-pie"></i> 11.3 مقارنة التقريرين</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المعيار</th><th>التقرير السابق (Master)</th><th>هذا التقرير (Cloud SaaS)</th></tr></thead>
+      <tbody>
+        <tr><td>الجمهور المستهدف</td><td>Startup CTO ($50K+ budget)</td><td>فريق طلاب ($0-500 budget)</td></tr>
+        <tr><td>إستراتيجية LLM</td><td>Self-hosted + Cloud APIs</td><td>API-only (no local)</td></tr>
+        <tr><td>التكلفة الشهرية (1K مستخدم)</td><td>~$600</td><td>~$120</td></tr>
+        <tr><td>التكلفة الشهرية (10K مستخدم)</td><td>~$4,500</td><td>~$1,100</td></tr>
+        <tr><td>GPU requirement</td><td>نعم ($150-500/شهر)</td><td>لا ($0)</td></tr>
+        <tr><td>DevOps complexity</td><td>عالٍ (K8s, vLLM, Ollama)</td><td>منخفض (Render, APIs)</td></tr>
+        <tr><td>Time to MVP</td><td>6-9 أشهر</td><td>3-4 أشهر</td></tr>
+        <tr><td>عدد التوصيات</td><td>100</td><td>55 (مرتّبة)</td></tr>
+        <tr><td>المخاطر التقنية</td><td>عالية (GPU, model management)</td><td>منخفضة (APIs مستقرة)</td></tr>
+        <tr><td>المرونة (vendor lock-in)</td><td>عالية (Ollama, vLLM)</td><td>منخفضة (LiteLLM unified)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-lightbulb"></i> الخلاصة النقدية</div>
+    <p>التقرير السابق كان <strong>ممتازاً كـ "نظرة CTO"</strong> لكنه كان <strong>غير واقعي لفريق طلاب</strong>. هذا التقرير يصحّح المسار: API-only، free-first، gradient scaling. <strong>النتيجة:</strong> نفس القيمة التعليمية، بتكلفة أقل بـ 5-10x، وزمن إطلاق أسرع بـ 2x.</p>
+  </div>
+</section>
+
+<!-- ============================ SECTION 12 ============================ -->
+<section id="s12" class="section">
+  <div class="sec-head">
+    <div class="sec-num">12</div>
+    <div class="sec-title">
+      <h2>توصية الـ CTO النهائية — Final Recommendation</h2>
+      <div class="sub">4 ميزانيات · 4 معماريات · توصية واحدة</div>
+    </div>
+  </div>
+
+  <p>السؤال الأخير: <strong>إذا كان لديك فقط 0$، 20$، 100$، أو 500$ شهرياً، كيف ستبني OpenLearn AI؟</strong> هذا القسم يقدّم 4 معماريات مختلفة، كل واحدة مصمّمة لميزانية معيّنة، ثم يوصي بالأفضل.</p>
+
+  <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> 12.1 الميزانية: $0/شهر (Free-Only Stack)</h3>
+  <div class="cost-card">
+    <div class="lbl">الحد الأقصى للمستخدمين</div>
+    <div class="total">500<span class="cur">طالب</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المكوّن</th><th>المزوّد</th><th>التكلفة</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>Vercel Free</td><td>$0</td></tr>
+        <tr><td>Backend</td><td>Render Free (with sleep)</td><td>$0</td></tr>
+        <tr><td>Database</td><td>Neon Free (0.5GB)</td><td>$0</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud Free (1GB)</td><td>$0</td></tr>
+        <tr><td>Redis</td><td>Upstash Free</td><td>$0</td></tr>
+        <tr><td>Storage</td><td>Cloudflare R2 (10GB free)</td><td>$0</td></tr>
+        <tr><td>CDN</td><td>Cloudflare Free</td><td>$0</td></tr>
+        <tr><td>Email</td><td>Resend Free (3K/month)</td><td>$0</td></tr>
+        <tr><td>LLM Chat</td><td>Groq Free (Qwen 2.5 7B)</td><td>$0</td></tr>
+        <tr><td>LLM Fallback</td><td>Cerebras Free / Cloudflare AI</td><td>$0</td></tr>
+        <tr><td>Embeddings</td><td>HuggingFace Free (BGE-m3)</td><td>$0</td></tr>
+        <tr><td>OCR</td><td>HuggingFace Free (Surya)</td><td>$0</td></tr>
+        <tr><td>Monitoring</td><td>Sentry Free + Langfuse Cloud Free</td><td>$0</td></tr>
+        <tr><td>Domain</td><td>.vercel.app subdomain</td><td>$0</td></tr>
+        <tr><td><strong>الإجمالي</strong></td><td></td><td><strong>$0/شهر</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="ttl"><i class="fa-solid fa-triangle-exclamation"></i> القيود</div>
+    <p>Render sleeps بعد 15min (cold starts 30s). Groq rate limits صارمة. لا domain مخصص. لا email branded. يكفي لمشروع تخرّج فقط.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> 12.2 الميزانية: $20/شهر (Lean Stack)</h3>
+  <div class="cost-card">
+    <div class="lbl">الحد الأقصى للمستخدمين</div>
+    <div class="total">1,500<span class="cur">طالب</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المكوّن</th><th>المزوّد</th><th>التكلفة</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Cloudflare (.com)</td><td>$1</td></tr>
+        <tr><td>Frontend</td><td>Vercel Free</td><td>$0</td></tr>
+        <tr><td>Backend</td><td>Render Starter (no sleep)</td><td>$7</td></tr>
+        <tr><td>Database</td><td>Neon Free (3GB)</td><td>$0</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud Free</td><td>$0</td></tr>
+        <tr><td>Redis</td><td>Upstash Free</td><td>$0</td></tr>
+        <tr><td>Storage</td><td>Cloudflare R2 Free</td><td>$0</td></tr>
+        <tr><td>CDN</td><td>Cloudflare Free</td><td>$0</td></tr>
+        <tr><td>Email</td><td>Resend Free</td><td>$0</td></tr>
+        <tr><td>LLM APIs</td><td>Groq Free + OpenRouter ($10 credit)</td><td>$10</td></tr>
+        <tr><td>Embeddings/OCR</td><td>HuggingFace Free</td><td>$0</td></tr>
+        <tr><td>Monitoring</td><td>Sentry + Langfuse Free</td><td>$0</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$2</td></tr>
+        <tr><td><strong>الإجمالي</strong></td><td></td><td><strong>~$20/شهر</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-thumbs-up"></i> الميزات</div>
+    <p>Domain مخصص. No cold starts. OpenRouter credit يسمح بنماذج أكبر (Qwen 14B). يكفي لجامعة كاملة. <strong>التوصية لـ Private Beta.</strong></p>
+  </div>
+
+  <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> 12.3 الميزانية: $100/شهر (Growth Stack)</h3>
+  <div class="cost-card">
+    <div class="lbl">الحد الأقصى للمستخدمين</div>
+    <div class="total">5,000<span class="cur">طالب</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المكوّن</th><th>المزوّد</th><th>التكلفة</th></tr></thead>
+      <tbody>
+        <tr><td>Domain</td><td>Cloudflare</td><td>$1</td></tr>
+        <tr><td>Frontend</td><td>Vercel Pro</td><td>$20</td></tr>
+        <tr><td>Backend</td><td>Render Standard 2GB</td><td>$15</td></tr>
+        <tr><td>Database</td><td>Neon Launch</td><td>$19</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud Free</td><td>$0</td></tr>
+        <tr><td>Redis</td><td>Upstash Pay-as-you-go</td><td>$10</td></tr>
+        <tr><td>Storage</td><td>Cloudflare R2 (50GB)</td><td>$1</td></tr>
+        <tr><td>CDN</td><td>Cloudflare</td><td>$5</td></tr>
+        <tr><td>Email</td><td>Resend (50K)</td><td>$20</td></tr>
+        <tr><td>LLM APIs</td><td>Groq + OpenRouter + DeepSeek</td><td>$25</td></tr>
+        <tr><td>Embeddings/OCR</td><td>HuggingFace + Cohere Rerank</td><td>$0</td></tr>
+        <tr><td>Monitoring</td><td>Sentry Team + Langfuse Cloud</td><td>$0 (free)</td></tr>
+        <tr><td>Backups</td><td>Backblaze B2</td><td>$0.50</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$-16.50 (تحت الميزانية)</td></tr>
+        <tr><td><strong>الإجمالي</strong></td><td></td><td><strong>~$100/شهر</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-thumbs-up"></i> الميزات</div>
+    <p>HA basic، monitoring كامل، DeepSeek للـ reasoning، Vercel Pro لـ bandwidth أعلى. <strong>التوصية لـ University Launch.</strong></p>
+  </div>
+
+  <h3><i class="fa-solid fa-circle-dollar-to-slot"></i> 12.4 الميزانية: $500/شهر (Production Stack)</h3>
+  <div class="cost-card">
+    <div class="lbl">الحد الأقصى للمستخدمين</div>
+    <div class="total">15,000<span class="cur">طالب</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>المكوّن</th><th>المزوّد</th><th>التكلفة</th></tr></thead>
+      <tbody>
+        <tr><td>Domain + DNS</td><td>Cloudflare</td><td>$5</td></tr>
+        <tr><td>Frontend</td><td>Vercel Pro</td><td>$20</td></tr>
+        <tr><td>Backend</td><td>Render Pro × 2 (4GB)</td><td>$50</td></tr>
+        <tr><td>Database</td><td>Neon Scale</td><td>$69</td></tr>
+        <tr><td>Vector DB</td><td>Qdrant Cloud (5GB)</td><td>$25</td></tr>
+        <tr><td>Redis</td><td>Upstash Pro</td><td>$30</td></tr>
+        <tr><td>Storage</td><td>Cloudflare R2 (250GB)</td><td>$5</td></tr>
+        <tr><td>CDN + Bandwidth</td><td>Cloudflare</td><td>$20</td></tr>
+        <tr><td>Email</td><td>Resend (100K)</td><td>$50</td></tr>
+        <tr><td>LLM APIs</td><td>Groq + OpenRouter + DeepSeek + Cohere</td><td>$150</td></tr>
+        <tr><td>Monitoring</td><td>Sentry Team + Langfuse Pro</td><td>$53</td></tr>
+        <tr><td>Backups</td><td>Backblaze B2</td><td>$1</td></tr>
+        <tr><td>Misc</td><td>—</td><td>$22</td></tr>
+        <tr><td><strong>الإجمالي</strong></td><td></td><td><strong>~$500/شهر</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-chart-bar"></i> 12.5 المقارنة الشاملة للميزانيات</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>الميزانية</th><th>الطلاب</th><th>التكلفة/طالب</th><th>SLA</th><th>Domain</th><th>أبرز الميزات</th></tr></thead>
+      <tbody>
+        <tr><td><strong>$0</strong></td><td>500</td><td>$0.00</td><td>Best-effort</td><td>Subdomain</td><td>كل شيء free tier</td></tr>
+        <tr><td><strong>$20</strong></td><td>1,500</td><td>$0.013</td><td>99%</td><td>Custom</td><td>No cold starts, OpenRouter</td></tr>
+        <tr><td><strong>$100</strong></td><td>5,000</td><td>$0.020</td><td>99.5%</td><td>Custom</td><td>Managed DB, DeepSeek, monitoring</td></tr>
+        <tr><td><strong>$500</strong></td><td>15,000</td><td>$0.033</td><td>99.9%</td><td>Custom</td><td>HA, multi-server, scale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><i class="fa-solid fa-decision-tree"></i> 12.6 شجرة القرار</h3>
+  <div class="diagram">
+    <div class="decision-tree">
+      <div class="dec-node q">ما هي ميزانيتك الشهرية؟</div>
+      <div class="dec-branches">
+        <div class="dec-branch">
+          <div class="dec-label">$0 (لا ميزانية)</div>
+          <div class="dec-node y">Free-Only Stack<br><small>500 طالب · مشروع تخرّج</small></div>
+        </div>
+        <div class="dec-branch">
+          <div class="dec-label">$20 (ميزانية شخصية)</div>
+          <div class="dec-node y">Lean Stack<br><small>1500 طالب · Beta خاص</small></div>
+        </div>
+        <div class="dec-branch">
+          <div class="dec-label">$100 (منحة)</div>
+          <div class="dec-node y">Growth Stack<br><small>5000 طالب · إطلاق جامعي</small></div>
+        </div>
+        <div class="dec-branch">
+          <div class="dec-label">$500 (إيرادات)</div>
+          <div class="dec-node y">Production Stack<br><small>15000 طالب · إطلاق عام</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3><i class="fa-solid fa-trophy"></i> 12.7 التوصية النهائية للـ CTO</h3>
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-trophy"></i> التوصية: ابدأ بـ $20/شهر، توسّع تدريجياً</div>
+    <p><strong>لا تبدأ بـ $0</strong> — Render cold starts وGroq rate limits ستفسد تجربة المستخدم. <strong>$20/شهر</strong> هو نقطة الانطلاق المثالية: domain مخصص، no cold starts، $10 OpenRouter credit للنماذج الكبيرة. هذا يكفي لـ <strong>1500 طالب</strong> — أي جامعة متوسطة. عند تجاوز ذلك، انتقل لـ $100 ثم $500 تدريجياً.</p>
+  </div>
+
+  <h3><i class="fa-solid fa-flag-checkered"></i> 12.8 الجواب على السؤال الجوهري</h3>
+  <div class="callout success">
+    <div class="ttl"><i class="fa-solid fa-circle-check"></i> هل يمكن تشغيل OpenLearn AI كـ SaaS بـ APIs مفتوحة فقط وبأسعار في متناول الطلاب؟</div>
+    <p style="font-size:16px;line-height:1.9"><strong>نعم، بكل تأكيد.</strong> الأرقام تثبت ذلك:</p>
+    <ul>
+      <li><strong>تكلفة طالب واحد:</strong> $0.001-0.03/شهر (حسب الـ tier).</li>
+      <li><strong>1000 طالب:</strong> $20-120/شهر — أقل من راتب مهندس يوم واحد.</li>
+      <li><strong>10000 طالب:</strong> $500-1100/شهر — أقل من ChatPDF subscription لـ 100 مستخدم.</li>
+      <li><strong>هامش الربح عند $5/طالب/شهر:</strong> 88-95%.</li>
+      <li><strong>لا GPU، لا DevOps معقّد، لا استثمار أولي ضخم.</strong></li>
+    </ul>
+    <p style="font-size:16px;line-height:1.9;margin-top:14px"><strong>الشرط الوحيد:</strong> اتبّع الـ stack الموصى به (Qwen + Groq + OpenRouter + HuggingFace)، طبّق تقنيات Tier 1 (semantic cache + prompt compression + task decomposition)، ولا تنحرف عن الـ API-only architecture. بهذه القواعد، OpenLearn AI يمكن أن يصبح <strong>أرخص منصة تعلّم تكيّفي عربية</strong>، بفريق طلاب، بميزانية Ramen-noodles.</p>
+  </div>
+
+  <div class="stat-grid" style="margin-top:24px">
+    <div class="stat-box"><div class="v grad">$0.001</div><div class="l">تكلفة جلسة طالب</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--success),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent">95%</div><div class="l">توفير مقابل GPT-4</div></div>
+    <div class="stat-box"><div class="v grad" style="background:linear-gradient(135deg,var(--brand-2),var(--brand-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent">88%</div><div class="l">هامش ربح محتمل</div></div>
+    <div class="stat-box"><div class="v">$20</div><div class="l">ميزانية البداية المثلى</div></div>
+    <div class="stat-box"><div class="v">12-18</div><div class="l">شهر للوصول لـ 10K طالب</div></div>
+    <div class="stat-box"><div class="v">نعم</div><div class="l">الجواب النهائي</div></div>
+  </div>
+</section>
+
+
+</main>
+</div>
+
+<footer class="footer">
+  <div class="brand">OpenLearn AI — Cloud SaaS Deployment Blueprint</div>
+  <div>تقرير إنتاجي ثاني · مُتمم للتقرير الهندسي الرئيسي · مُركّز على الجدوى العملية لفريق طلاب بميزانية محدودة</div>
+</footer>
+
+<script>
+mermaid.initialize({startOnLoad:true,theme:'base',themeVariables:{primaryColor:'#10b981',primaryTextColor:'#fff',primaryBorderColor:'#06b6d4',lineColor:'#5d7a72',secondaryColor:'#14302a',tertiaryColor:'#0f231d',fontFamily:'IBM Plex Sans Arabic, sans-serif'},flowchart:{curve:'basis',padding:14},sequence:{actorMargin:50,mirrorActors:false}});
+
+const sections = document.querySelectorAll('.section');
+const tocLinks = document.querySelectorAll('.toc-item');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id = e.target.id;
+      tocLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href')==='#'+id));
+    }
+  });
+},{rootMargin:'-100px 0px -60% 0px'});
+sections.forEach(s=>observer.observe(s));
+
+tocLinks.forEach(l=>{
+  l.addEventListener('click',e=>{
+    e.preventDefault();
+    const t = document.querySelector(l.getAttribute('href'));
+    if(t){t.scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('.sidebar').classList.remove('open');}
+  });
+});
+
+const bars = document.querySelectorAll('.progress .bar .fill');
+const pobs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const w = e.target.dataset.w || '0';
+      e.target.style.width = w+'%';
+      pobs.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+bars.forEach(b=>{b.style.width='0';pobs.observe(b)});
+</script>
+</body>
+</html>

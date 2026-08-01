@@ -1,0 +1,3268 @@
+<html lang="ar" dir="rtl" class="dark"><head>
+<meta charset="UTF-8">
+
+<style id="webmakerstyle">
+
+</style>
+</head>
+<body class="min-h-screen">
+
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenLearn AI — منصة الذكاء التعليمي التكيفي</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Cairo', 'Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      }
+    }
+  }
+}
+</script>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --surface-2: #f1f4f9;
+    --surface-3: #e8edf5;
+    --border: #e2e8f0;
+    --border-2: #cbd5e1;
+    --text: #0f172a;
+    --text-2: #334155;
+    --muted: #64748b;
+    --primary: #6366f1;
+    --primary-soft: #eef2ff;
+    --violet: #8b5cf6;
+    --pink: #ec4899;
+    --emerald: #10b981;
+    --amber: #f59e0b;
+    --rose: #f43f5e;
+    --sky: #0ea5e9;
+  }
+  .dark {
+    --bg: #080b16;
+    --surface: #111521;
+    --surface-2: #181d2e;
+    --surface-3: #1f2538;
+    --border: #232a3f;
+    --border-2: #2e3650;
+    --text: #e6e9f2;
+    --text-2: #c4c9d6;
+    --muted: #7e869c;
+    --primary: #818cf8;
+    --primary-soft: rgba(99, 102, 241, 0.12);
+  }
+  * { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    transition: background 0.3s, color 0.3s;
+  }
+  .surface { background: var(--surface); border: 1px solid var(--border); }
+  .surface-2 { background: var(--surface-2); }
+  .surface-3 { background: var(--surface-3); }
+  .text-muted { color: var(--muted); }
+  .text-2 { color: var(--text-2); }
+  .border-c { border-color: var(--border); }
+  .border-c-2 { border-color: var(--border-2); }
+  .bg-primary-soft { background: var(--primary-soft); }
+  
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+  
+  .brand-gradient { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 45%, #ec4899 100%); }
+  .brand-gradient-soft { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.08), rgba(236,72,153,0.06)); }
+  .brand-text {
+    background: linear-gradient(135deg, #818cf8 0%, #c4b5fd 50%, #f9a8d4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  
+  /* Flashcard 3D flip */
+  .flashcard { perspective: 1500px; }
+  .flashcard-inner {
+    position: relative;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .flashcard-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    position: absolute;
+    inset: 0;
+  }
+  .flashcard-back { transform: rotateY(180deg); }
+  
+  /* Animations */
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .float { animation: float 7s ease-in-out infinite; }
+  .float-delay { animation: float 7s ease-in-out infinite; animation-delay: -3s; }
+  
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+  }
+  .pulse-soft { animation: pulse-soft 2.5s ease-in-out infinite; }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page { animation: fadeIn 0.35s ease; }
+  
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+  .typing-dot { animation: typing 1.4s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+  }
+  
+  @keyframes drawLine {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+  }
+  
+  /* Nav active */
+  .nav-item {
+    position: relative;
+    transition: all 0.2s;
+  }
+  .nav-item:hover { background: var(--surface-2); }
+  .nav-item-active {
+    background: linear-gradient(90deg, rgba(99,102,241,0.18), rgba(139,92,246,0.08), transparent) !important;
+    color: #a5b4fc !important;
+  }
+  .nav-item-active::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #818cf8, #ec4899);
+  }
+  
+  /* Tabs */
+  .tab-active {
+    color: var(--text) !important;
+    background: var(--surface-2) !important;
+  }
+  .tab-active .tab-dot { opacity: 1; }
+  
+  /* Knowledge graph */
+  .kg-node-circle { transition: all 0.3s; cursor: pointer; }
+  .kg-node-circle:hover { filter: brightness(1.3); transform: scale(1.1); transform-origin: center; }
+  .kg-edge { transition: all 0.3s; }
+  
+  /* Heatmap cell */
+  .heat-cell {
+    transition: transform 0.15s;
+    cursor: pointer;
+  }
+  .heat-cell:hover { transform: scale(1.15); z-index: 2; }
+  
+  /* Grid pattern bg */
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .dark .grid-pattern {
+    background-image:
+      linear-gradient(rgba(129,140,248,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(129,140,248,0.05) 1px, transparent 1px);
+  }
+  
+  /* Glow effects */
+  .glow-primary { box-shadow: 0 0 60px -10px rgba(99, 102, 241, 0.45); }
+  .glow-pink { box-shadow: 0 0 60px -10px rgba(236, 72, 153, 0.35); }
+  
+  /* Toggle switch */
+  .toggle {
+    width: 44px; height: 24px; border-radius: 12px;
+    background: var(--surface-3); position: relative; cursor: pointer;
+    transition: background 0.2s;
+    border: 1px solid var(--border);
+  }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; right: 2px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--text-2);
+    transition: all 0.2s;
+  }
+  .toggle.on { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; }
+  .toggle.on::after { right: 22px; background: white; }
+  
+  /* Code block */
+  .code-block {
+    font-family: 'JetBrains Mono', monospace;
+    background: #0d1117;
+    color: #e6edf3;
+    border: 1px solid #1f2937;
+  }
+  .code-block .kw { color: #ff7b72; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .fn { color: #d2a8ff; }
+  .code-block .num { color: #79c0ff; }
+  .code-block .cm { color: #8b949e; }
+  
+  /* Bubble chat */
+  .chat-bubble-ai {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .chat-bubble-user {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+  }
+  
+  /* Drop zone */
+  .drop-zone {
+    border: 2px dashed var(--border-2);
+    transition: all 0.25s;
+  }
+  .drop-zone:hover, .drop-zone.drag {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+  
+  /* Progress bar */
+  .pbar { 
+    background: var(--surface-3); 
+    border-radius: 999px; 
+    overflow: hidden;
+  }
+  .pbar > div {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+  
+  /* Tooltip */
+  .tip { position: relative; }
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 50;
+  }
+  .tip:hover::after { opacity: 1; }
+  
+  /* Selection */
+  ::selection { background: rgba(129, 140, 248, 0.3); }
+  
+  /* Modal */
+  .modal-backdrop {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Hide scrollbar on horizontal scroll */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- LOGIN SCREEN                                            -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="login-screen" class="min-h-screen flex">
+  <!-- Left brand panel -->
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden brand-gradient">
+    <div class="absolute inset-0 grid-pattern opacity-30"></div>
+    <!-- Floating shapes -->
+    <div class="absolute top-20 left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl float"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-pink-300/20 blur-3xl float-delay"></div>
+    
+    <!-- Orbiting dots -->
+    <div class="absolute top-1/2 left-1/2 w-2 h-2 -m-1 rounded-full bg-white/80" style="animation: orbit 18s linear infinite;"></div>
+    <div class="absolute top-1/2 left-1/2 w-1.5 h-1.5 -m-1 rounded-full bg-pink-200" style="animation: orbit 24s linear infinite reverse;"></div>
+    
+    <div class="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center border border-white/20">
+          <i class="fa-solid fa-graduation-cap text-xl"></i>
+        </div>
+        <div>
+          <div class="text-xl font-extrabold tracking-tight">OpenLearn AI</div>
+          <div class="text-xs text-white/70">منصة الذكاء التعليمي التكيفي</div>
+        </div>
+      </div>
+      
+      <!-- Hero text -->
+      <div class="max-w-lg">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-medium mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-300 pulse-soft"></span>
+          النسخة 4.0 — Hybrid AI Architecture
+        </div>
+        <h1 class="text-5xl font-extrabold leading-tight mb-5">
+          تعلّم بذكاء.<br>
+          <span class="text-white/80">لا تكتفي بالقراءة.</span>
+        </h1>
+        <p class="text-white/75 text-lg leading-relaxed mb-8">
+          منصة مفتوحة المصدر تحوّل موادك الدراسية إلى تجربة تعلم تكيفية — تفهم ما تعرفه، تحدد نقاط ضعفك، وتجدول مراجعتك وفقًا لمنحنى النسيان.
+        </p>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4">
+            <div class="text-2xl font-extrabold">8</div>
+            <div class="text-xs text-white/70 mt-1">طبقات ذكاء تعليمي</div>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4">
+            <div class="text-2xl font-extrabold">100%</div>
+            <div class="text-xs text-white/70 mt-1">خصوصية — Local First</div>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4">
+            <div class="text-2xl font-extrabold">AGPL</div>
+            <div class="text-xs text-white/70 mt-1">مفتوح المصدر بالكامل</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="flex items-center justify-between text-xs text-white/60">
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1.5"><i class="fa-brands fa-github"></i> github.com/openlearn-ai</span>
+          <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Privacy First</span>
+        </div>
+        <div>© 2025 OpenLearn AI</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Right form panel -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+    <div class="absolute top-6 right-6 lg:hidden flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center">
+        <i class="fa-solid fa-graduation-cap text-white text-sm"></i>
+      </div>
+      <span class="font-extrabold">OpenLearn AI</span>
+    </div>
+    
+    <!-- Theme toggle -->
+    <button onclick="toggleTheme()" class="absolute top-6 left-6 w-10 h-10 rounded-xl surface flex items-center justify-center hover:bg-[var(--surface-2)] transition">
+      <i class="fa-solid fa-moon text-sm" id="theme-icon"></i>
+    </button>
+    
+    <div class="w-full max-w-md page">
+      <!-- Tabs -->
+      <div class="flex p-1 surface rounded-2xl mb-8">
+        <button onclick="switchAuth('signin')" id="tab-signin" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition tab-active">تسجيل الدخول</button>
+        <button onclick="switchAuth('signup')" id="tab-signup" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition text-muted">حساب جديد</button>
+      </div>
+      
+      <!-- Sign in form -->
+      <div id="form-signin" class="space-y-5">
+        <div>
+          <h2 class="text-3xl font-extrabold mb-2">أهلاً بعودتك 👋</h2>
+          <p class="text-muted text-sm">سجّل دخولك لمتابعة رحلة التعلم التكيفية</p>
+        </div>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-2 mb-2">البريد الإلكتروني</label>
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+              <input type="email" value="ahmed@university.edu" class="w-full surface rounded-xl pr-11 pl-4 py-3 text-sm outline-none focus:border-[var(--primary)] transition" placeholder="you@example.com">
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-semibold text-2">كلمة المرور</label>
+              <button class="text-xs text-[var(--primary)] hover:underline">نسيت كلمة المرور؟</button>
+            </div>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+              <input type="password" value="••••••••••" class="w-full surface rounded-xl pr-11 pl-11 py-3 text-sm outline-none focus:border-[var(--primary)] transition">
+              <i class="fa-solid fa-eye absolute left-4 top-1/2 -translate-y-1/2 text-muted text-sm cursor-pointer"></i>
+            </div>
+          </div>
+          <label class="flex items-center gap-2 text-sm text-muted cursor-pointer">
+            <input type="checkbox" checked="" class="w-4 h-4 rounded accent-[var(--primary)]">
+            إبقائي مسجّل الدخول على هذا الجهاز
+          </label>
+        </div>
+        
+        <button onclick="enterApp()" class="w-full brand-gradient text-white py-3.5 rounded-xl font-bold text-sm hover:opacity-90 transition glow-primary">
+          <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+          تسجيل الدخول
+        </button>
+        
+        <div class="flex items-center gap-3 my-2">
+          <div class="flex-1 h-px bg-[var(--border)]"></div>
+          <span class="text-xs text-muted">أو تابع عبر</span>
+          <div class="flex-1 h-px bg-[var(--border)]"></div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3">
+          <button class="surface hover:bg-[var(--surface-2)] py-3 rounded-xl font-semibold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-brands fa-google text-red-400"></i> Google
+          </button>
+          <button onclick="enterApp()" class="surface hover:bg-[var(--surface-2)] py-3 rounded-xl font-semibold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wifi-slash text-amber-400"></i> وضع دون اتصال
+          </button>
+        </div>
+        
+        <p class="text-center text-xs text-muted pt-2">
+          بتسجيلك الدخول، أنت توافق على
+          <a class="text-[var(--primary)] hover:underline">شروط الاستخدام</a>
+          و
+          <a class="text-[var(--primary)] hover:underline">سياسة الخصوصية</a>
+        </p>
+      </div>
+      
+      <!-- Sign up form -->
+      <div id="form-signup" class="space-y-5 hidden">
+        <div>
+          <h2 class="text-3xl font-extrabold mb-2">ابدأ رحلتك 🚀</h2>
+          <p class="text-muted text-sm">أنشئ حسابًا مجانيًا — بدون بطاقة ائتمان</p>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-2 mb-2">الاسم الكامل</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+              <input type="text" placeholder="أحمد محمد" class="w-full surface rounded-xl pr-11 pl-4 py-3 text-sm outline-none focus:border-[var(--primary)] transition">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-2 mb-2">البريد الإلكتروني</label>
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+              <input type="email" placeholder="you@example.com" class="w-full surface rounded-xl pr-11 pl-4 py-3 text-sm outline-none focus:border-[var(--primary)] transition">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-2 mb-2">كلمة المرور</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+              <input type="password" placeholder="••••••••" class="w-full surface rounded-xl pr-11 pl-4 py-3 text-sm outline-none focus:border-[var(--primary)] transition">
+            </div>
+            <div class="flex gap-1 mt-2">
+              <div class="h-1 flex-1 rounded bg-emerald-500"></div>
+              <div class="h-1 flex-1 rounded bg-emerald-500"></div>
+              <div class="h-1 flex-1 rounded bg-amber-500"></div>
+              <div class="h-1 flex-1 rounded bg-[var(--surface-3)]"></div>
+            </div>
+            <p class="text-xs text-muted mt-1.5">قوة كلمة المرور: متوسطة</p>
+          </div>
+        </div>
+        <button onclick="enterApp()" class="w-full brand-gradient text-white py-3.5 rounded-xl font-bold text-sm hover:opacity-90 transition glow-primary">
+          إنشاء الحساب
+        </button>
+        <div class="flex items-center gap-3">
+          <div class="flex-1 h-px bg-[var(--border)]"></div>
+          <span class="text-xs text-muted">أو</span>
+          <div class="flex-1 h-px bg-[var(--border)]"></div>
+        </div>
+        <button class="w-full surface hover:bg-[var(--surface-2)] py-3 rounded-xl font-semibold text-sm transition flex items-center justify-center gap-2">
+          <i class="fa-brands fa-google text-red-400"></i> المتابعة باستخدام Google
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN APP                                                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="app" class="hidden flex">
+  <!-- Sidebar -->
+  <aside class="w-64 surface border-l border-c flex-shrink-0 flex flex-col h-screen sticky top-0">
+    <!-- Logo -->
+    <div class="px-5 py-5 border-b border-c">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl brand-gradient flex items-center justify-center glow-primary">
+          <i class="fa-solid fa-graduation-cap text-white"></i>
+        </div>
+        <div>
+          <div class="font-extrabold text-sm">OpenLearn AI</div>
+          <div class="text-[10px] text-muted">v4.0 · Hybrid</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Material selector -->
+    <div class="px-3 py-3 border-b border-c">
+      <div class="text-[10px] font-bold text-muted uppercase tracking-wider px-2 mb-2">المادة النشطة</div>
+      <button class="w-full surface-2 rounded-xl p-3 text-right hover:bg-[var(--surface-3)] transition flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-brain text-white text-xs"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold truncate">التعلم الآلي</div>
+          <div class="text-[10px] text-muted">247 مفهوم · 89% mastery</div>
+        </div>
+        <i class="fa-solid fa-chevron-down text-muted text-xs"></i>
+      </button>
+    </div>
+    
+    <!-- Nav -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-0.5">
+      <div class="text-[10px] font-bold text-muted uppercase tracking-wider px-3 py-2">الرئيسية</div>
+      <button onclick="navTo('dashboard')" data-nav="dashboard" class="nav-item nav-item-active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right">
+        <i class="fa-solid fa-gauge-high w-5 text-center"></i>
+        <span>لوحة التحكم</span>
+      </button>
+      <button onclick="navTo('adaptive')" data-nav="adaptive" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-wand-magic-sparkles w-5 text-center"></i>
+        <span>التعلم التكيفي</span>
+        <span class="mr-auto text-[9px] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded-full">5</span>
+      </button>
+      
+      <div class="text-[10px] font-bold text-muted uppercase tracking-wider px-3 py-2 mt-3">المحتوى</div>
+      <button onclick="navTo('upload')" data-nav="upload" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-cloud-arrow-up w-5 text-center"></i>
+        <span>رفع المواد</span>
+      </button>
+      <button onclick="navTo('chat')" data-nav="chat" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-comments w-5 text-center"></i>
+        <span>المساعد الذكي</span>
+      </button>
+      <button onclick="navTo('graph')" data-nav="graph" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-diagram-project w-5 text-center"></i>
+        <span>خريطة المعرفة</span>
+      </button>
+      
+      <div class="text-[10px] font-bold text-muted uppercase tracking-wider px-3 py-2 mt-3">التقييم</div>
+      <button onclick="navTo('flashcards')" data-nav="flashcards" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-clone w-5 text-center"></i>
+        <span>البطاقات التعليمية</span>
+        <span class="mr-auto text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-full">12</span>
+      </button>
+      <button onclick="navTo('exams')" data-nav="exams" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-file-pen w-5 text-center"></i>
+        <span>الاختبارات</span>
+      </button>
+      <button onclick="navTo('analytics')" data-nav="analytics" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-chart-line w-5 text-center"></i>
+        <span>التحليلات</span>
+      </button>
+      
+      <div class="text-[10px] font-bold text-muted uppercase tracking-wider px-3 py-2 mt-3">الحساب</div>
+      <button onclick="navTo('profile')" data-nav="profile" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+        <span>الملف الشخصي</span>
+      </button>
+      <button onclick="navTo('settings')" data-nav="settings" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-right text-2">
+        <i class="fa-solid fa-sliders w-5 text-center"></i>
+        <span>الإعدادات</span>
+      </button>
+    </nav>
+    
+    <!-- Storage status -->
+    <div class="p-3 border-t border-c">
+      <div class="surface-2 rounded-xl p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-bold text-muted">التخزين المحلي</span>
+          <span class="text-[10px] font-bold text-emerald-400">● Local</span>
+        </div>
+        <div class="pbar h-1.5 mb-1.5">
+          <div class="bg-gradient-to-r from-indigo-500 to-violet-500" style="width: 62%"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-muted">
+          <span>6.2 GB مستخدم</span>
+          <span>10 GB</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  
+  <!-- Main content -->
+  <div class="flex-1 min-w-0 flex flex-col">
+    <!-- Topbar -->
+    <header class="h-16 surface border-b border-c sticky top-0 z-30 flex items-center px-6 gap-4">
+      <div class="flex-1 max-w-xl relative">
+        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+        <input type="text" placeholder="ابحث في المفاهيم، المواد، الأسئلة..." class="w-full surface-2 rounded-xl pr-11 pl-20 py-2.5 text-sm outline-none border border-transparent focus:border-[var(--primary)] transition">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <kbd class="text-[10px] surface-3 px-1.5 py-0.5 rounded border border-c text-muted">⌘</kbd>
+          <kbd class="text-[10px] surface-3 px-1.5 py-0.5 rounded border border-c text-muted">K</kbd>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <button class="w-9 h-9 rounded-xl surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center tip" data-tip="المساعدة">
+          <i class="fa-solid fa-circle-question text-sm text-muted"></i>
+        </button>
+        <button class="w-9 h-9 rounded-xl surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center tip relative" data-tip="الإشعارات">
+          <i class="fa-solid fa-bell text-sm text-muted"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+        </button>
+        <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center tip" data-tip="الوضع الليلي">
+          <i class="fa-solid fa-moon text-sm text-muted" id="theme-icon-app"></i>
+        </button>
+        <div class="w-px h-6 bg-[var(--border)] mx-1"></div>
+        <button class="flex items-center gap-2.5 surface-2 hover:bg-[var(--surface-3)] transition rounded-xl pr-2 pl-3 py-1.5">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">أ</div>
+          <div class="text-right hidden sm:block">
+            <div class="text-xs font-semibold leading-tight">أحمد محمد</div>
+            <div class="text-[10px] text-muted leading-tight">طالب · هندسة</div>
+          </div>
+        </button>
+      </div>
+    </header>
+    
+    <!-- Pages container -->
+    <main class="flex-1 overflow-y-auto">
+      
+      <!-- ═════════ DASHBOARD ═════════ -->
+      <section data-page="dashboard" class="page p-6 lg:p-8">
+        <!-- Greeting -->
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-7">
+          <div>
+            <div class="flex items-center gap-2 text-muted text-sm mb-1.5">
+              <i class="fa-regular fa-calendar"></i>
+              <span>الإثنين، 12 مايو 2025</span>
+              <span class="mx-1">·</span>
+              <span class="text-emerald-400">محلي — Qwen 2.5 7B</span>
+            </div>
+            <h1 class="text-3xl font-extrabold">مرحبًا أحمد 👋</h1>
+            <p class="text-muted text-sm mt-1">لديك <span class="text-[var(--primary)] font-semibold">5 مفاهيم</span> للمراجعة اليوم و <span class="text-amber-400 font-semibold">3 نقاط ضعف</span> تحتاج عناية.</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="surface hover:bg-[var(--surface-2)] px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+              <i class="fa-solid fa-download text-xs"></i> تصدير التقرير
+            </button>
+            <button onclick="navTo('adaptive')" class="brand-gradient text-white px-4 py-2.5 rounded-xl text-sm font-bold transition flex items-center gap-2 glow-primary">
+              <i class="fa-solid fa-play text-xs"></i> ابدأ جلسة اليوم
+            </button>
+          </div>
+        </div>
+        
+        <!-- Stat cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+          <!-- Today's progress -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-bullseye text-indigo-400"></i>
+              </div>
+              <span class="text-xs text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up text-[10px]"></i> 12%</span>
+            </div>
+            <div class="text-2xl font-extrabold">68%</div>
+            <div class="text-xs text-muted mt-1">تقدّم اليوم</div>
+            <div class="pbar h-1 mt-3"><div class="bg-gradient-to-r from-indigo-500 to-violet-500" style="width: 68%"></div></div>
+          </div>
+          <!-- Weak concepts -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+              </div>
+              <span class="text-xs text-rose-400 font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up text-[10px]"></i> 2 جديد</span>
+            </div>
+            <div class="text-2xl font-extrabold">3</div>
+            <div class="text-xs text-muted mt-1">مفاهيم ضعيفة</div>
+            <div class="flex gap-1 mt-3">
+              <span class="text-[9px] bg-rose-500/15 text-rose-400 px-1.5 py-0.5 rounded">Backprop</span>
+              <span class="text-[9px] bg-rose-500/15 text-rose-400 px-1.5 py-0.5 rounded">+2</span>
+            </div>
+          </div>
+          <!-- Review today -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-arrows-rotate text-amber-400"></i>
+              </div>
+              <span class="text-xs text-muted font-bold">SM-2</span>
+            </div>
+            <div class="text-2xl font-extrabold">5</div>
+            <div class="text-xs text-muted mt-1">مراجعات اليوم</div>
+            <div class="flex items-center gap-1 mt-3 text-[10px] text-muted">
+              <i class="fa-solid fa-clock"></i> ~25 دقيقة
+            </div>
+          </div>
+          <!-- Mastery score -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+              </div>
+              <span class="text-xs text-emerald-400 font-bold flex items-center gap-1"><i class="fa-solid fa-arrow-up text-[10px]"></i> 4%</span>
+            </div>
+            <div class="text-2xl font-extrabold">89%</div>
+            <div class="text-xs text-muted mt-1">مستوى الإتقان</div>
+            <div class="pbar h-1 mt-3"><div class="bg-gradient-to-r from-emerald-500 to-teal-500" style="width: 89%"></div></div>
+          </div>
+          <!-- Study time -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-clock text-sky-400"></i>
+              </div>
+              <span class="text-xs text-sky-400 font-bold">هذا الأسبوع</span>
+            </div>
+            <div class="text-2xl font-extrabold">14<span class="text-base text-muted">س</span> 32<span class="text-base text-muted">د</span></div>
+            <div class="text-xs text-muted mt-1">وقت الدراسة</div>
+            <div class="flex items-end gap-0.5 mt-2 h-5">
+              <div class="flex-1 bg-sky-500/30 rounded-sm" style="height: 40%"></div>
+              <div class="flex-1 bg-sky-500/40 rounded-sm" style="height: 65%"></div>
+              <div class="flex-1 bg-sky-500/30 rounded-sm" style="height: 30%"></div>
+              <div class="flex-1 bg-sky-500/60 rounded-sm" style="height: 80%"></div>
+              <div class="flex-1 bg-sky-500/50 rounded-sm" style="height: 55%"></div>
+              <div class="flex-1 bg-sky-500 rounded-sm" style="height: 95%"></div>
+              <div class="flex-1 bg-sky-500/40 rounded-sm" style="height: 50%"></div>
+            </div>
+          </div>
+          <!-- Upcoming exams -->
+          <div class="surface rounded-2xl p-5 hover:border-c-2 transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl bg-pink-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-file-pen text-pink-400"></i>
+              </div>
+              <span class="text-xs text-pink-400 font-bold">قريب</span>
+            </div>
+            <div class="text-2xl font-extrabold">3</div>
+            <div class="text-xs text-muted mt-1">اختبارات قادمة</div>
+            <div class="text-[10px] text-muted mt-2">الأقرب: <span class="text-2 font-semibold">الشبكات العصبية</span> · بعد 4 أيام</div>
+          </div>
+        </div>
+        
+        <!-- Charts row -->
+        <div class="grid lg:grid-cols-3 gap-4 mb-6">
+          <!-- Progress over time -->
+          <div class="surface rounded-2xl p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="font-bold text-base">تطور الإتقان عبر الزمن</h3>
+                <p class="text-xs text-muted mt-0.5">آخر 30 يومًا · جميع المواد</p>
+              </div>
+              <div class="flex gap-1 surface-2 rounded-lg p-1">
+                <button class="text-xs px-3 py-1 rounded-md tab-active font-semibold">30د</button>
+                <button class="text-xs px-3 py-1 rounded-md text-muted font-semibold">3ش</button>
+                <button class="text-xs px-3 py-1 rounded-md text-muted font-semibold">الكل</button>
+              </div>
+            </div>
+            <div class="h-64"><canvas id="chart-progress"></canvas></div>
+          </div>
+          <!-- Mastery distribution -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-base mb-1">توزيع المفاهيم</h3>
+            <p class="text-xs text-muted mb-5">حسب مستوى الإتقان</p>
+            <div class="h-48 flex items-center justify-center"><canvas id="chart-distribution"></canvas></div>
+            <div class="space-y-2 mt-4">
+              <div class="flex items-center justify-between text-xs">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> متقن</span>
+                <span class="font-bold">184 (74%)</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> جزئي</span>
+                <span class="font-bold">47 (19%)</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> ضعيف</span>
+                <span class="font-bold">16 (7%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Activity & reviews -->
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Recent activity -->
+          <div class="surface rounded-2xl p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="font-bold text-base">النشاط الأخير</h3>
+              <button class="text-xs text-[var(--primary)] font-semibold hover:underline">عرض الكل</button>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-[var(--surface-2)] transition">
+                <div class="w-9 h-9 rounded-lg bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-check text-emerald-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">أكملت اختبارًا تكيفيًا في <span class="text-[var(--primary)]">الشبكات العصبية</span></div>
+                  <div class="text-xs text-muted">النتيجة: 87% · 12 من 14 سؤالًا صحيحة</div>
+                </div>
+                <span class="text-xs text-muted">قبل 12د</span>
+              </div>
+              <div class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-[var(--surface-2)] transition">
+                <div class="w-9 h-9 rounded-lg bg-indigo-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-comments text-indigo-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">سألت المساعد عن <span class="text-[var(--primary)]">Backpropagation</span></div>
+                  <div class="text-xs text-muted">وضع الشرح · 3 مصادر مقتبسة</div>
+                </div>
+                <span class="text-xs text-muted">قبل 45د</span>
+              </div>
+              <div class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-[var(--surface-2)] transition">
+                <div class="w-9 h-9 rounded-lg bg-amber-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-clone text-amber-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">راجعت <span class="text-[var(--primary)]">8 بطاقات تعليمية</span></div>
+                  <div class="text-xs text-muted">6 صحيحة · 2 تحتاج إعادة</div>
+                </div>
+                <span class="text-xs text-muted">قبل ساعة</span>
+              </div>
+              <div class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-[var(--surface-2)] transition">
+                <div class="w-9 h-9 rounded-lg bg-sky-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-cloud-arrow-up text-sky-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">رفعت ملفًا جديدًا <span class="text-[var(--primary)]">chapter_7_rnn.pdf</span></div>
+                  <div class="text-xs text-muted">42 صفحة · تم توليد 28 مفهومًا</div>
+                </div>
+                <span class="text-xs text-muted">قبل 3س</span>
+              </div>
+              <div class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-[var(--surface-2)] transition">
+                <div class="w-9 h-9 rounded-lg bg-violet-500/15 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-trophy text-violet-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium">إنجاز جديد: <span class="text-[var(--primary)]">إتقان 50 مفهومًا</span> 🎉</div>
+                  <div class="text-xs text-muted">+50 نقطة خبرة</div>
+                </div>
+                <span class="text-xs text-muted">أمس</span>
+              </div>
+            </div>
+          </div>
+          <!-- Upcoming reviews -->
+          <div class="surface rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="font-bold text-base">مراجعات اليوم</h3>
+              <span class="text-xs bg-amber-500/15 text-amber-400 px-2 py-0.5 rounded-full font-bold">5 pending</span>
+            </div>
+            <div class="space-y-2.5">
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm font-semibold">Gradient Descent</span>
+                  <span class="text-[10px] bg-rose-500/15 text-rose-400 px-1.5 py-0.5 rounded">عاجلة</span>
+                </div>
+                <div class="text-[11px] text-muted">آخر مراجعة: 4 أيام · احتمال التذكر: 42%</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm font-semibold">Overfitting</span>
+                  <span class="text-[10px] bg-amber-500/15 text-amber-400 px-1.5 py-0.5 rounded">قريبة</span>
+                </div>
+                <div class="text-[11px] text-muted">آخر مراجعة: 3 أيام · احتمال التذكر: 58%</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm font-semibold">Activation Functions</span>
+                  <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded">جيدة</span>
+                </div>
+                <div class="text-[11px] text-muted">آخر مراجعة: 6 أيام · احتمال التذكر: 71%</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm font-semibold">Cross-Entropy Loss</span>
+                  <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded">جيدة</span>
+                </div>
+                <div class="text-[11px] text-muted">آخر مراجعة: 2 أيام · احتمال التذكر: 78%</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm font-semibold">Batch Normalization</span>
+                  <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded">جيدة</span>
+                </div>
+                <div class="text-[11px] text-muted">آخر مراجعة: 5 أيام · احتمال التذكر: 75%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ UPLOAD ═════════ -->
+      <section data-page="upload" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>المحتوى</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>رفع المواد</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">رفع المواد التعليمية</h1>
+          <p class="text-muted text-sm mt-1">ارفع ملفاتك وسيقوم النظام تلقائيًا باستخراج النص، توليد التضمينات، وبناء خريطة المعرفة.</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Drop zone -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="drop-zone surface rounded-3xl p-10 text-center" id="dropzone">
+              <div class="w-20 h-20 mx-auto rounded-3xl brand-gradient-soft flex items-center justify-center mb-5">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-[var(--primary)]"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">اسحب ملفاتك هنا</h3>
+              <p class="text-muted text-sm mb-5">أو انقر للاختيار من جهازك — الحد الأقصى 100 ميجابايت للملف</p>
+              <button class="brand-gradient text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition">
+                <i class="fa-solid fa-folder-open ml-2"></i> اختيار الملفات
+              </button>
+              <div class="flex items-center justify-center gap-3 mt-6 flex-wrap">
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-file-pdf text-rose-400"></i> PDF</span>
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-file-word text-sky-400"></i> DOCX</span>
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-file-powerpoint text-orange-400"></i> PPTX</span>
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-image text-violet-400"></i> صور</span>
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-file-audio text-emerald-400"></i> صوت</span>
+                <span class="text-[10px] surface-2 px-2.5 py-1 rounded-full text-muted flex items-center gap-1"><i class="fa-solid fa-file-video text-pink-400"></i> فيديو</span>
+              </div>
+            </div>
+            
+            <!-- Active upload -->
+            <div class="surface rounded-2xl p-6">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="font-bold text-base flex items-center gap-2">
+                  <i class="fa-solid fa-spinner fa-spin text-[var(--primary)] text-sm"></i>
+                  معالجة الملفات
+                </h3>
+                <span class="text-xs text-muted">2 من 3 مكتمل</span>
+              </div>
+              
+              <!-- File 1: completed -->
+              <div class="surface-2 rounded-xl p-4 mb-3">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-lg bg-rose-500/15 flex items-center justify-center">
+                    <i class="fa-solid fa-file-pdf text-rose-400"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold truncate">machine_learning_chapter_6.pdf</div>
+                    <div class="text-xs text-muted">8.4 MB · 142 صفحة · مكتمل</div>
+                  </div>
+                  <button class="text-emerald-400 text-sm flex items-center gap-1 font-semibold">
+                    <i class="fa-solid fa-circle-check"></i> جاهز
+                  </button>
+                </div>
+                <div class="grid grid-cols-4 gap-2 text-[10px]">
+                  <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    <span class="text-muted">استخراج النص</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    <span class="text-muted">OCR (عربي)</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    <span class="text-muted">التضمينات (BGE-m3)</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    <span class="text-muted">خريطة المعرفة</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- File 2: in progress -->
+              <div class="surface-2 rounded-xl p-4 mb-3 border border-[var(--primary)]/30">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-lg bg-sky-500/15 flex items-center justify-center">
+                    <i class="fa-solid fa-file-powerpoint text-orange-400"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold truncate">neural_networks_lecture.pptx</div>
+                    <div class="text-xs text-muted">12.1 MB · 86 شريحة · جاري المعالجة</div>
+                  </div>
+                  <button class="text-muted hover:text-rose-400 text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+                <!-- Pipeline stages -->
+                <div class="space-y-2.5">
+                  <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                      <span class="flex items-center gap-1.5 text-emerald-400 font-medium"><i class="fa-solid fa-circle-check"></i> استخراج النص</span>
+                      <span class="text-muted">86/86 شريحة</span>
+                    </div>
+                    <div class="pbar h-1"><div class="bg-emerald-500" style="width: 100%"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                      <span class="flex items-center gap-1.5 text-emerald-400 font-medium"><i class="fa-solid fa-circle-check"></i> OCR للصور</span>
+                      <span class="text-muted">24/24 صورة</span>
+                    </div>
+                    <div class="pbar h-1"><div class="bg-emerald-500" style="width: 100%"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                      <span class="flex items-center gap-1.5 text-[var(--primary)] font-medium"><i class="fa-solid fa-spinner fa-spin"></i> توليد التضمينات</span>
+                      <span class="text-muted">127/186 قطعة</span>
+                    </div>
+                    <div class="pbar h-1"><div class="bg-gradient-to-r from-indigo-500 to-violet-500" style="width: 68%"></div></div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between text-xs mb-1">
+                      <span class="flex items-center gap-1.5 text-muted font-medium"><i class="fa-regular fa-circle"></i> بناء خريطة المعرفة</span>
+                      <span class="text-muted">بانتظار</span>
+                    </div>
+                    <div class="pbar h-1"><div class="bg-[var(--surface-3)]" style="width: 0%"></div></div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- File 3: queued -->
+              <div class="surface-2 rounded-xl p-4 opacity-60">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-violet-500/15 flex items-center justify-center">
+                    <i class="fa-solid fa-image text-violet-400"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold truncate">lecture_notes_scan.jpg</div>
+                    <div class="text-xs text-muted">3.2 MB · في قائمة الانتظار</div>
+                  </div>
+                  <span class="text-xs text-muted"><i class="fa-regular fa-clock"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Side info -->
+          <div class="space-y-4">
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-[var(--primary)]"></i> خط المعالجة
+              </h3>
+              <div class="space-y-3">
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center text-xs font-bold text-emerald-400">1</div>
+                    <div class="w-0.5 flex-1 bg-[var(--border)] mt-1"></div>
+                  </div>
+                  <div class="pb-2">
+                    <div class="text-sm font-semibold">استخراج النص</div>
+                    <div class="text-xs text-muted mt-0.5">PyMuPDF · python-docx · PaddleOCR</div>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center text-xs font-bold text-emerald-400">2</div>
+                    <div class="w-0.5 flex-1 bg-[var(--border)] mt-1"></div>
+                  </div>
+                  <div class="pb-2">
+                    <div class="text-sm font-semibold">التقطيع الدلالي</div>
+                    <div class="text-xs text-muted mt-0.5">~500 كلمة لكل قطعة مع الحفاظ على البنية</div>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-indigo-500/15 flex items-center justify-center text-xs font-bold text-indigo-400">3</div>
+                    <div class="w-0.5 flex-1 bg-[var(--border)] mt-1"></div>
+                  </div>
+                  <div class="pb-2">
+                    <div class="text-sm font-semibold">توليد التضمينات</div>
+                    <div class="text-xs text-muted mt-0.5">BGE-m3 · 1024 أبعاد · ChromaDB</div>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="w-7 h-7 rounded-full bg-[var(--surface-3)] flex items-center justify-center text-xs font-bold text-muted">4</div>
+                  <div>
+                    <div class="text-sm font-semibold">خريطة المعرفة</div>
+                    <div class="text-xs text-muted mt-0.5">استخراج المفاهيم والعلاقات</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> الخصوصية
+              </h3>
+              <p class="text-xs text-muted leading-relaxed mb-3">جميع المعالجة تتم محليًا على جهازك. لا تُرسل أي بيانات للسحابة إلا إذا فعّلت ذلك من الإعدادات.</p>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-soft"></span>
+                <span class="text-emerald-400 font-semibold">Local Mode نشط</span>
+              </div>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-3">إحصائيات سريعة</h3>
+              <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xl font-extrabold text-[var(--primary)]">12</div>
+                  <div class="text-[10px] text-muted">ملف نشط</div>
+                </div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xl font-extrabold text-emerald-400">247</div>
+                  <div class="text-[10px] text-muted">مفهوم مستخرج</div>
+                </div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xl font-extrabold text-amber-400">1.4K</div>
+                  <div class="text-[10px] text-muted">قطعة نصية</div>
+                </div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xl font-extrabold text-pink-400">312</div>
+                  <div class="text-[10px] text-muted">علاقة معرفية</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ AI CHAT ═════════ -->
+      <section data-page="chat" class="page hidden h-[calc(100vh-4rem)] flex">
+        <!-- Chat main -->
+        <div class="flex-1 flex flex-col min-w-0">
+          <!-- Chat header -->
+          <div class="px-6 py-4 border-b border-c flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h2 class="font-bold text-base flex items-center gap-2">
+                <i class="fa-solid fa-robot text-[var(--primary)]"></i>
+                المساعد التعليمي الذكي
+              </h2>
+              <p class="text-xs text-muted mt-0.5">يعمل بـ Qwen 2.5 7B · RAG مفعّل · 3 مصادر</p>
+            </div>
+            <!-- Mode tabs -->
+            <div class="flex gap-1 surface-2 rounded-xl p-1 overflow-x-auto no-scrollbar">
+              <button class="mode-btn tab-active text-xs px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-user-tie text-[10px]"></i> مدرّس
+              </button>
+              <button class="mode-btn text-xs px-3 py-1.5 rounded-lg font-semibold text-muted whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-file-pen text-[10px]"></i> اختبار
+              </button>
+              <button class="mode-btn text-xs px-3 py-1.5 rounded-lg font-semibold text-muted whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-lightbulb text-[10px]"></i> شرح
+              </button>
+              <button class="mode-btn text-xs px-3 py-1.5 rounded-lg font-semibold text-muted whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-compress text-[10px]"></i> تلخيص
+              </button>
+              <button class="mode-btn text-xs px-3 py-1.5 rounded-lg font-semibold text-muted whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-magnifying-glass-chart text-[10px]"></i> بحث
+              </button>
+              <button class="mode-btn text-xs px-3 py-1.5 rounded-lg font-semibold text-muted whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-code text-[10px]"></i> كود
+              </button>
+            </div>
+          </div>
+          
+          <!-- Messages -->
+          <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+            <!-- AI message -->
+            <div class="flex gap-3 max-w-3xl">
+              <div class="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-robot text-white text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="chat-bubble-ai rounded-2xl rounded-tr-sm p-4 text-sm leading-relaxed">
+                  <p class="mb-2">مرحبًا أحمد! 👋 أنا مساعدك التعليمي. لاحظت أنك تعمل على فصل <strong>الشبكات العصبية</strong> ولديك <strong>3 نقاط ضعف</strong> تحتاج عناية.</p>
+                  <p class="mb-3">كيف يمكنني مساعدتك اليوم؟ يمكنني:</p>
+                  <ul class="space-y-1.5 text-muted text-xs mb-3">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-chevron-left text-[var(--primary)] mt-1 text-[10px]"></i> شرح مفهوم صعب بطريقة مبسطة</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-chevron-left text-[var(--primary)] mt-1 text-[10px]"></i> توليد أسئلة تدريبية بمستوى صعوبة مناسب</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-chevron-left text-[var(--primary)] mt-1 text-[10px]"></i> إنشاء بطاقات تعليمية للمراجعة</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-chevron-left text-[var(--primary)] mt-1 text-[10px]"></i> تلخيص فصل كامل في صفحة واحدة</li>
+                  </ul>
+                </div>
+                <div class="flex items-center gap-2 mt-2 text-[10px] text-muted">
+                  <span>قبل دقيقتين</span>
+                  <span>·</span>
+                  <button class="hover:text-[var(--primary)]"><i class="fa-regular fa-copy"></i> نسخ</button>
+                  <button class="hover:text-[var(--primary)]"><i class="fa-regular fa-thumbs-up"></i></button>
+                  <button class="hover:text-[var(--primary)]"><i class="fa-regular fa-thumbs-down"></i></button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- User message -->
+            <div class="flex gap-3 max-w-3xl mr-auto flex-row-reverse">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">أ</div>
+              <div class="flex-1">
+                <div class="chat-bubble-user rounded-2xl rounded-tl-sm p-4 text-sm leading-relaxed">
+                  اشرح لي Backpropagation بطريقة بسيطة، مع التركيز على كيفية حساب المشتقات.
+                </div>
+                <div class="text-[10px] text-muted mt-2 mr-4">قبل دقيقة</div>
+              </div>
+            </div>
+            
+            <!-- AI response -->
+            <div class="flex gap-3 max-w-3xl">
+              <div class="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-robot text-white text-sm"></i>
+              </div>
+              <div class="flex-1">
+                <div class="chat-bubble-ai rounded-2xl rounded-tr-sm p-4 text-sm leading-relaxed">
+                  <p class="mb-3">سؤال ممتاز! دعنا نفهم <strong>Backpropagation</strong> خطوة بخطوة. 🎯</p>
+                  
+                  <p class="mb-2 font-semibold text-[var(--primary)]">الفكرة الأساسية</p>
+                  <p class="mb-3">Backpropagation هي خوارزمية لحساب تدرّجات (gradients) دالة الخسارة بالنسبة لكل وزن في الشبكة، باستخدام <strong>قاعدة السلسلة</strong> (Chain Rule).</p>
+                  
+                  <p class="mb-2 font-semibold text-[var(--primary)]">الخطوات</p>
+                  <ol class="space-y-2 mb-3 list-decimal list-inside text-muted text-xs">
+                    <li><strong>Forward Pass:</strong> نمرر المدخلات عبر الشبكة ونحسب المخرجات</li>
+                    <li><strong>حساب الخسارة:</strong> نقارن المخرجات بالقيم الحقيقية</li>
+                    <li><strong>Backward Pass:</strong> نحسب المشتقات من الخرج إلى الدخل</li>
+                    <li><strong>تحديث الأوزان:</strong> نستخدم Gradient Descent</li>
+                  </ol>
+                  
+                  <p class="mb-2 font-semibold text-[var(--primary)]">المعادلة الأساسية</p>
+                  <div class="code-block rounded-xl p-3 text-xs mb-3 overflow-x-auto" dir="ltr">
+<span class="cm"># Chain rule for layer l</span><br>
+<span class="kw">delta</span> = <span class="kw">dL</span>/<span class="kw">dz</span> * <span class="kw">dz</span>/<span class="kw">da</span> * <span class="kw">da</span>/<span class="kw">dW</span><br><br>
+<span class="cm"># Simplified form</span><br>
+<span class="kw">delta</span><span class="num">[l]</span> = (<span class="kw">W</span><span class="num">[l+1]</span>.<span class="fn">T</span> @ <span class="kw">delta</span><span class="num">[l+1]</span>) * <span class="fn">sigmoid_prime</span>(<span class="kw">z</span><span class="num">[l]</span>)
+                  </div>
+                  
+                  <p class="mb-3">هل تريد أن أقوم بـ:</p>
+                  <div class="flex flex-wrap gap-2">
+                    <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-2.5 py-1 rounded-lg transition">📝 توليد 5 أسئلة تدريبية</button>
+                    <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-2.5 py-1 rounded-lg transition">🃏 إنشاء بطاقات تعليمية</button>
+                    <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-2.5 py-1 rounded-lg transition">🗺️ عرض في خريطة المعرفة</button>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 mt-2 text-[10px] text-muted">
+                  <span>الآن</span>
+                  <span>·</span>
+                  <button class="hover:text-[var(--primary)]"><i class="fa-regular fa-copy"></i> نسخ</button>
+                  <span>·</span>
+                  <span class="text-emerald-400"><i class="fa-solid fa-bolt"></i> 1.2s</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Typing indicator -->
+            <div class="flex gap-3 max-w-3xl">
+              <div class="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-robot text-white text-sm"></i>
+              </div>
+              <div class="chat-bubble-ai rounded-2xl rounded-tr-sm px-4 py-3 flex items-center gap-1.5">
+                <span class="typing-dot w-2 h-2 rounded-full bg-[var(--primary)]"></span>
+                <span class="typing-dot w-2 h-2 rounded-full bg-[var(--primary)]"></span>
+                <span class="typing-dot w-2 h-2 rounded-full bg-[var(--primary)]"></span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick actions -->
+          <div class="px-6 py-2 border-t border-c">
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <span class="text-[10px] font-bold text-muted whitespace-nowrap">إجراءات سريعة:</span>
+              <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-1.5">
+                <i class="fa-solid fa-file-pen text-[var(--primary)]"></i> توليد أسئلة
+              </button>
+              <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-1.5">
+                <i class="fa-solid fa-clone text-amber-400"></i> توليد بطاقات
+              </button>
+              <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-1.5">
+                <i class="fa-solid fa-compress text-emerald-400"></i> تلخيص الفصل
+              </button>
+              <button class="text-[11px] surface-2 hover:bg-[var(--surface-3)] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center gap-1.5">
+                <i class="fa-solid fa-diagram-project text-pink-400"></i> خريطة ذهنية
+              </button>
+            </div>
+          </div>
+          
+          <!-- Composer -->
+          <div class="p-4">
+            <div class="surface rounded-2xl p-2 flex items-end gap-2">
+              <button class="w-10 h-10 rounded-xl hover:bg-[var(--surface-2)] transition flex items-center justify-center text-muted">
+                <i class="fa-solid fa-paperclip"></i>
+              </button>
+              <textarea rows="1" placeholder="اكتب سؤالك هنا... (Shift + Enter لسطر جديد)" class="flex-1 bg-transparent outline-none text-sm py-2.5 resize-none"></textarea>
+              <button class="w-10 h-10 rounded-xl hover:bg-[var(--surface-2)] transition flex items-center justify-center text-muted">
+                <i class="fa-solid fa-microphone"></i>
+              </button>
+              <button class="brand-gradient text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-90 transition">
+                <i class="fa-solid fa-paper-plane text-sm"></i>
+              </button>
+            </div>
+            <div class="text-[10px] text-muted text-center mt-2">
+              قد يخطئ المساعد أحيانًا. تحقق من المصادر دائمًا. · <span class="text-emerald-400">معالجة محلية بالكامل</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sources panel -->
+        <aside class="w-80 surface border-r border-c hidden xl:flex flex-col">
+          <div class="px-5 py-4 border-b border-c">
+            <h3 class="font-bold text-sm flex items-center gap-2">
+              <i class="fa-solid fa-quote-left text-[var(--primary)]"></i> المصادر والاقتباسات
+            </h3>
+            <p class="text-xs text-muted mt-0.5">3 مصادر مسترجعة · Re-ranked</p>
+          </div>
+          <div class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+              <div class="flex items-start justify-between mb-2">
+                <span class="text-[10px] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded font-bold">[1]</span>
+                <span class="text-[10px] text-emerald-400 font-bold">94% صلة</span>
+              </div>
+              <div class="text-xs font-semibold mb-1">machine_learning_chapter_6.pdf</div>
+              <div class="text-[11px] text-muted leading-relaxed mb-2">"Backpropagation is a method used in artificial neural networks to calculate the gradient of the loss function with respect to the weights..."</div>
+              <div class="flex items-center gap-2 text-[10px] text-muted">
+                <i class="fa-solid fa-file-pdf text-rose-400"></i>
+                <span>صفحة 142</span>
+                <span>·</span>
+                <span>قطعة 87/186</span>
+              </div>
+            </div>
+            <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+              <div class="flex items-start justify-between mb-2">
+                <span class="text-[10px] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded font-bold">[2]</span>
+                <span class="text-[10px] text-emerald-400 font-bold">89% صلة</span>
+              </div>
+              <div class="text-xs font-semibold mb-1">neural_networks_lecture.pptx</div>
+              <div class="text-[11px] text-muted leading-relaxed mb-2">"The chain rule allows us to compute derivatives of composite functions. In neural networks, this enables efficient gradient computation..."</div>
+              <div class="flex items-center gap-2 text-[10px] text-muted">
+                <i class="fa-solid fa-file-powerpoint text-orange-400"></i>
+                <span>شريحة 34</span>
+              </div>
+            </div>
+            <div class="surface-2 rounded-xl p-3 hover:border-c-2 transition cursor-pointer">
+              <div class="flex items-start justify-between mb-2">
+                <span class="text-[10px] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded font-bold">[3]</span>
+                <span class="text-[10px] text-amber-400 font-bold">76% صلة</span>
+              </div>
+              <div class="text-xs font-semibold mb-1">deep_learning_basics.pdf</div>
+              <div class="text-[11px] text-muted leading-relaxed mb-2">"Gradient descent updates weights in the direction that minimizes the loss. The learning rate controls the step size..."</div>
+              <div class="flex items-center gap-2 text-[10px] text-muted">
+                <i class="fa-solid fa-file-pdf text-rose-400"></i>
+                <span>صفحة 78</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 border-t border-c">
+            <div class="surface-2 rounded-xl p-3">
+              <div class="text-[10px] font-bold text-muted mb-2">إعدادات RAG</div>
+              <div class="space-y-1.5 text-[11px]">
+                <div class="flex justify-between"><span class="text-muted">Top-K</span><span class="font-semibold">5</span></div>
+                <div class="flex justify-between"><span class="text-muted">Search</span><span class="font-semibold">Hybrid</span></div>
+                <div class="flex justify-between"><span class="text-muted">Re-ranker</span><span class="font-semibold">BGE-v2</span></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+      
+      <!-- ═════════ KNOWLEDGE GRAPH ═════════ -->
+      <section data-page="graph" class="page p-6 lg:p-8 hidden">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+          <div>
+            <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+              <span>المحتوى</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>خريطة المعرفة</span>
+            </div>
+            <h1 class="text-3xl font-extrabold">خريطة المعرفة التفاعلية</h1>
+            <p class="text-muted text-sm mt-1">استكشف المفاهيم والعلاقات بينها — ملوّنة حسب مستوى إتقانك</p>
+          </div>
+          <div class="flex gap-2">
+            <div class="flex gap-1 surface-2 rounded-xl p-1">
+              <button class="text-xs px-3 py-1.5 rounded-lg tab-active font-semibold">الكل</button>
+              <button class="text-xs px-3 py-1.5 rounded-lg text-muted font-semibold">ضمني</button>
+              <button class="text-xs px-3 py-1.5 rounded-lg text-muted font-semibold">قوي</button>
+              <button class="text-xs px-3 py-1.5 rounded-lg text-muted font-semibold">ضعيف</button>
+            </div>
+            <button class="surface hover:bg-[var(--surface-2)] px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+              <i class="fa-solid fa-expand text-xs"></i> ملء الشاشة
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-4 gap-4">
+          <!-- Graph canvas -->
+          <div class="lg:col-span-3 surface rounded-2xl overflow-hidden relative" style="height: 600px;">
+            <div class="absolute inset-0 grid-pattern"></div>
+            <svg viewBox="0 0 800 600" class="w-full h-full relative" id="kg-svg">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#6366f1" opacity="0.5"></path>
+                </marker>
+                <marker id="arrow-amber" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" opacity="0.5"></path>
+                </marker>
+                <filter id="glow-node">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              <!-- Edges -->
+              <g stroke-width="1.5" fill="none">
+                <!-- prerequisite edges (dashed amber) -->
+                <line x1="400" y1="80" x2="400" y2="180" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="400" y1="180" x2="250" y2="280" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="400" y1="180" x2="550" y2="280" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="250" y1="280" x2="180" y2="400" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="550" y1="280" x2="620" y2="400" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="400" y1="180" x2="400" y2="280" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="400" y1="280" x2="400" y2="400" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="400" y1="400" x2="400" y2="500" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.6"></line>
+                <line x1="180" y1="400" x2="400" y2="500" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.4"></line>
+                <line x1="620" y1="400" x2="400" y2="500" stroke="#f59e0b" stroke-dasharray="4 4" marker-end="url(#arrow-amber)" opacity="0.4"></line>
+                
+                <!-- is-a edges (solid indigo) -->
+                <line x1="250" y1="280" x2="400" y2="280" stroke="#6366f1" marker-end="url(#arrow)" opacity="0.4"></line>
+                <line x1="550" y1="280" x2="400" y2="280" stroke="#6366f1" marker-end="url(#arrow)" opacity="0.4"></line>
+                <line x1="180" y1="400" x2="400" y2="400" stroke="#6366f1" marker-end="url(#arrow)" opacity="0.3"></line>
+                <line x1="620" y1="400" x2="400" y2="400" stroke="#6366f1" marker-end="url(#arrow)" opacity="0.3"></line>
+                
+                <!-- part-of (dotted pink) -->
+                <line x1="400" y1="500" x2="250" y2="540" stroke="#ec4899" stroke-dasharray="2 3" opacity="0.4"></line>
+                <line x1="400" y1="500" x2="550" y2="540" stroke="#ec4899" stroke-dasharray="2 3" opacity="0.4"></line>
+              </g>
+              
+              <!-- Nodes -->
+              <!-- Linear Algebra (mastered) -->
+              <g class="kg-node-circle" transform="translate(400, 80)">
+                <circle r="32" fill="#10b981" opacity="0.15"></circle>
+                <circle r="22" fill="#10b981" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="10" font-weight="700">جبر خطي</text>
+              </g>
+              <!-- Calculus (mastered) -->
+              <g class="kg-node-circle" transform="translate(400, 180)">
+                <circle r="36" fill="#10b981" opacity="0.15"></circle>
+                <circle r="26" fill="#10b981" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="10" font-weight="700">تفاضل</text>
+              </g>
+              <!-- Probability (partial) -->
+              <g class="kg-node-circle" transform="translate(250, 280)">
+                <circle r="32" fill="#f59e0b" opacity="0.15"></circle>
+                <circle r="22" fill="#f59e0b" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">احتمالات</text>
+              </g>
+              <!-- Statistics (mastered) -->
+              <g class="kg-node-circle" transform="translate(550, 280)">
+                <circle r="30" fill="#10b981" opacity="0.15"></circle>
+                <circle r="20" fill="#10b981" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">إحصاء</text>
+              </g>
+              <!-- ML Basics (mastered) -->
+              <g class="kg-node-circle" transform="translate(400, 280)">
+                <circle r="34" fill="#10b981" opacity="0.15"></circle>
+                <circle r="24" fill="#10b981" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">أساسيات ML</text>
+              </g>
+              <!-- Neural Networks (partial) -->
+              <g class="kg-node-circle" transform="translate(400, 400)">
+                <circle r="40" fill="#f59e0b" opacity="0.2"></circle>
+                <circle r="30" fill="#f59e0b" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="10" font-weight="700">شبكات عصبية</text>
+              </g>
+              <!-- Backprop (weak) -->
+              <g class="kg-node-circle" transform="translate(180, 400)">
+                <circle r="36" fill="#f43f5e" opacity="0.2"></circle>
+                <circle r="26" fill="#f43f5e" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">Backprop</text>
+              </g>
+              <!-- Gradient Descent (partial) -->
+              <g class="kg-node-circle" transform="translate(620, 400)">
+                <circle r="34" fill="#f59e0b" opacity="0.15"></circle>
+                <circle r="24" fill="#f59e0b" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">Gradient</text>
+              </g>
+              <!-- Deep Learning (weak) -->
+              <g class="kg-node-circle" transform="translate(400, 500)">
+                <circle r="36" fill="#f43f5e" opacity="0.2"></circle>
+                <circle r="26" fill="#f43f5e" filter="url(#glow-node)"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">تعلم عميق</text>
+              </g>
+              <!-- CNN (not started) -->
+              <g class="kg-node-circle" transform="translate(250, 540)">
+                <circle r="30" fill="#64748b" opacity="0.15"></circle>
+                <circle r="20" fill="#64748b"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">CNN</text>
+              </g>
+              <!-- RNN (not started) -->
+              <g class="kg-node-circle" transform="translate(550, 540)">
+                <circle r="30" fill="#64748b" opacity="0.15"></circle>
+                <circle r="20" fill="#64748b"></circle>
+                <text y="4" text-anchor="middle" fill="white" font-size="9" font-weight="700">RNN</text>
+              </g>
+            </svg>
+            
+            <!-- Legend -->
+            <div class="absolute bottom-4 right-4 surface rounded-xl p-3 glass">
+              <div class="text-[10px] font-bold text-muted mb-2">دليل الألوان</div>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2 text-xs"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> متقن (≥85%)</div>
+                <div class="flex items-center gap-2 text-xs"><span class="w-3 h-3 rounded-full bg-amber-500"></span> جزئي (50-85%)</div>
+                <div class="flex items-center gap-2 text-xs"><span class="w-3 h-3 rounded-full bg-rose-500"></span> ضعيف (&lt;50%)</div>
+                <div class="flex items-center gap-2 text-xs"><span class="w-3 h-3 rounded-full bg-slate-500"></span> لم يُدرس</div>
+              </div>
+            </div>
+            <!-- Edge legend -->
+            <div class="absolute bottom-4 left-4 surface rounded-xl p-3 glass">
+              <div class="text-[10px] font-bold text-muted mb-2">أنواع العلاقات</div>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2 text-xs"><svg width="20" height="2"><line x1="0" y1="1" x2="20" y2="1" stroke="#f59e0b" stroke-dasharray="4 4" stroke-width="2"></line> متطلب سابق</svg></div>
+                <div class="flex items-center gap-2 text-xs"><svg width="20" height="2"><line x1="0" y1="1" x2="20" y2="1" stroke="#6366f1" stroke-width="2"></line> نوع من (is-a)</svg></div>
+                <div class="flex items-center gap-2 text-xs"><svg width="20" height="2"><line x1="0" y1="1" x2="20" y2="1" stroke="#ec4899" stroke-dasharray="2 3" stroke-width="2"></line> جزء من</svg></div>
+              </div>
+            </div>
+            <!-- Zoom controls -->
+            <div class="absolute top-4 left-4 flex flex-col gap-1">
+              <button class="w-9 h-9 surface rounded-lg flex items-center justify-center hover:bg-[var(--surface-2)] transition"><i class="fa-solid fa-plus text-xs"></i></button>
+              <button class="w-9 h-9 surface rounded-lg flex items-center justify-center hover:bg-[var(--surface-2)] transition"><i class="fa-solid fa-minus text-xs"></i></button>
+              <button class="w-9 h-9 surface rounded-lg flex items-center justify-center hover:bg-[var(--surface-2)] transition"><i class="fa-solid fa-arrows-to-dot text-xs"></i></button>
+            </div>
+          </div>
+          
+          <!-- Node details -->
+          <div class="space-y-4">
+            <div class="surface rounded-2xl p-5">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-rose-500/15 flex items-center justify-center">
+                  <i class="fa-solid fa-circle-nodes text-rose-400 text-lg"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold">Backpropagation</h3>
+                  <span class="text-[10px] bg-rose-500/15 text-rose-400 px-2 py-0.5 rounded-full">ضعيف · 34%</span>
+                </div>
+              </div>
+              <p class="text-xs text-muted leading-relaxed mb-4">خوارزمية لحساب تدرّجات دالة الخسارة بالنسبة لأوزان الشبكة العصبية باستخدام قاعدة السلسلة.</p>
+              <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-muted">المستوى</span><span class="font-semibold">متقدم</span></div>
+                <div class="flex justify-between text-xs"><span class="text-muted">المتطلبات السابقة</span><span class="font-semibold">3 مفاهيم</span></div>
+                <div class="flex justify-between text-xs"><span class="text-muted">عدد الأسئلة</span><span class="font-semibold">12 سؤال</span></div>
+                <div class="flex justify-between text-xs"><span class="text-muted">آخر دراسة</span><span class="font-semibold">قبل 5 أيام</span></div>
+                <div class="flex justify-between text-xs"><span class="text-muted">المراجعة القادمة</span><span class="font-semibold text-rose-400">اليوم!</span></div>
+              </div>
+              <button class="w-full brand-gradient text-white py-2.5 rounded-xl text-sm font-bold mt-4 hover:opacity-90 transition">
+                ادرس هذا المفهوم
+              </button>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h4 class="font-bold text-sm mb-3">المتطلبات السابقة</h4>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-xs surface-2 rounded-lg p-2">
+                  <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                  <span class="flex-1">التفاضل والتكامل</span>
+                  <span class="text-emerald-400 font-bold">95%</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs surface-2 rounded-lg p-2">
+                  <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                  <span class="flex-1">الجبر الخطي</span>
+                  <span class="text-emerald-400 font-bold">91%</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs surface-2 rounded-lg p-2">
+                  <i class="fa-solid fa-circle-exclamation text-amber-400"></i>
+                  <span class="flex-1">الشبكات العصبية</span>
+                  <span class="text-amber-400 font-bold">62%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h4 class="font-bold text-sm mb-3">إحصائيات الرسم</h4>
+              <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="surface-2 rounded-lg p-2.5">
+                  <div class="text-lg font-extrabold text-[var(--primary)]">247</div>
+                  <div class="text-[10px] text-muted">مفهوم</div>
+                </div>
+                <div class="surface-2 rounded-lg p-2.5">
+                  <div class="text-lg font-extrabold text-pink-400">312</div>
+                  <div class="text-[10px] text-muted">علاقة</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ PROFILE ═════════ -->
+      <section data-page="profile" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>الحساب</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>الملف الشخصي</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">الملف التعليمي الشخصي</h1>
+          <p class="text-muted text-sm mt-1">يُغذّي هذا الملف محرك التعلم التكيفي لاتخاذ قرارات تعليمية مخصصة لك</p>
+        </div>
+        
+        <!-- Profile header -->
+        <div class="surface rounded-2xl p-6 mb-6 relative overflow-hidden">
+          <div class="absolute inset-0 brand-gradient-soft"></div>
+          <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
+          <div class="relative flex flex-wrap items-center gap-6">
+            <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500 via-violet-500 to-pink-500 flex items-center justify-center text-white text-4xl font-extrabold glow-primary">أ</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-1">
+                <h2 class="text-2xl font-extrabold">أحمد محمد علي</h2>
+                <span class="text-xs bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold flex items-center gap-1"><i class="fa-solid fa-circle text-[6px]"></i> نشط</span>
+              </div>
+              <p class="text-muted text-sm mb-2">طالب هندسة · جامعة الملك سعود · المستوى 4</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-[11px] surface-2 px-2.5 py-1 rounded-full flex items-center gap-1"><i class="fa-solid fa-clock text-[var(--primary)]"></i> عضو منذ سبتمبر 2024</span>
+                <span class="text-[11px] surface-2 px-2.5 py-1 rounded-full flex items-center gap-1"><i class="fa-solid fa-trophy text-amber-400"></i> المستوى 12 · 2,840 XP</span>
+                <span class="text-[11px] surface-2 px-2.5 py-1 rounded-full flex items-center gap-1"><i class="fa-solid fa-fire text-rose-400"></i> 23 يوم متتالي</span>
+              </div>
+            </div>
+            <button class="surface-2 hover:bg-[var(--surface-3)] px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+              <i class="fa-solid fa-pen text-xs"></i> تعديل الملف
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Learning style VARK -->
+          <div class="surface rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-sm flex items-center gap-2">
+                <i class="fa-solid fa-brain text-[var(--primary)]"></i> نمط التعلم (VARK)
+              </h3>
+              <button class="text-[10px] text-[var(--primary)] font-semibold">إعادة الاختبار</button>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-eye text-sky-400"></i> بصري (Visual)</span>
+                  <span class="text-muted">75%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-gradient-to-r from-sky-500 to-cyan-500" style="width: 75%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-headphones text-violet-400"></i> سمعي (Auditory)</span>
+                  <span class="text-muted">45%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-gradient-to-r from-violet-500 to-purple-500" style="width: 45%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-book text-emerald-400"></i> قرائي (Reading)</span>
+                  <span class="text-muted">62%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-gradient-to-r from-emerald-500 to-teal-500" style="width: 62%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-hand text-amber-400"></i> حركي (Kinesthetic)</span>
+                  <span class="text-muted">38%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-gradient-to-r from-amber-500 to-orange-500" style="width: 38%"></div></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-c text-xs text-muted">
+              <strong class="text-2">النمط الغالب:</strong> بصري — يُفضّل الرسوم والأشكال التوضيحية
+            </div>
+          </div>
+          
+          <!-- Goals -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-bullseye text-pink-400"></i> الأهداف
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">قصيرة المدى</div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="flex items-start gap-2">
+                    <i class="fa-solid fa-flag-checkered text-[var(--primary)] mt-0.5"></i>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold">اجتياز اختبار الشبكات العصبية</div>
+                      <div class="text-[10px] text-muted mt-1">بعد 4 أيام · التقدم 68%</div>
+                      <div class="pbar h-1.5 mt-2"><div class="bg-gradient-to-r from-indigo-500 to-violet-500" style="width: 68%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">طويلة المدى</div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="flex items-start gap-2">
+                    <i class="fa-solid fa-mountain-sun text-emerald-400 mt-0.5"></i>
+                    <div class="flex-1">
+                      <div class="text-sm font-semibold">إتقان أساسيات التعلم العميق</div>
+                      <div class="text-[10px] text-muted mt-1">الموعد النهائي: يوليو 2025 · 32%</div>
+                      <div class="pbar h-1.5 mt-2"><div class="bg-gradient-to-r from-emerald-500 to-teal-500" style="width: 32%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Weekly target -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-week text-amber-400"></i> الهدف الأسبوعي
+            </h3>
+            <div class="text-center mb-4">
+              <div class="text-4xl font-extrabold brand-text">14<span class="text-lg text-muted">/20</span></div>
+              <div class="text-xs text-muted mt-1">ساعة دراسة هذا الأسبوع</div>
+            </div>
+            <div class="pbar h-3 mb-4"><div class="bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500" style="width: 70%"></div></div>
+            <div class="grid grid-cols-7 gap-1.5 mb-4">
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">سبت</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"><div class="w-full bg-amber-500/40" style="height: 60%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">أحد</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"><div class="w-full bg-amber-500/60" style="height: 75%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">إثن</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"><div class="w-full bg-amber-500" style="height: 90%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">ثلا</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"><div class="w-full bg-amber-500/50" style="height: 55%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">أرب</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"><div class="w-full bg-amber-500/30" style="height: 30%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-[var(--primary)] mb-1 font-bold">خمي</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden border border-[var(--primary)]"><div class="w-full bg-amber-500/70" style="height: 80%"></div></div>
+              </div>
+              <div class="text-center">
+                <div class="text-[9px] text-muted mb-1">جمع</div>
+                <div class="h-12 surface-2 rounded-md flex items-end overflow-hidden"></div>
+              </div>
+            </div>
+            <div class="flex justify-between text-[10px] text-muted">
+              <span>المعدل اليومي: 2س</span>
+              <span>المتبقي: 6 ساعات</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Strengths & Weaknesses -->
+        <div class="grid lg:grid-cols-2 gap-4 mt-4">
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i> نقاط القوة
+            </h3>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center"><i class="fa-solid fa-check text-emerald-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Linear Algebra</div>
+                    <div class="text-[10px] text-muted">12 سؤال متتالي صحيح</div>
+                  </div>
+                </div>
+                <span class="text-emerald-400 font-bold">95%</span>
+              </div>
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center"><i class="fa-solid fa-check text-emerald-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Probability Theory</div>
+                    <div class="text-[10px] text-muted">إتقان ممتاز · 8 مفاهيم</div>
+                  </div>
+                </div>
+                <span class="text-emerald-400 font-bold">91%</span>
+              </div>
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center"><i class="fa-solid fa-check text-emerald-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Statistics</div>
+                    <div class="text-[10px] text-muted">تحسن 15% هذا الأسبوع</div>
+                  </div>
+                </div>
+                <span class="text-emerald-400 font-bold">88%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> نقاط الضعف
+            </h3>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center"><i class="fa-solid fa-xmark text-rose-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Backpropagation</div>
+                    <div class="text-[10px] text-muted">5 أخطاء في آخر اختبار</div>
+                  </div>
+                </div>
+                <span class="text-rose-400 font-bold">34%</span>
+              </div>
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center"><i class="fa-solid fa-xmark text-rose-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Deep Learning</div>
+                    <div class="text-[10px] text-muted">لم يُدرس بعد · 4 متطلبات</div>
+                  </div>
+                </div>
+                <span class="text-rose-400 font-bold">28%</span>
+              </div>
+              <div class="flex items-center justify-between surface-2 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center"><i class="fa-solid fa-exclamation text-amber-400 text-xs"></i></div>
+                  <div>
+                    <div class="text-sm font-semibold">Gradient Descent</div>
+                    <div class="text-[10px] text-muted">مراجعة متأخرة · احتمال تذكر 42%</div>
+                  </div>
+                </div>
+                <span class="text-amber-400 font-bold">58%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Other info -->
+        <div class="grid lg:grid-cols-4 gap-4 mt-4">
+          <div class="surface rounded-2xl p-5">
+            <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">اللغة المفضلة</div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-language text-[var(--primary)]"></i>
+              <span class="font-bold">العربية</span>
+              <span class="text-xs text-muted">+ English</span>
+            </div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">سرعة التعلم</div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-gauge-high text-amber-400"></i>
+              <span class="font-bold">متوسطة</span>
+            </div>
+            <div class="text-[10px] text-muted mt-1">~25 دقيقة/مفهوم</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">الإتقان الحالي</div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-emerald-400"></i>
+              <span class="font-bold">89%</span>
+            </div>
+            <div class="text-[10px] text-emerald-400 mt-1">+4% هذا الأسبوع</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="text-[10px] font-bold text-muted uppercase tracking-wider mb-2">الوقت المتاح يوميًا</div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-clock text-sky-400"></i>
+              <span class="font-bold">120 دقيقة</span>
+            </div>
+            <div class="text-[10px] text-muted mt-1">ساعتان صباحًا</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ ADAPTIVE LEARNING ═════════ -->
+      <section data-page="adaptive" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>الرئيسية</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>التعلم التكيفي</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">التعلم التكيفي</h1>
+          <p class="text-muted text-sm mt-1">خطة مخصصة بناءً على SKM + CSP + Knowledge Graph — محدّثة الآن</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4 mb-4">
+          <!-- Today's plan -->
+          <div class="lg:col-span-2 surface rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="font-bold text-base flex items-center gap-2">
+                  <i class="fa-solid fa-list-check text-[var(--primary)]"></i> خطة اليوم
+                </h3>
+                <p class="text-xs text-muted mt-0.5">5 مهام · ~45 دقيقة · مستوى الصعوبة متوسط</p>
+              </div>
+              <button class="brand-gradient text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-play text-[10px]"></i> ابدأ
+              </button>
+            </div>
+            
+            <div class="space-y-2">
+              <div class="surface-2 rounded-xl p-3 flex items-center gap-3 hover:border-c-2 transition cursor-pointer">
+                <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold line-through opacity-60">مراجعة: Gradient Descent</div>
+                  <div class="text-[10px] text-muted">SM-2 · 8 بطاقات · اكتمل</div>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-bold">+15 XP</span>
+              </div>
+              <div class="surface-2 rounded-xl p-3 flex items-center gap-3 border border-[var(--primary)] hover:border-c-2 transition cursor-pointer">
+                <div class="w-6 h-6 rounded-full border-2 border-[var(--primary)] flex items-center justify-center flex-shrink-0"><div class="w-2.5 h-2.5 rounded-full bg-[var(--primary)]"></div></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold">دراسة: Backpropagation — شرح بالرسوم</div>
+                  <div class="text-[10px] text-muted">وضع بصري · ~15 دقيقة · مناسب لـ VARK الخاص بك</div>
+                  <div class="flex gap-1.5 mt-1.5">
+                    <span class="text-[9px] bg-rose-500/15 text-rose-400 px-1.5 py-0.5 rounded">ضعيف 34%</span>
+                    <span class="text-[9px] bg-[var(--primary)]/15 text-[var(--primary)] px-1.5 py-0.5 rounded">أولوية عالية</span>
+                  </div>
+                </div>
+                <i class="fa-solid fa-chevron-left text-muted text-xs"></i>
+              </div>
+              <div class="surface-2 rounded-xl p-3 flex items-center gap-3 hover:border-c-2 transition cursor-pointer">
+                <div class="w-6 h-6 rounded-full border-2 border-[var(--border-2)] flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold">تدريب: 5 أسئلة عن الشبكات العصبية</div>
+                  <div class="text-[10px] text-muted">CAT · صعوبة متكيفة · ~10 دقائق</div>
+                </div>
+                <span class="text-[10px] text-muted">~10د</span>
+              </div>
+              <div class="surface-2 rounded-xl p-3 flex items-center gap-3 hover:border-c-2 transition cursor-pointer">
+                <div class="w-6 h-6 rounded-full border-2 border-[var(--border-2)] flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold">مراجعة: Activation Functions</div>
+                  <div class="text-[10px] text-muted">SM-2 · 6 بطاقات · ~5 دقائق</div>
+                </div>
+                <span class="text-[10px] text-muted">~5د</span>
+              </div>
+              <div class="surface-2 rounded-xl p-3 flex items-center gap-3 hover:border-c-2 transition cursor-pointer">
+                <div class="w-6 h-6 rounded-full border-2 border-[var(--border-2)] flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold">اختبار قصير: Neural Networks Basics</div>
+                  <div class="text-[10px] text-muted">10 أسئلة · CAT · ~15 دقيقة</div>
+                </div>
+                <span class="text-[10px] text-muted">~15د</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Next review -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-base mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-bell text-amber-400"></i> المراجعة القادمة
+            </h3>
+            <div class="surface-2 rounded-xl p-4 text-center">
+              <div class="text-xs text-muted mb-2">خلال</div>
+              <div class="text-4xl font-extrabold brand-text mb-1">02:34</div>
+              <div class="text-xs text-muted">ساعة : دقيقة</div>
+            </div>
+            <div class="mt-4 space-y-2.5 text-xs">
+              <div class="flex justify-between"><span class="text-muted">المفهوم</span><span class="font-semibold">Overfitting</span></div>
+              <div class="flex justify-between"><span class="text-muted">آخر دراسة</span><span class="font-semibold">قبل 3 أيام</span></div>
+              <div class="flex justify-between"><span class="text-muted">الفاصل الزمني</span><span class="font-semibold">4 أيام</span></div>
+              <div class="flex justify-between"><span class="text-muted">Ease Factor</span><span class="font-semibold">2.5</span></div>
+              <div class="flex justify-between"><span class="text-muted">عدد المراجعات</span><span class="font-semibold">3</span></div>
+            </div>
+            <button class="w-full surface-2 hover:bg-[var(--surface-3)] py-2.5 rounded-xl text-sm font-semibold mt-4 transition">
+              راجع الآن
+            </button>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Predicted forgetting -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-rose-400"></i> النسيان المتوقع
+            </h3>
+            <p class="text-xs text-muted mb-4">Half-Life Regression · مفاهيم مختارة</p>
+            <div class="h-48"><canvas id="chart-forgetting"></canvas></div>
+          </div>
+          
+          <!-- Recommendations -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles text-violet-400"></i> توصيات ذكية
+            </h3>
+            <div class="space-y-2.5">
+              <div class="surface-2 rounded-xl p-3">
+                <div class="flex items-start gap-2 mb-1.5">
+                  <i class="fa-solid fa-lightbulb text-amber-400 mt-0.5 text-xs"></i>
+                  <div class="text-xs font-semibold">ركّز على Backpropagation</div>
+                </div>
+                <p class="text-[11px] text-muted leading-relaxed">نقطة ضعف حرجة且有 3 مفاهيم تعتمد عليها في المستقبل.</p>
+              </div>
+              <div class="surface-2 rounded-xl p-3">
+                <div class="flex items-start gap-2 mb-1.5">
+                  <i class="fa-solid fa-clock-rotate-left text-sky-400 mt-0.5 text-xs"></i>
+                  <div class="text-xs font-semibold">راجع Gradient Descent الآن</div>
+                </div>
+                <p class="text-[11px] text-muted leading-relaxed">احتمال التذكر انخفض لـ 42% — المراجعة المثالية الآن.</p>
+              </div>
+              <div class="surface-2 rounded-xl p-3">
+                <div class="flex items-start gap-2 mb-1.5">
+                  <i class="fa-solid fa-arrow-trend-up text-emerald-400 mt-0.5 text-xs"></i>
+                  <div class="text-xs font-semibold">جاهز لمفهوم جديد</div>
+                </div>
+                <p class="text-[11px] text-muted leading-relaxed">أساسيات ML متقنة بنسبة 92% — يمكنك التقدم لـ CNN.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mastery heatmap -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-sm mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-border-all text-pink-400"></i> خريطة الإتقان
+            </h3>
+            <p class="text-xs text-muted mb-4">آخر 12 أسبوعًا · 30 مفهوم</p>
+            <div class="grid grid-cols-12 gap-1" id="heatmap">
+              <!-- Generated by JS -->
+            </div>
+            <div class="flex items-center justify-between mt-4 text-[10px] text-muted">
+              <span>أقل</span>
+              <div class="flex gap-1">
+                <div class="w-3 h-3 rounded-sm bg-[var(--surface-3)]"></div>
+                <div class="w-3 h-3 rounded-sm bg-rose-500/40"></div>
+                <div class="w-3 h-3 rounded-sm bg-amber-500/50"></div>
+                <div class="w-3 h-3 rounded-sm bg-emerald-500/60"></div>
+                <div class="w-3 h-3 rounded-sm bg-emerald-500"></div>
+              </div>
+              <span>أكثر</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ ANALYTICS ═════════ -->
+      <section data-page="analytics" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>التقييم</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>التحليلات</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">تحليلات التعلم</h1>
+          <p class="text-muted text-sm mt-1">رؤى تفصيلية عن تقدمك وأدائك وأنماط تعلمك</p>
+        </div>
+        
+        <!-- Top metrics -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <div class="surface rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs text-muted">إجمالي وقت الدراسة</span>
+              <i class="fa-solid fa-clock text-sky-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold">127<span class="text-base text-muted">س</span></div>
+            <div class="text-xs text-emerald-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-up text-[10px]"></i> +14س هذا الأسبوع</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs text-muted">متوسط الدقة</span>
+              <i class="fa-solid fa-bullseye text-emerald-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold">84%</div>
+            <div class="text-xs text-emerald-400 mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-up text-[10px]"></i> +6% عن الأسبوع الماضي</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs text-muted">أسئلة مجاب عليها</span>
+              <i class="fa-solid fa-circle-question text-amber-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold">1,847</div>
+            <div class="text-xs text-muted mt-1">1,553 صحيح · 294 خطأ</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs text-muted">أطول سلسلة أيام</span>
+              <i class="fa-solid fa-fire text-rose-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold">23<span class="text-base text-muted">يوم</span></div>
+            <div class="text-xs text-amber-400 mt-1">استمر! أنت على الطريق الصحيح</div>
+          </div>
+        </div>
+        
+        <!-- Charts grid -->
+        <div class="grid lg:grid-cols-2 gap-4 mb-4">
+          <!-- Mastery timeline -->
+          <div class="surface rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="font-bold text-base">خط زمني الإتقان</h3>
+                <p class="text-xs text-muted mt-0.5">تطور الإتقان عبر المواد المختلفة</p>
+              </div>
+            </div>
+            <div class="h-64"><canvas id="chart-mastery-timeline"></canvas></div>
+          </div>
+          
+          <!-- Radar chart -->
+          <div class="surface rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="font-bold text-base">تحليل المهارات</h3>
+                <p class="text-xs text-muted mt-0.5">نقاط القوة والضعف عبر المجالات</p>
+              </div>
+            </div>
+            <div class="h-64"><canvas id="chart-radar"></canvas></div>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Accuracy trend -->
+          <div class="surface rounded-2xl p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h3 class="font-bold text-base">اتجاه الدقة</h3>
+                <p class="text-xs text-muted mt-0.5">نسبة الإجابات الصحيحة يوميًا · آخر 14 يومًا</p>
+              </div>
+            </div>
+            <div class="h-56"><canvas id="chart-accuracy"></canvas></div>
+          </div>
+          
+          <!-- Review stats -->
+          <div class="surface rounded-2xl p-6">
+            <h3 class="font-bold text-base mb-4">إحصائيات المراجعة</h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="flex items-center gap-1.5"><i class="fa-solid fa-rotate-right text-rose-400"></i> مرة أخرى</span>
+                  <span class="font-bold">12%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-rose-500" style="width: 12%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-minus text-amber-400"></i> صعب</span>
+                  <span class="font-bold">18%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-amber-500" style="width: 18%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> جيد</span>
+                  <span class="font-bold">52%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-emerald-500" style="width: 52%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-sky-400"></i> سهل</span>
+                  <span class="font-bold">18%</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-sky-500" style="width: 18%"></div></div>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-c">
+              <div class="grid grid-cols-2 gap-3 text-center">
+                <div>
+                  <div class="text-2xl font-extrabold text-emerald-400">87%</div>
+                  <div class="text-[10px] text-muted">معدل النجاح</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-extrabold text-[var(--primary)]">2.4×</div>
+                  <div class="text-[10px] text-muted">تخطي الفواصل</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ EXAMS ═════════ -->
+      <section data-page="exams" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>التقييم</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>الاختبارات</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">الاختبار التكيفي</h1>
+          <p class="text-muted text-sm mt-1">Computerized Adaptive Testing — صعوبة السؤال التالي تعتمد على إجاباتك</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-4 gap-4 mb-4">
+          <!-- Exam types -->
+          <div class="surface rounded-2xl p-5">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center mb-3">
+              <i class="fa-solid fa-circle-question text-indigo-400"></i>
+            </div>
+            <div class="font-bold text-sm">اختيار من متعدد</div>
+            <div class="text-xs text-muted mt-1">MCQ · 4 خيارات</div>
+            <div class="text-[10px] text-[var(--primary)] mt-2 font-bold">12 سؤال متاح</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-3">
+              <i class="fa-solid fa-check-double text-emerald-400"></i>
+            </div>
+            <div class="font-bold text-sm">صح / خطأ</div>
+            <div class="text-xs text-muted mt-1">True / False</div>
+            <div class="text-[10px] text-emerald-400 mt-2 font-bold">8 أسئلة متاحة</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center mb-3">
+              <i class="fa-solid fa-pen-to-square text-amber-400"></i>
+            </div>
+            <div class="font-bold text-sm">أكمل الفراغ</div>
+            <div class="text-xs text-muted mt-1">Fill in the Blank</div>
+            <div class="text-[10px] text-amber-400 mt-2 font-bold">6 أسئلة متاحة</div>
+          </div>
+          <div class="surface rounded-2xl p-5">
+            <div class="w-10 h-10 rounded-xl bg-pink-500/15 flex items-center justify-center mb-3">
+              <i class="fa-solid fa-file-lines text-pink-400"></i>
+            </div>
+            <div class="font-bold text-sm">سؤال مقالي</div>
+            <div class="text-xs text-muted mt-1">Essay · تقييم بالـ AI</div>
+            <div class="text-[10px] text-pink-400 mt-2 font-bold">4 أسئلة متاحة</div>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Exam interface -->
+          <div class="lg:col-span-2 surface rounded-2xl p-6">
+            <!-- Exam header -->
+            <div class="flex items-center justify-between mb-5 pb-4 border-b border-c">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl brand-gradient flex items-center justify-center">
+                  <i class="fa-solid fa-file-pen text-white"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold">اختبار: الشبكات العصبية</h3>
+                  <p class="text-xs text-muted">CAT · تكيّف الصعوبة · IRT 2PL</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="surface-2 rounded-lg px-3 py-1.5 text-xs">
+                  <i class="fa-solid fa-clock text-amber-400 ml-1"></i>
+                  <span class="font-bold">12:34</span>
+                </div>
+                <div class="surface-2 rounded-lg px-3 py-1.5 text-xs">
+                  <span class="text-muted">السؤال</span>
+                  <span class="font-bold">7</span>
+                  <span class="text-muted">/10</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Difficulty indicator -->
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-[10px] text-muted">الصعوبة الحالية:</span>
+              <div class="flex gap-1">
+                <div class="w-1.5 h-4 rounded bg-emerald-500"></div>
+                <div class="w-1.5 h-4 rounded bg-emerald-500"></div>
+                <div class="w-1.5 h-4 rounded bg-emerald-500"></div>
+                <div class="w-1.5 h-4 rounded bg-amber-500"></div>
+                <div class="w-1.5 h-4 rounded bg-[var(--surface-3)]"></div>
+              </div>
+              <span class="text-[10px] font-bold text-amber-400">متوسط-عالي</span>
+              <span class="text-[10px] text-muted mr-auto">IRT θ = 0.72</span>
+            </div>
+            
+            <!-- Question -->
+            <div class="surface-2 rounded-xl p-5 mb-4">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-[10px] bg-[var(--primary)] text-white px-2 py-0.5 rounded font-bold">MCQ</span>
+                <span class="text-[10px] bg-rose-500/15 text-rose-400 px-2 py-0.5 rounded font-bold">Backpropagation</span>
+                <span class="text-[10px] text-muted mr-auto">2 نقطة</span>
+              </div>
+              <p class="text-sm font-semibold leading-relaxed mb-4">
+                في خوارزمية Backpropagation، ما هي الوظيفة الأساسية للمشتقة الجزئية ∂L/∂w في عملية تحديث الأوزان؟
+              </p>
+              <div class="space-y-2">
+                <label class="block surface rounded-xl p-3 cursor-pointer hover:border-[var(--primary)] transition border border-transparent">
+                  <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg surface-3 flex items-center justify-center text-xs font-bold">أ</span>
+                    <span class="text-sm">حساب القيمة المتوقعة للمخرجات</span>
+                  </div>
+                </label>
+                <label class="block surface rounded-xl p-3 cursor-pointer border-2 border-[var(--primary)] transition">
+                  <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg brand-gradient text-white flex items-center justify-center text-xs font-bold">ب</span>
+                    <span class="text-sm font-semibold">تحديد اتجاه وكمية التغيير المطلوب للوزن لتقليل الخسارة</span>
+                    <i class="fa-solid fa-circle-check text-[var(--primary)] mr-auto"></i>
+                  </div>
+                </label>
+                <label class="block surface rounded-xl p-3 cursor-pointer hover:border-[var(--primary)] transition border border-transparent">
+                  <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg surface-3 flex items-center justify-center text-xs font-bold">ج</span>
+                    <span class="text-sm">تنشيط الخلايا العصبية في الطبقات المخفية</span>
+                  </div>
+                </label>
+                <label class="block surface rounded-xl p-3 cursor-pointer hover:border-[var(--primary)] transition border border-transparent">
+                  <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg surface-3 flex items-center justify-center text-xs font-bold">د</span>
+                    <span class="text-sm">تطبيع قيم المدخلات قبل المعالجة</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <button class="surface-2 hover:bg-[var(--surface-3)] px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-right text-xs"></i> السابق
+              </button>
+              <div class="flex gap-1.5">
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="w-2 h-2 rounded-full bg-[var(--primary)] ring-2 ring-[var(--primary)]/30"></div>
+                <div class="w-2 h-2 rounded-full bg-[var(--surface-3)]"></div>
+                <div class="w-2 h-2 rounded-full bg-[var(--surface-3)]"></div>
+                <div class="w-2 h-2 rounded-full bg-[var(--surface-3)]"></div>
+              </div>
+              <button class="brand-gradient text-white px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-2">
+                التالي <i class="fa-solid fa-arrow-left text-xs"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Results / mistakes -->
+          <div class="space-y-4">
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-[var(--primary)]"></i> معلومات الاختبار
+              </h3>
+              <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between"><span class="text-muted">النوع</span><span class="font-semibold">CAT</span></div>
+                <div class="flex justify-between"><span class="text-muted">المادة</span><span class="font-semibold">الشبكات العصبية</span></div>
+                <div class="flex justify-between"><span class="text-muted">عدد الأسئلة</span><span class="font-semibold">10 (متكيف)</span></div>
+                <div class="flex justify-between"><span class="text-muted">الوقت المتوقع</span><span class="font-semibold">15 دقيقة</span></div>
+                <div class="flex justify-between"><span class="text-muted">القدرة المقدّرة</span><span class="font-semibold text-[var(--primary)]">θ = 0.72</span></div>
+                <div class="flex justify-between"><span class="text-muted">التقدم</span><span class="font-semibold">60%</span></div>
+              </div>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-emerald-400"></i> آخر نتيجة
+              </h3>
+              <div class="text-center mb-3">
+                <div class="text-4xl font-extrabold text-emerald-400">87%</div>
+                <div class="text-xs text-muted mt-1">12 من 14 صحيح</div>
+              </div>
+              <div class="pbar h-2 mb-3"><div class="bg-gradient-to-r from-emerald-500 to-teal-500" style="width: 87%"></div></div>
+              <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+                <div class="surface-2 rounded-lg p-2">
+                  <div class="text-emerald-400 font-bold text-sm">12</div>
+                  <div class="text-muted">صحيح</div>
+                </div>
+                <div class="surface-2 rounded-lg p-2">
+                  <div class="text-rose-400 font-bold text-sm">2</div>
+                  <div class="text-muted">خطأ</div>
+                </div>
+                <div class="surface-2 rounded-lg p-2">
+                  <div class="text-amber-400 font-bold text-sm">78%</div>
+                  <div class="text-muted">دقة</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="surface rounded-2xl p-5">
+              <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> الأخطاء والتوصيات
+              </h3>
+              <div class="space-y-2.5">
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xs font-semibold mb-1">خطأ في: Vanishing Gradient</div>
+                  <div class="text-[10px] text-muted mb-2">اخترت "ب" والإجابة "ج"</div>
+                  <div class="text-[10px] text-[var(--primary)] bg-[var(--primary)]/10 p-2 rounded-lg">
+                    <i class="fa-solid fa-lightbulb ml-1"></i> راجع مفهوم Activation Functions
+                  </div>
+                </div>
+                <div class="surface-2 rounded-xl p-3">
+                  <div class="text-xs font-semibold mb-1">خطأ في: Batch Size</div>
+                  <div class="text-[10px] text-muted mb-2">لم تأخذ في الاعتبار تأثير الذاكرة</div>
+                  <div class="text-[10px] text-amber-400 bg-amber-500/10 p-2 rounded-lg">
+                    <i class="fa-solid fa-lightbulb ml-1"></i> راجع: Gradient Descent Variants
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ FLASHCARDS ═════════ -->
+      <section data-page="flashcards" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>التقييم</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>البطاقات التعليمية</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">البطاقات التعليمية</h1>
+          <p class="text-muted text-sm mt-1">مراجعة مكانية (Spaced Repetition) — SM-2 Algorithm</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-4 gap-4 mb-6">
+          <div class="surface rounded-2xl p-4">
+            <div class="text-xs text-muted mb-1">المراجعات اليوم</div>
+            <div class="text-2xl font-extrabold">12<span class="text-sm text-muted">/20</span></div>
+          </div>
+          <div class="surface rounded-2xl p-4">
+            <div class="text-xs text-muted mb-1">معدل النجاح</div>
+            <div class="text-2xl font-extrabold text-emerald-400">87%</div>
+          </div>
+          <div class="surface rounded-2xl p-4">
+            <div class="text-xs text-muted mb-1">إجمالي البطاقات</div>
+            <div class="text-2xl font-extrabold">348</div>
+          </div>
+          <div class="surface rounded-2xl p-4">
+            <div class="text-xs text-muted mb-1">المراجعة القادمة</div>
+            <div class="text-2xl font-extrabold text-amber-400">02:34</div>
+          </div>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Deck list -->
+          <div class="surface rounded-2xl p-5">
+            <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-[var(--primary)]"></i> الرزم
+            </h3>
+            <div class="space-y-2">
+              <div class="surface-2 rounded-xl p-3 border border-[var(--primary)] cursor-pointer">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-sm font-semibold">Neural Networks</span>
+                  <span class="text-[10px] bg-[var(--primary)] text-white px-1.5 py-0.5 rounded">نشط</span>
+                </div>
+                <div class="text-[10px] text-muted">12 بطاقة للمراجعة اليوم</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 cursor-pointer transition">
+                <div class="text-sm font-semibold mb-1">Linear Algebra</div>
+                <div class="text-[10px] text-muted">3 بطاقات · غدًا</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 cursor-pointer transition">
+                <div class="text-sm font-semibold mb-1">Probability</div>
+                <div class="text-[10px] text-muted">8 بطاقات · بعد 3 أيام</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 cursor-pointer transition">
+                <div class="text-sm font-semibold mb-1">Calculus</div>
+                <div class="text-[10px] text-muted">0 بطاقات · مكتمل</div>
+              </div>
+              <div class="surface-2 rounded-xl p-3 hover:border-c-2 cursor-pointer transition">
+                <div class="text-sm font-semibold mb-1">Statistics</div>
+                <div class="text-[10px] text-muted">5 بطاقات · بعد أسبوع</div>
+              </div>
+            </div>
+            <button class="w-full mt-4 surface-2 hover:bg-[var(--surface-3)] py-2.5 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-plus text-xs"></i> رزمة جديدة
+            </button>
+          </div>
+          
+          <!-- Flashcard -->
+          <div class="lg:col-span-2">
+            <div class="surface rounded-2xl p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs surface-2 px-2 py-1 rounded-lg">رزمة: Neural Networks</span>
+                  <span class="text-xs text-muted">بطاقة 3/12</span>
+                </div>
+                <div class="flex gap-1">
+                  <button class="w-8 h-8 rounded-lg surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center text-xs"><i class="fa-solid fa-shuffle"></i></button>
+                  <button class="w-8 h-8 rounded-lg surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center text-xs"><i class="fa-solid fa-volume-high"></i></button>
+                  <button class="w-8 h-8 rounded-lg surface-2 hover:bg-[var(--surface-3)] transition flex items-center justify-center text-xs"><i class="fa-solid fa-pen"></i></button>
+                </div>
+              </div>
+              
+              <!-- Card -->
+              <div class="flashcard h-80 cursor-pointer mb-5" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-inner w-full h-full">
+                  <!-- Front -->
+                  <div class="flashcard-face w-full h-full">
+                    <div class="w-full h-full surface-2 rounded-3xl flex flex-col items-center justify-center p-8 border border-c relative">
+                      <div class="absolute top-4 right-4 text-[10px] text-muted font-bold uppercase">السؤال</div>
+                      <div class="absolute top-4 left-4 text-[10px] bg-rose-500/15 text-rose-400 px-2 py-1 rounded-full font-bold">صعوبة: عالية</div>
+                      <div class="text-center">
+                        <i class="fa-solid fa-circle-question text-4xl text-[var(--primary)] mb-4"></i>
+                        <h3 class="text-2xl font-extrabold mb-3">ما هي Backpropagation؟</h3>
+                        <p class="text-sm text-muted">...واذكر وظيفتها الأساسية</p>
+                      </div>
+                      <div class="absolute bottom-4 text-[10px] text-muted flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-pointer"></i> انقر لقلب البطاقة
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Back -->
+                  <div class="flashcard-face flashcard-back w-full h-full">
+                    <div class="w-full h-full brand-gradient rounded-3xl flex flex-col items-center justify-center p-8 text-white relative">
+                      <div class="absolute top-4 right-4 text-[10px] font-bold uppercase opacity-80">الإجابة</div>
+                      <div class="text-center">
+                        <i class="fa-solid fa-lightbulb text-4xl mb-4 opacity-80"></i>
+                        <p class="text-lg leading-relaxed mb-3">
+                          خوارزمية لحساب <strong>تدرّجات</strong> دالة الخسارة بالنسبة لكل وزن في الشبكة العصبية، باستخدام <strong>قاعدة السلسلة</strong>.
+                        </p>
+                        <div class="text-xs opacity-80 bg-white/10 backdrop-blur rounded-xl p-3 mt-3">
+                          الوظيفة: تحديد كيفية تحديث كل وزن لتقليل الخطأ في الاتجاه الصحيح
+                        </div>
+                      </div>
+                      <div class="absolute bottom-4 text-[10px] opacity-80 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-pointer"></i> انقر للعودة
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Difficulty buttons -->
+              <div>
+                <div class="text-xs text-center text-muted mb-3">كم كان استرجاعك للإجابة؟</div>
+                <div class="grid grid-cols-4 gap-2">
+                  <button class="surface-2 hover:bg-rose-500/15 hover:border-rose-500/30 border border-transparent rounded-xl p-3 transition text-center group">
+                    <i class="fa-solid fa-rotate-right text-rose-400 text-lg mb-1.5"></i>
+                    <div class="text-xs font-bold">مرة أخرى</div>
+                    <div class="text-[10px] text-muted">&lt;1د</div>
+                  </button>
+                  <button class="surface-2 hover:bg-amber-500/15 hover:border-amber-500/30 border border-transparent rounded-xl p-3 transition text-center">
+                    <i class="fa-solid fa-circle-minus text-amber-400 text-lg mb-1.5"></i>
+                    <div class="text-xs font-bold">صعب</div>
+                    <div class="text-[10px] text-muted">10د</div>
+                  </button>
+                  <button class="surface-2 hover:bg-emerald-500/15 hover:border-emerald-500/30 border border-transparent rounded-xl p-3 transition text-center">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-lg mb-1.5"></i>
+                    <div class="text-xs font-bold">جيد</div>
+                    <div class="text-[10px] text-muted">يوم</div>
+                  </button>
+                  <button class="surface-2 hover:bg-sky-500/15 hover:border-sky-500/30 border border-transparent rounded-xl p-3 transition text-center">
+                    <i class="fa-solid fa-bolt text-sky-400 text-lg mb-1.5"></i>
+                    <div class="text-xs font-bold">سهل</div>
+                    <div class="text-[10px] text-muted">4 أيام</div>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Progress -->
+              <div class="mt-5 pt-4 border-t border-c">
+                <div class="flex items-center justify-between text-xs mb-2">
+                  <span class="text-muted">تقدم الجلسة</span>
+                  <span class="font-bold">3/12</span>
+                </div>
+                <div class="pbar h-2"><div class="bg-gradient-to-r from-indigo-500 to-violet-500" style="width: 25%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- ═════════ SETTINGS ═════════ -->
+      <section data-page="settings" class="page p-6 lg:p-8 hidden">
+        <div class="mb-7">
+          <div class="text-xs text-muted mb-1.5 flex items-center gap-1.5">
+            <span>الحساب</span> <i class="fa-solid fa-chevron-left text-[8px]"></i> <span>الإعدادات</span>
+          </div>
+          <h1 class="text-3xl font-extrabold">الإعدادات</h1>
+          <p class="text-muted text-sm mt-1">تكوين مزودات الذكاء الاصطناعي، النماذج، التخزين، والمظهر</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-4">
+          <!-- Execution mode -->
+          <div class="lg:col-span-2 space-y-4">
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-base mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-microchip text-[var(--primary)]"></i> وضع التشغيل
+              </h3>
+              <p class="text-xs text-muted mb-5">اختر بين التشغيل المحلي، السحابي، أو الهجين</p>
+              <div class="grid sm:grid-cols-3 gap-3">
+                <label class="surface-2 rounded-xl p-4 cursor-pointer border-2 border-[var(--primary)] transition relative">
+                  <div class="absolute top-3 left-3 w-5 h-5 rounded-full brand-gradient flex items-center justify-center"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
+                  <i class="fa-solid fa-laptop text-2xl text-[var(--primary)] mb-2"></i>
+                  <div class="font-bold text-sm">محلي</div>
+                  <div class="text-[10px] text-muted mt-1">خصوصية كاملة · دون اتصال</div>
+                </label>
+                <label class="surface-2 rounded-xl p-4 cursor-pointer border-2 border-transparent hover:border-c-2 transition">
+                  <i class="fa-solid fa-cloud-arrow-up text-2xl text-sky-400 mb-2"></i>
+                  <div class="font-bold text-sm">سحابي</div>
+                  <div class="text-[10px] text-muted mt-1">جودة أعلى · يتطلب إنترنت</div>
+                </label>
+                <label class="surface-2 rounded-xl p-4 cursor-pointer border-2 border-transparent hover:border-c-2 transition">
+                  <i class="fa-solid fa-shuffle text-2xl text-violet-400 mb-2"></i>
+                  <div class="font-bold text-sm">هجين</div>
+                  <div class="text-[10px] text-muted mt-1">أفضل توازن · موصى به</div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Models config -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-base mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-brain text-violet-400"></i> تكوين النماذج
+              </h3>
+              <p class="text-xs text-muted mb-5">Provider Abstraction Layer — كل مكوّن قابل للاستبدال</p>
+              
+              <div class="space-y-4">
+                <!-- Reasoning model -->
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-sm font-semibold flex items-center gap-2">
+                      <i class="fa-solid fa-comments text-indigo-400 w-4"></i> نموذج التفكير (Reasoning)
+                    </label>
+                    <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold">نشط</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>Ollama (Local)</option>
+                      <option>OpenAI API</option>
+                      <option>Claude API</option>
+                      <option>Groq</option>
+                    </select>
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>Qwen 2.5 7B</option>
+                      <option>Llama 3.1 8B</option>
+                      <option>Gemma 2 9B</option>
+                      <option>Phi-3.5 Mini</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <!-- Embedding model -->
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-sm font-semibold flex items-center gap-2">
+                      <i class="fa-solid fa-vector-square text-emerald-400 w-4"></i> نموذج التضمين (Embedding)
+                    </label>
+                    <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold">نشط</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>Sentence Transformers (Local)</option>
+                      <option>OpenAI Embeddings</option>
+                      <option>Cohere Embed</option>
+                    </select>
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>BAAI/bge-m3</option>
+                      <option>multilingual-e5-large</option>
+                      <option>text-embedding-3-large</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <!-- OCR model -->
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-sm font-semibold flex items-center gap-2">
+                      <i class="fa-solid fa-eye text-amber-400 w-4"></i> نموذج OCR
+                    </label>
+                    <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold">نشط</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>PaddleOCR (Local)</option>
+                      <option>Tesseract (Local)</option>
+                      <option>Surya (Local)</option>
+                      <option>Google Vision API</option>
+                    </select>
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>Arabic + English</option>
+                      <option>Arabic only</option>
+                      <option>English only</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <!-- Ranking -->
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-sm font-semibold flex items-center gap-2">
+                      <i class="fa-solid fa-ranking-star text-pink-400 w-4"></i> نموذج إعادة الترتيب (Ranking)
+                    </label>
+                    <span class="text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full font-bold">نشط</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>BGE Reranker (Local)</option>
+                      <option>Cohere Rerank (Cloud)</option>
+                    </select>
+                    <select class="surface-2 rounded-xl px-3 py-2.5 text-sm outline-none border border-c">
+                      <option>bge-reranker-v2-m3</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Storage -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-base mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-database text-sky-400"></i> التخزين
+              </h3>
+              <p class="text-xs text-muted mb-5">إدارة التخزين المحلي والباقات</p>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between text-xs mb-2">
+                    <span class="font-semibold">التخزين المستخدم</span>
+                    <span class="text-muted">6.2 GB / 10 GB</span>
+                  </div>
+                  <div class="pbar h-2.5"><div class="bg-gradient-to-r from-sky-500 to-indigo-500" style="width: 62%"></div></div>
+                </div>
+                <div class="grid grid-cols-4 gap-2 text-center text-[10px]">
+                  <div class="surface-2 rounded-lg p-2">
+                    <div class="text-sm font-bold text-indigo-400">2.1 GB</div>
+                    <div class="text-muted">النماذج</div>
+                  </div>
+                  <div class="surface-2 rounded-lg p-2">
+                    <div class="text-sm font-bold text-emerald-400">1.8 GB</div>
+                    <div class="text-muted">الملفات</div>
+                  </div>
+                  <div class="surface-2 rounded-lg p-2">
+                    <div class="text-sm font-bold text-amber-400">1.4 GB</div>
+                    <div class="text-muted">التضمينات</div>
+                  </div>
+                  <div class="surface-2 rounded-lg p-2">
+                    <div class="text-sm font-bold text-pink-400">0.9 GB</div>
+                    <div class="text-muted">قاعدة البيانات</div>
+                  </div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                  <button class="surface-2 hover:bg-[var(--surface-3)] px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-broom text-xs"></i> تنظيف ذاكرة التخزين المؤقت
+                  </button>
+                  <button class="surface-2 hover:bg-[var(--surface-3)] px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-download text-xs"></i> حزمة دون اتصال
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right column -->
+          <div class="space-y-4">
+            <!-- Language -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-language text-violet-400"></i> اللغة والمنطقة
+              </h3>
+              <div class="space-y-3">
+                <div>
+                  <label class="text-xs font-semibold text-muted block mb-1.5">لغة الواجهة</label>
+                  <select class="w-full surface-2 rounded-xl px-3 py-2 text-sm outline-none border border-c">
+                    <option>العربية</option>
+                    <option>English</option>
+                    <option>النظام الافتراضي</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-muted block mb-1.5">لغة المحتوى</label>
+                  <select class="w-full surface-2 rounded-xl px-3 py-2 text-sm outline-none border border-c">
+                    <option>عربي + إنجليزي</option>
+                    <option>عربي فقط</option>
+                    <option>إنجليزي فقط</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Theme -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-palette text-pink-400"></i> المظهر
+              </h3>
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <button class="surface-2 rounded-xl p-3 text-center border-2 border-[var(--primary)]">
+                  <div class="w-full h-12 rounded-lg bg-slate-900 mb-2"></div>
+                  <div class="text-[10px] font-bold">داكن</div>
+                </button>
+                <button class="surface-2 rounded-xl p-3 text-center border-2 border-transparent hover:border-c-2 transition">
+                  <div class="w-full h-12 rounded-lg bg-slate-100 mb-2"></div>
+                  <div class="text-[10px] font-bold">فاتح</div>
+                </button>
+                <button class="surface-2 rounded-xl p-3 text-center border-2 border-transparent hover:border-c-2 transition">
+                  <div class="w-full h-12 rounded-lg bg-gradient-to-br from-slate-900 to-slate-100 mb-2"></div>
+                  <div class="text-[10px] font-bold">نظام</div>
+                </button>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs">تأثيرات الحركة</span>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs">الوضع المضغوط</span>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs">إظهار التلميحات</span>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Privacy -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> الخصوصية
+              </h3>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs font-semibold">إرسال القياس عن بُعد</div>
+                    <div class="text-[10px] text-muted">بيانات استخدام مجهولة</div>
+                  </div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs font-semibold">معالجة سحابية عند الحاجة</div>
+                    <div class="text-[10px] text-muted">للحالات الحرجة فقط</div>
+                  </div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-xs font-semibold">حفظ سجل المحادثات</div>
+                    <div class="text-[10px] text-muted">محليًا فقط</div>
+                  </div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Offline package -->
+            <div class="surface rounded-2xl p-6">
+              <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-wifi-slash text-amber-400"></i> حزمة دون اتصال
+              </h3>
+              <p class="text-xs text-muted mb-4">حمّل النماذج مسبقًا للاستخدام التام دون إنترنت</p>
+              <div class="space-y-2 text-xs">
+                <div class="flex items-center justify-between surface-2 rounded-lg p-2.5">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Qwen 2.5 7B</span>
+                  <span class="text-muted">4.1 GB</span>
+                </div>
+                <div class="flex items-center justify-between surface-2 rounded-lg p-2.5">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> BGE-m3</span>
+                  <span class="text-muted">2.2 GB</span>
+                </div>
+                <div class="flex items-center justify-between surface-2 rounded-lg p-2.5">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> PaddleOCR</span>
+                  <span class="text-muted">180 MB</span>
+                </div>
+                <div class="flex items-center justify-between surface-2 rounded-lg p-2.5">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> BGE Reranker</span>
+                  <span class="text-muted">1.1 GB</span>
+                </div>
+              </div>
+              <button class="w-full mt-3 surface-2 hover:bg-[var(--surface-3)] py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-down text-xs"></i> تحميل المزيد من النماذج
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+  const isDark = document.documentElement.classList.contains('dark');
+  document.querySelectorAll('#theme-icon, #theme-icon-app').forEach(el => {
+    if (el) el.className = isDark ? 'fa-solid fa-moon text-sm text-muted' : 'fa-solid fa-sun text-sm text-amber-400';
+  });
+  // Re-render charts with new theme
+  if (window.charts) {
+    Object.values(window.charts).forEach(c => c && c.update && c.update());
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════
+function switchAuth(tab) {
+  document.getElementById('form-signin').classList.toggle('hidden', tab !== 'signin');
+  document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('tab-signin').classList.toggle('tab-active', tab === 'signin');
+  document.getElementById('tab-signin').classList.toggle('text-muted', tab !== 'signin');
+  document.getElementById('tab-signup').classList.toggle('tab-active', tab === 'signup');
+  document.getElementById('tab-signup').classList.toggle('text-muted', tab !== 'signup');
+}
+
+function enterApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('app').classList.add('flex');
+  setTimeout(initDashboardCharts, 100);
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const pageInits = {
+  dashboard: initDashboardCharts,
+  analytics: initAnalyticsCharts,
+  adaptive: initAdaptiveCharts,
+};
+
+function navTo(page) {
+  document.querySelectorAll('[data-page]').forEach(s => s.classList.add('hidden'));
+  const target = document.querySelector(`[data-page="${page}"]`);
+  if (target) {
+    target.classList.remove('hidden');
+    target.classList.remove('page');
+    void target.offsetWidth;
+    target.classList.add('page');
+  }
+  document.querySelectorAll('[data-nav]').forEach(b => {
+    b.classList.remove('nav-item-active');
+    b.classList.add('text-2');
+  });
+  const activeBtn = document.querySelector(`[data-nav="${page}"]`);
+  if (activeBtn) {
+    activeBtn.classList.add('nav-item-active');
+    activeBtn.classList.remove('text-2');
+  }
+  if (pageInits[page]) pageInits[page]();
+}
+
+// ═══════════════════════════════════════════════════════
+// FLASHCARDS
+// ═══════════════════════════════════════════════════════
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+// ═══════════════════════════════════════════════════════
+// CHART HELPERS
+// ═══════════════════════════════════════════════════════
+function getTheme() {
+  return {
+    text: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(),
+    muted: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim(),
+    border: getComputedStyle(document.documentElement).getPropertyValue('--border').trim(),
+    surface: getComputedStyle(document.documentElement).getPropertyValue('--surface-2').trim(),
+  };
+}
+
+function gridOpts() {
+  const t = getTheme();
+  return {
+    color: t.border,
+    drawBorder: false,
+  };
+}
+
+window.charts = {};
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD CHARTS
+// ═══════════════════════════════════════════════════════
+function initDashboardCharts() {
+  const t = getTheme();
+  // Progress line chart
+  const ctxP = document.getElementById('chart-progress');
+  if (ctxP && !window.charts.progress) {
+    const g1 = ctxP.getContext('2d').createLinearGradient(0, 0, 0, 250);
+    g1.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
+    g1.addColorStop(1, 'rgba(99, 102, 241, 0)');
+    window.charts.progress = new Chart(ctxP, {
+      type: 'line',
+      data: {
+        labels: ['1', '5', '10', '15', '20', '25', '30'],
+        datasets: [{
+          label: 'الإتقان %',
+          data: [62, 65, 68, 72, 75, 82, 89],
+          borderColor: '#6366f1',
+          backgroundColor: g1,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#6366f1',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }, {
+          label: 'الدقة %',
+          data: [55, 60, 64, 68, 71, 76, 84],
+          borderColor: '#ec4899',
+          backgroundColor: 'transparent',
+          tension: 0.4,
+          fill: false,
+          pointBackgroundColor: '#ec4899',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, labels: { color: t.text, font: { family: 'Cairo', size: 11 } }, position: 'bottom' },
+          tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Cairo' }, bodyFont: { family: 'Cairo' } }
+        },
+        scales: {
+          y: { grid: { color: t.border }, ticks: { color: t.muted, font: { family: 'Cairo' } }, min: 50, max: 100 },
+          x: { grid: { display: false }, ticks: { color: t.muted, font: { family: 'Cairo' } } }
+        }
+      }
+    });
+  }
+  
+  // Distribution doughnut
+  const ctxD = document.getElementById('chart-distribution');
+  if (ctxD && !window.charts.distribution) {
+    window.charts.distribution = new Chart(ctxD, {
+      type: 'doughnut',
+      data: {
+        labels: ['متقن', 'جزئي', 'ضعيف'],
+        datasets: [{
+          data: [184, 47, 16],
+          backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+          borderColor: 'transparent',
+          borderWidth: 0,
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Cairo' }, bodyFont: { family: 'Cairo' } }
+        }
+      }
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ADAPTIVE CHARTS
+// ═══════════════════════════════════════════════════════
+function initAdaptiveCharts() {
+  const t = getTheme();
+  // Forgetting curve
+  const ctxF = document.getElementById('chart-forgetting');
+  if (ctxF && !window.charts.forgetting) {
+    window.charts.forgetting = new Chart(ctxF, {
+      type: 'line',
+      data: {
+        labels: ['اليوم', '+1', '+2', '+3', '+4', '+5', '+6', '+7'],
+        datasets: [{
+          label: 'Backpropagation',
+          data: [100, 65, 42, 28, 20, 15, 12, 10],
+          borderColor: '#f43f5e',
+          backgroundColor: 'rgba(244, 63, 94, 0.1)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#f43f5e',
+          pointRadius: 3,
+        }, {
+          label: 'Gradient Descent',
+          data: [100, 75, 58, 42, 32, 25, 20, 16],
+          borderColor: '#f59e0b',
+          backgroundColor: 'transparent',
+          tension: 0.4,
+          fill: false,
+          pointBackgroundColor: '#f59e0b',
+          pointRadius: 3,
+        }, {
+          label: 'Activation Functions',
+          data: [100, 88, 78, 71, 65, 60, 56, 53],
+          borderColor: '#10b981',
+          backgroundColor: 'transparent',
+          tension: 0.4,
+          fill: false,
+          pointBackgroundColor: '#10b981',
+          pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, labels: { color: t.text, font: { family: 'Cairo', size: 10 } }, position: 'bottom' },
+          tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Cairo' }, bodyFont: { family: 'Cairo' } }
+        },
+        scales: {
+          y: { grid: { color: t.border }, ticks: { color: t.muted, font: { family: 'Cairo', size: 10 }, callback: v => v + '%' }, min: 0, max: 100 },
+          x: { grid: { display: false }, ticks: { color: t.muted, font: { family: 'Cairo', size: 10 } } }
+        }
+      }
+    });
+  }
+  
+  // Build heatmap
+  const hm = document.getElementById('heatmap');
+  if (hm && !hm.dataset.built) {
+    hm.dataset.built = '1';
+    let html = '';
+    const colors = ['bg-[var(--surface-3)]', 'bg-rose-500/40', 'bg-amber-500/50', 'bg-emerald-500/60', 'bg-emerald-500'];
+    for (let i = 0; i < 12 * 5; i++) {
+      const r = Math.random();
+      let idx = 0;
+      if (r > 0.85) idx = 4;
+      else if (r > 0.65) idx = 3;
+      else if (r > 0.45) idx = 2;
+      else if (r > 0.25) idx = 1;
+      else idx = 0;
+      html += `<div class="heat-cell aspect-square rounded-sm ${colors[idx]}" title="أسبوع ${Math.floor(i/5)+1}"></div>`;
+    }
+    hm.innerHTML = html;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ANALYTICS CHARTS
+// ═══════════════════════════════════════════════════════
+function initAnalyticsCharts() {
+  const t = getTheme();
+  // Mastery timeline
+  const ctxM = document.getElementById('chart-mastery-timeline');
+  if (ctxM && !window.charts.masteryTimeline) {
+    window.charts.masteryTimeline = new Chart(ctxM, {
+      type: 'line',
+      data: {
+        labels: ['أسبوع 1', '2', '3', '4', '5', '6', '7', '8'],
+        datasets: [{
+          label: 'Neural Networks',
+          data: [30, 38, 45, 52, 58, 62, 68, 72],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          tension: 0.4, fill: true, pointRadius: 3,
+        }, {
+          label: 'Linear Algebra',
+          data: [70, 75, 80, 83, 86, 88, 90, 91],
+          borderColor: '#10b981',
+          backgroundColor: 'transparent',
+          tension: 0.4, fill: false, pointRadius: 3,
+        }, {
+          label: 'Probability',
+          data: [45, 52, 58, 64, 70, 75, 82, 88],
+          borderColor: '#f59e0b',
+          backgroundColor: 'transparent',
+          tension: 0.4, fill: false, pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: t.text, font: { family: 'Cairo', size: 11 } }, position: 'bottom' } },
+        scales: {
+          y: { grid: { color: t.border }, ticks: { color: t.muted, font: { family: 'Cairo' }, callback: v => v + '%' }, min: 0, max: 100 },
+          x: { grid: { display: false }, ticks: { color: t.muted, font: { family: 'Cairo' } } }
+        }
+      }
+    });
+  }
+  
+  // Radar
+  const ctxR = document.getElementById('chart-radar');
+  if (ctxR && !window.charts.radar) {
+    window.charts.radar = new Chart(ctxR, {
+      type: 'radar',
+      data: {
+        labels: ['جبر خطي', 'تفاضل', 'احتمالات', 'إحصاء', 'ML أساسيات', 'شبكات عصبية', 'تعلم عميق'],
+        datasets: [{
+          label: 'الإتقان الحالي',
+          data: [95, 88, 91, 88, 84, 62, 28],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.15)',
+          pointBackgroundColor: '#6366f1',
+          pointRadius: 4,
+        }, {
+          label: 'الهدف',
+          data: [90, 90, 90, 90, 90, 90, 90],
+          borderColor: '#ec4899',
+          backgroundColor: 'transparent',
+          borderDash: [4, 4],
+          pointRadius: 0,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: t.text, font: { family: 'Cairo', size: 11 } }, position: 'bottom' } },
+        scales: {
+          r: {
+            angleLines: { color: t.border },
+            grid: { color: t.border },
+            pointLabels: { color: t.text, font: { family: 'Cairo', size: 10 } },
+            ticks: { display: false, backdropColor: 'transparent' },
+            min: 0, max: 100,
+          }
+        }
+      }
+    });
+  }
+  
+  // Accuracy
+  const ctxA = document.getElementById('chart-accuracy');
+  if (ctxA && !window.charts.accuracy) {
+    const g = ctxA.getContext('2d').createLinearGradient(0, 0, 0, 220);
+    g.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+    g.addColorStop(1, 'rgba(16, 185, 129, 0)');
+    window.charts.accuracy = new Chart(ctxA, {
+      type: 'bar',
+      data: {
+        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'],
+        datasets: [{
+          label: 'الدقة %',
+          data: [72, 68, 75, 78, 82, 79, 85, 81, 88, 84, 86, 89, 87, 84],
+          backgroundColor: g,
+          borderColor: '#10b981',
+          borderWidth: 2,
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: t.border }, ticks: { color: t.muted, font: { family: 'Cairo' }, callback: v => v + '%' }, min: 50, max: 100 },
+          x: { grid: { display: false }, ticks: { color: t.muted, font: { family: 'Cairo' } } }
+        }
+      }
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAG & DROP visual
+// ═══════════════════════════════════════════════════════
+const dz = document.getElementById('dropzone');
+if (dz) {
+  ['dragenter', 'dragover'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.remove('drag'); }));
+}
+
+// ═══════════════════════════════════════════════════════
+// MODE TABS (chat)
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.classList.remove('tab-active');
+      b.classList.add('text-muted');
+    });
+    btn.classList.add('tab-active');
+    btn.classList.remove('text-muted');
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+// Knowledge graph node click
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.kg-node-circle').forEach(node => {
+  node.addEventListener('click', () => {
+    document.querySelectorAll('.kg-node-circle').forEach(n => {
+      n.querySelector('circle:first-child').setAttribute('opacity', '0.15');
+    });
+    node.querySelector('circle:first-child').setAttribute('opacity', '0.35');
+  });
+});
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+// Set initial theme icon
+const isDark = document.documentElement.classList.contains('dark');
+const initIcon = document.getElementById('theme-icon');
+if (initIcon) initIcon.className = isDark ? 'fa-solid fa-moon text-sm' : 'fa-solid fa-sun text-sm text-amber-400';
+</script>
+
+
+
+
+
+</body></html>

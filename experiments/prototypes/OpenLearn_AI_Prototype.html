@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenLearn AI — منصة التعلّم التكيّفي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Cairo:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ============================================================
+   OpenLearn AI — Design tokens
+   Concept: "the lamp in the library" — a deep, calm study-navy
+   canvas with a warm amber glow standing in for insight/mastery,
+   and a cool teal for growth/progress. Nodes & connecting lines
+   (echoing the Knowledge Graph) recur quietly as a signature
+   motif across Dashboard, Analytics and Adaptive Learning.
+   ============================================================ */
+:root{
+  --bg:            #0E1320;
+  --bg-soft:       #121829;
+  --surface:       #171E2E;
+  --surface-2:     #1E2739;
+  --surface-3:     #253048;
+  --border:        #2A3448;
+  --border-soft:   #212a3d;
+  --text:          #EAEDF5;
+  --text-dim:      #9BA3B8;
+  --text-faint:    #6B7590;
+  --amber:         #E3A857;
+  --amber-soft:    rgba(227,168,87,0.14);
+  --amber-line:    rgba(227,168,87,0.35);
+  --teal:          #4FBDB4;
+  --teal-soft:     rgba(79,189,180,0.14);
+  --violet:        #8B85D6;
+  --violet-soft:   rgba(139,133,214,0.14);
+  --red:           #E2685A;
+  --red-soft:      rgba(226,104,90,0.14);
+  --green:         #6FCF97;
+  --green-soft:    rgba(111,207,151,0.14);
+  --shadow-sm:     0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md:     0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg:     0 20px 50px rgba(0,0,0,0.45);
+  --radius-sm:     10px;
+  --radius-md:     16px;
+  --radius-lg:     22px;
+  --font-display:  'Tajawal', 'IBM Plex Mono', sans-serif;
+  --font-body:     'Cairo', 'Tajawal', sans-serif;
+  --font-mono:     'IBM Plex Mono', monospace;
+}
+html.light{
+  --bg:            #F4F2ED;
+  --bg-soft:       #EFEDE6;
+  --surface:       #FFFFFF;
+  --surface-2:     #FAF9F5;
+  --surface-3:     #F0EEE7;
+  --border:        #E2DFD4;
+  --border-soft:   #EAE7DC;
+  --text:          #201C14;
+  --text-dim:      #6C6656;
+  --text-faint:    #9B9584;
+  --shadow-sm:     0 2px 8px rgba(30,25,10,0.06);
+  --shadow-md:     0 8px 24px rgba(30,25,10,0.08);
+  --shadow-lg:     0 20px 50px rgba(30,25,10,0.12);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.6;
+  min-height:100vh;
+  transition:background .3s ease, color .3s ease;
+  overflow-x:hidden;
+}
+.bg-noise{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.4;
+  background-image:
+    radial-gradient(circle at 15% 20%, var(--amber-soft) 0%, transparent 35%),
+    radial-gradient(circle at 85% 75%, var(--teal-soft) 0%, transparent 35%);
+}
+::selection{background:var(--amber); color:#141826;}
+::-webkit-scrollbar{width:10px; height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--surface-3); border-radius:10px; border:2px solid var(--bg);}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+h1,h2,h3,h4{font-family:var(--font-display); font-weight:700; letter-spacing:-.01em;}
+code,.mono{font-family:var(--font-mono); direction:ltr; unicode-bidi:isolate;}
+:focus-visible{outline:2px solid var(--amber); outline-offset:2px; border-radius:4px;}
+@media (prefers-reduced-motion: reduce){*{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}}
+
+/* ---------- Utility ---------- */
+.hidden{display:none !important;}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap-1{gap:6px;} .gap-2{gap:10px;} .gap-3{gap:16px;} .gap-4{gap:24px;}
+.grid{display:grid;}
+.text-dim{color:var(--text-dim);}
+.text-faint{color:var(--text-faint);}
+.text-sm{font-size:13px;} .text-xs{font-size:11.5px;}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  padding:11px 20px; border-radius:12px; border:1px solid transparent;
+  font-family:var(--font-body); font-weight:600; font-size:14px;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg, var(--amber), #C98A3B); color:#1B1408; box-shadow:0 6px 18px rgba(227,168,87,.25);}
+.btn-primary:hover{box-shadow:0 8px 22px rgba(227,168,87,.4); transform:translateY(-1px);}
+.btn-ghost{background:var(--surface-2); color:var(--text); border-color:var(--border);}
+.btn-ghost:hover{background:var(--surface-3);}
+.btn-outline{background:transparent; border-color:var(--border); color:var(--text-dim);}
+.btn-outline:hover{border-color:var(--amber-line); color:var(--text);}
+.btn-sm{padding:7px 13px; font-size:12.5px; border-radius:9px;}
+.btn-icon{width:38px; height:38px; padding:0; border-radius:11px; background:var(--surface-2); border:1px solid var(--border); color:var(--text-dim); flex-shrink:0;}
+.btn-icon:hover{color:var(--text); border-color:var(--amber-line);}
+.btn-danger{background:var(--red-soft); color:var(--red); border-color:rgba(226,104,90,.3);}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:22px;
+  box-shadow:var(--shadow-sm);
+}
+.card-title{font-family:var(--font-display); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:9px;}
+.card-title i{color:var(--amber); font-size:14px; width:18px; text-align:center;}
+.chip{
+  display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:20px;
+  font-size:11.5px; font-weight:600; border:1px solid var(--border);
+}
+.chip-amber{background:var(--amber-soft); color:var(--amber); border-color:var(--amber-line);}
+.chip-teal{background:var(--teal-soft); color:var(--teal); border-color:rgba(79,189,180,.35);}
+.chip-red{background:var(--red-soft); color:var(--red); border-color:rgba(226,104,90,.35);}
+.chip-green{background:var(--green-soft); color:var(--green); border-color:rgba(111,207,151,.35);}
+.chip-violet{background:var(--violet-soft); color:var(--violet); border-color:rgba(139,133,214,.35);}
+
+/* ---------- Progress ---------- */
+.progress-track{width:100%; height:8px; border-radius:20px; background:var(--surface-3); overflow:hidden;}
+.progress-fill{height:100%; border-radius:20px; background:linear-gradient(90deg, var(--amber), var(--teal));}
+
+/* ================= LOGIN ================= */
+#login-screen{
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:1; padding:24px;
+}
+.login-wrap{
+  width:100%; max-width:940px; display:grid; grid-template-columns:1.1fr 1fr;
+  background:var(--surface); border:1px solid var(--border); border-radius:26px;
+  overflow:hidden; box-shadow:var(--shadow-lg);
+  min-height:560px;
+}
+.login-visual{
+  background:
+    radial-gradient(circle at 30% 20%, rgba(227,168,87,.25), transparent 55%),
+    radial-gradient(circle at 75% 80%, rgba(79,189,180,.22), transparent 50%),
+    linear-gradient(160deg,#141a2b, #0d1120);
+  position:relative; padding:44px; display:flex; flex-direction:column; justify-content:space-between;
+  overflow:hidden;
+}
+.login-visual svg{position:absolute; inset:0; width:100%; height:100%; opacity:.55;}
+.brand-mark{display:flex; align-items:center; gap:12px; position:relative; z-index:2;}
+.brand-mark .logo-dot{
+  width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg,var(--amber),var(--teal));
+  display:flex; align-items:center; justify-content:center; color:#141826; font-size:17px; box-shadow:0 6px 16px rgba(227,168,87,.35);
+}
+.brand-mark span{font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:-.02em; color:#fff;}
+.login-visual h2{position:relative; z-index:2; color:#fff; font-size:27px; line-height:1.5; max-width:360px; margin-top:30px;}
+.login-visual p{position:relative; z-index:2; color:rgba(255,255,255,.65); margin-top:14px; max-width:340px; font-size:14px;}
+.visual-stats{position:relative; z-index:2; display:flex; gap:22px; margin-top:auto;}
+.visual-stats div b{display:block; color:#fff; font-family:var(--font-display); font-size:20px;}
+.visual-stats div span{color:rgba(255,255,255,.5); font-size:12px;}
+
+.login-form{padding:48px 44px; display:flex; flex-direction:column;}
+.auth-tabs{display:flex; background:var(--surface-2); border-radius:12px; padding:4px; margin-bottom:28px; border:1px solid var(--border);}
+.auth-tab{flex:1; text-align:center; padding:10px; border-radius:9px; font-weight:700; font-size:14px; color:var(--text-dim); transition:all .2s;}
+.auth-tab.active{background:var(--surface); color:var(--text); box-shadow:var(--shadow-sm);}
+.field{margin-bottom:16px;}
+.field label{display:block; font-size:12.5px; color:var(--text-dim); margin-bottom:7px; font-weight:600;}
+.field input{
+  width:100%; padding:12px 14px; border-radius:11px; border:1px solid var(--border);
+  background:var(--surface-2); color:var(--text); font-family:inherit; font-size:14px;
+}
+.field input:focus{border-color:var(--amber-line); background:var(--surface);}
+.divider{display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--text-faint); font-size:12px;}
+.divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--border);}
+.social-row{display:flex; flex-direction:column; gap:10px;}
+
+/* ================= APP SHELL ================= */
+#app-shell{display:flex; min-height:100vh; position:relative; z-index:1;}
+.sidebar{
+  width:250px; flex-shrink:0; background:var(--bg-soft); border-inline-start:1px solid var(--border);
+  padding:22px 16px; display:flex; flex-direction:column; gap:6px; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sidebar .brand-mark{padding:6px 8px 22px;}
+.sidebar .brand-mark span{color:var(--text); font-size:17px;}
+.nav-section-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-faint); font-weight:700; margin:16px 10px 6px;}
+.nav-item{
+  display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:11px; color:var(--text-dim);
+  font-weight:600; font-size:13.8px; transition:all .15s ease; position:relative;
+}
+.nav-item i{width:18px; text-align:center; font-size:15px;}
+.nav-item:hover{background:var(--surface-2); color:var(--text);}
+.nav-item.active{background:var(--amber-soft); color:var(--amber);}
+.nav-item .badge-mini{margin-inline-start:auto; background:var(--red); color:#fff; font-size:10px; font-weight:800; padding:1px 6px; border-radius:20px;}
+.sidebar-footer{margin-top:auto; padding-top:14px; border-top:1px solid var(--border-soft);}
+.user-chip{display:flex; align-items:center; gap:10px; padding:8px; border-radius:12px;}
+.user-chip:hover{background:var(--surface-2);}
+.avatar{width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--violet),var(--teal)); display:flex; align-items:center; justify-content:center; font-weight:800; color:#141826; font-size:13px; flex-shrink:0;}
+.user-chip .u-name{font-weight:700; font-size:13px;} .user-chip .u-role{font-size:11px; color:var(--text-faint);}
+
+.main{flex:1; min-width:0; display:flex; flex-direction:column;}
+.topbar{
+  height:68px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(14,19,32,.85); backdrop-filter:blur(10px); z-index:10;
+}
+html.light .topbar{background:rgba(244,242,237,.85);}
+.search-box{
+  display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:9px 14px; width:340px; color:var(--text-faint); font-size:13px;
+}
+.search-box kbd{margin-inline-start:auto; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:1px 7px; font-size:10.5px; font-family:var(--font-mono);}
+.page{padding:28px; display:none; animation:fadeIn .35s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+.page-header{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:14px;}
+.page-header h1{font-size:24px;}
+.page-header p{color:var(--text-dim); font-size:13.5px; margin-top:4px;}
+.eyebrow{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--amber); margin-bottom:6px;}
+
+/* ---------- Dashboard grid ---------- */
+.stat-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:16px; margin-bottom:20px;}
+.stat-card{grid-column:span 2;}
+@media(max-width:1200px){.stat-card{grid-column:span 3;}}
+@media(max-width:760px){.stat-card{grid-column:span 6;}}
+.stat-card .stat-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.stat-icon{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:14px;}
+.stat-value{font-family:var(--font-display); font-size:26px; font-weight:800;}
+.stat-label{color:var(--text-dim); font-size:12.5px; margin-top:2px;}
+.trend{font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:3px;}
+.trend.up{color:var(--green);} .trend.down{color:var(--red);}
+
+.dash-cols{display:grid; grid-template-columns:1.5fr 1fr; gap:18px; align-items:start;}
+@media(max-width:1000px){.dash-cols{grid-template-columns:1fr;}}
+
+/* mini bar chart */
+.bars{display:flex; align-items:flex-end; gap:10px; height:150px; margin-top:14px;}
+.bars .bar-col{flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;}
+.bars .bar{width:100%; border-radius:7px 7px 3px 3px; background:linear-gradient(180deg, var(--amber), rgba(227,168,87,.25)); position:relative;}
+.bars .bar.today{background:linear-gradient(180deg, var(--teal), rgba(79,189,180,.25));}
+.bars .bar-col span{font-size:10.5px; color:var(--text-faint);}
+
+.activity-row{display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border-soft); align-items:flex-start;}
+.activity-row:last-child{border-bottom:none;}
+.act-icon{width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;}
+.act-title{font-size:13.5px; font-weight:600;} .act-time{font-size:11.5px; color:var(--text-faint); margin-top:2px;}
+
+/* ---------- Upload page ---------- */
+.dropzone{
+  border:2px dashed var(--border); border-radius:var(--radius-lg); padding:50px 30px; text-align:center;
+  background:var(--surface); transition:all .2s;
+}
+.dropzone:hover, .dropzone.drag{border-color:var(--amber-line); background:var(--amber-soft);}
+.dropzone .dz-icon{width:64px; height:64px; border-radius:18px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--amber); margin:0 auto 18px;}
+.filetypes{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px;}
+.filetype-chip{display:flex; align-items:center; gap:7px; padding:7px 13px; border-radius:10px; background:var(--surface-2); border:1px solid var(--border); font-size:12px; font-weight:600;}
+
+.upload-item{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 18px; margin-bottom:12px;}
+.upload-item-head{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+.file-icon{width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;}
+.pipeline{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+.pipeline-step{flex:1; min-width:120px; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:9px 11px;}
+.pipeline-step .ps-head{display:flex; align-items:center; justify-content:between; gap:6px; font-size:11.5px; font-weight:700; margin-bottom:6px;}
+.pipeline-step .ps-head i{font-size:11px;}
+
+/* ---------- Chat ---------- */
+.chat-layout{display:grid; grid-template-columns:1fr 300px; gap:18px; height:calc(100vh - 190px);}
+@media(max-width:1050px){.chat-layout{grid-template-columns:1fr;}}
+.chat-panel{display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;}
+.mode-tabs{display:flex; gap:6px; padding:14px 16px; border-bottom:1px solid var(--border); overflow-x:auto;}
+.mode-tab{display:flex; align-items:center; gap:7px; padding:8px 14px; border-radius:10px; font-size:12.5px; font-weight:700; color:var(--text-dim); white-space:nowrap; border:1px solid transparent;}
+.mode-tab.active{background:var(--amber-soft); color:var(--amber); border-color:var(--amber-line);}
+.mode-tab:hover:not(.active){background:var(--surface-2);}
+.chat-body{flex:1; overflow-y:auto; padding:22px; display:flex; flex-direction:column; gap:18px;}
+.msg{display:flex; gap:12px; max-width:80%;}
+.msg.user{align-self:flex-end; flex-direction:row-reverse;}
+.msg .m-avatar{width:30px; height:30px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px;}
+.msg.ai .m-avatar{background:linear-gradient(135deg,var(--amber),var(--teal)); color:#141826;}
+.msg.user .m-avatar{background:var(--surface-3); color:var(--text-dim);}
+.msg .bubble{background:var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:13px 16px; font-size:13.8px;}
+.msg.user .bubble{background:var(--amber-soft); border-color:var(--amber-line);}
+.msg .bubble .cite{display:inline-flex; align-items:center; gap:4px; background:var(--surface-3); border-radius:6px; padding:1px 7px; font-size:10.5px; color:var(--teal); margin-inline-start:4px;}
+.quick-actions{display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--border); flex-wrap:wrap;}
+.chat-input-row{display:flex; gap:10px; padding:14px 16px; border-top:1px solid var(--border);}
+.chat-input-row input{flex:1; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; color:var(--text); font-family:inherit;}
+.sources-panel{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:18px; overflow-y:auto;}
+.source-item{padding:12px; border-radius:11px; background:var(--surface-2); border:1px solid var(--border); margin-bottom:10px; font-size:12.5px;}
+.source-item .src-title{font-weight:700; font-size:12.8px; margin-bottom:4px; display:flex; gap:7px; align-items:center;}
+
+/* ---------- Knowledge graph ---------- */
+.graph-legend{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;}
+.legend-dot{width:10px; height:10px; border-radius:50%; display:inline-block; margin-inline-end:6px;}
+.graph-canvas{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); height:520px; position:relative; overflow:hidden;}
+.graph-node{
+  position:absolute; padding:9px 15px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer;
+  border:1.5px solid; transition:transform .2s ease, box-shadow .2s ease; white-space:nowrap; backdrop-filter:blur(6px);
+}
+.graph-node:hover{transform:scale(1.08); z-index:5; box-shadow:0 10px 24px rgba(0,0,0,.4);}
+.node-mastered{background:var(--green-soft); border-color:var(--green); color:var(--green);}
+.node-progress{background:var(--amber-soft); border-color:var(--amber); color:var(--amber);}
+.node-weak{background:var(--red-soft); border-color:var(--red); color:var(--red);}
+.node-locked{background:var(--surface-2); border-color:var(--border); color:var(--text-faint);}
+
+/* ---------- Profile ---------- */
+.profile-hero{display:flex; gap:20px; align-items:center; margin-bottom:22px;}
+.profile-avatar{width:74px; height:74px; border-radius:20px; background:linear-gradient(135deg,var(--violet),var(--teal)); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:#141826;}
+.pill-row{display:flex; flex-wrap:wrap; gap:8px;}
+.weak-tag{background:var(--red-soft); color:var(--red); border:1px solid rgba(226,104,90,.3);}
+.strong-tag{background:var(--green-soft); color:var(--green); border:1px solid rgba(111,207,151,.3);}
+.radial{position:relative; width:110px; height:110px; margin:0 auto;}
+.radial svg{transform:rotate(-90deg);}
+.radial-value{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;}
+.radial-value b{font-size:20px; font-family:var(--font-display);}
+.radial-value span{font-size:10px; color:var(--text-faint);}
+
+/* ---------- Adaptive Learning ---------- */
+.plan-item{display:flex; align-items:center; gap:14px; padding:14px; border-radius:13px; background:var(--surface-2); border:1px solid var(--border); margin-bottom:10px;}
+.plan-check{width:22px; height:22px; border-radius:7px; border:2px solid var(--border); flex-shrink:0;}
+.heatmap{display:grid; grid-template-columns:repeat(12,1fr); gap:5px;}
+.heat-cell{aspect-ratio:1; border-radius:5px;}
+
+/* ---------- Analytics radar ---------- */
+.radar-wrap{display:flex; justify-content:center;}
+
+/* ---------- Exams ---------- */
+.exam-progress-dots{display:flex; gap:6px; margin-bottom:20px;}
+.exam-dot{width:28px; height:6px; border-radius:4px; background:var(--surface-3);}
+.exam-dot.done{background:var(--green);} .exam-dot.current{background:var(--amber);}
+.option-row{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:13px; background:var(--surface-2); border:1.5px solid var(--border); margin-bottom:10px; transition:all .15s;}
+.option-row:hover{border-color:var(--amber-line);}
+.option-row.selected{border-color:var(--amber); background:var(--amber-soft);}
+.option-letter{width:26px; height:26px; border-radius:8px; background:var(--surface-3); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0;}
+
+/* ---------- Flashcards ---------- */
+.flash-stage{display:flex; justify-content:center; padding:20px 0 30px;}
+.flashcard{width:440px; max-width:100%; height:270px; position:relative; perspective:1400px;}
+.flash-inner{width:100%; height:100%; position:relative; transition:transform .6s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; cursor:pointer;}
+.flashcard.flipped .flash-inner{transform:rotateY(180deg);}
+.flash-face{position:absolute; inset:0; backface-visibility:hidden; border-radius:20px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; text-align:center; padding:30px; background:var(--surface); box-shadow:var(--shadow-md);}
+.flash-face.back{transform:rotateY(180deg); background:var(--surface-2);}
+.flash-diff-row{display:flex; gap:10px; justify-content:center; margin-top:22px;}
+.diff-btn{flex:1; max-width:110px; padding:12px; border-radius:12px; text-align:center; font-weight:800; font-size:12.5px; border:1.5px solid;}
+.diff-again{background:var(--red-soft); border-color:var(--red); color:var(--red);}
+.diff-hard{background:var(--amber-soft); border-color:var(--amber); color:var(--amber);}
+.diff-good{background:var(--teal-soft); border-color:var(--teal); color:var(--teal);}
+.diff-easy{background:var(--green-soft); border-color:var(--green); color:var(--green);}
+
+/* ---------- Settings ---------- */
+.settings-row{display:flex; align-items:center; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--border-soft);}
+.settings-row:last-child{border-bottom:none;}
+.settings-row .sr-label{font-weight:700; font-size:13.8px;}
+.settings-row .sr-desc{font-size:12px; color:var(--text-faint); margin-top:2px;}
+.select-box{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:9px 14px; font-family:inherit; color:var(--text); font-size:13px; min-width:160px;}
+.toggle{width:44px; height:25px; border-radius:20px; background:var(--surface-3); position:relative; border:1px solid var(--border); flex-shrink:0;}
+.toggle::after{content:''; position:absolute; width:19px; height:19px; border-radius:50%; background:var(--text-faint); top:2px; right:2px; transition:all .2s;}
+.toggle.on{background:var(--amber-soft); border-color:var(--amber-line);}
+.toggle.on::after{background:var(--amber); right:22px;}
+.storage-bar{display:flex; height:10px; border-radius:20px; overflow:hidden; margin-top:10px;}
+.model-card{border:1.5px solid var(--border); border-radius:14px; padding:16px; cursor:pointer; transition:all .15s;}
+.model-card.selected{border-color:var(--amber); background:var(--amber-soft);}
+.model-card:hover:not(.selected){border-color:var(--border-soft); background:var(--surface-2);}
+
+/* responsive sidebar collapse */
+@media(max-width:880px){
+  .sidebar{position:fixed; inset-inline-start:0; top:0; z-index:100; transform:translateX(101%);}
+  html[dir="rtl"] .sidebar{transform:translateX(-101%);}
+  .sidebar.open{transform:none;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .stat-card{grid-column:span 1 !important;}
+}
+</style>
+</head>
+<body>
+<div class="bg-noise"></div>
+
+<!-- ============================================================ LOGIN ============================================================ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-visual">
+      <svg viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="rgba(255,255,255,.35)" stroke-width="1">
+          <line x1="60" y1="90" x2="160" y2="160"/><line x1="160" y1="160" x2="270" y2="120"/>
+          <line x1="160" y1="160" x2="150" y2="270"/><line x1="150" y1="270" x2="260" y2="320"/>
+          <line x1="150" y1="270" x2="60" y2="360"/><line x1="260" y1="320" x2="300" y2="430"/>
+        </g>
+        <g fill="#E3A857"><circle cx="60" cy="90" r="5"/><circle cx="160" cy="160" r="7"/><circle cx="150" cy="270" r="6"/></g>
+        <g fill="#4FBDB4"><circle cx="270" cy="120" r="4"/><circle cx="260" cy="320" r="5"/><circle cx="60" cy="360" r="4"/><circle cx="300" cy="430" r="4"/></g>
+      </svg>
+      <div class="brand-mark"><div class="logo-dot"><i class="fa-solid fa-diagram-project"></i></div><span>OpenLearn AI</span></div>
+      <div>
+        <h2>حوّل ملفاتك الدراسية إلى خريطة معرفة تتعلّم منها فعليًا</h2>
+        <p>OCR، تضمين دلالي، بناء خرائط معرفة، وتكرار متباعد — كل ذلك في مكان واحد يتكيّف مع أسلوبك في التعلّم.</p>
+      </div>
+      <div class="visual-stats">
+        <div><b>+12,400</b><span>مفهوم مُستخرَج</span></div>
+        <div><b>94%</b><span>دقة الاسترجاع</span></div>
+        <div><b>3.2×</b><span>تسريع المراجعة</span></div>
+      </div>
+    </div>
+    <div class="login-form">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="setAuthTab(this,0)">تسجيل الدخول</div>
+        <div class="auth-tab" onclick="setAuthTab(this,1)">إنشاء حساب</div>
+      </div>
+      <div id="auth-signin">
+        <div class="field"><label>البريد الإلكتروني</label><input type="email" placeholder="you@university.edu.eg"></div>
+        <div class="field"><label>كلمة المرور</label><input type="password" placeholder="••••••••"></div>
+        <div class="flex justify-between text-sm text-dim" style="margin-bottom:18px;"><label class="flex items-center gap-1"><input type="checkbox" style="accent-color:var(--amber)"> تذكّرني</label><a href="#" style="color:var(--amber); font-weight:600;">نسيت كلمة المرور؟</a></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="enterApp()"><i class="fa-solid fa-arrow-left"></i> تسجيل الدخول</button>
+      </div>
+      <div id="auth-signup" class="hidden">
+        <div class="field"><label>الاسم الكامل</label><input type="text" placeholder="محمد صيام"></div>
+        <div class="field"><label>البريد الإلكتروني</label><input type="email" placeholder="you@university.edu.eg"></div>
+        <div class="field"><label>كلمة المرور</label><input type="password" placeholder="••••••••"></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="enterApp()"><i class="fa-solid fa-user-plus"></i> إنشاء الحساب</button>
+      </div>
+      <div class="divider">أو المتابعة عبر</div>
+      <div class="social-row">
+        <button class="btn btn-ghost" style="width:100%;" onclick="enterApp()"><i class="fa-brands fa-google"></i> المتابعة مع Google</button>
+        <button class="btn btn-outline" style="width:100%;" onclick="enterApp()"><i class="fa-solid fa-plane-circle-check"></i> المتابعة دون اتصال (Offline)</button>
+      </div>
+      <p class="text-xs text-faint" style="margin-top:24px; text-align:center;">بالمتابعة، أنت توافق على <a href="#" style="color:var(--text-dim); text-decoration:underline;">شروط الاستخدام</a> و<a href="#" style="color:var(--text-dim); text-decoration:underline;">سياسة الخصوصية</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ APP SHELL ============================================================ -->
+<div id="app-shell" class="hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-mark"><div class="logo-dot"><i class="fa-solid fa-diagram-project"></i></div><span>OpenLearn AI</span></div>
+
+    <div class="nav-section-label">التعلّم</div>
+    <a class="nav-item active" data-page="dashboard" onclick="goPage('dashboard',this)"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم</a>
+    <a class="nav-item" data-page="adaptive" onclick="goPage('adaptive',this)"><i class="fa-solid fa-route"></i> التعلّم التكيّفي</a>
+    <a class="nav-item" data-page="chat" onclick="goPage('chat',this)"><i class="fa-solid fa-comments"></i> المساعد الذكي</a>
+    <a class="nav-item" data-page="flashcards" onclick="goPage('flashcards',this)"><i class="fa-solid fa-clone"></i> البطاقات التعليمية <span class="badge-mini">24</span></a>
+    <a class="nav-item" data-page="exams" onclick="goPage('exams',this)"><i class="fa-solid fa-file-pen"></i> الاختبارات</a>
+
+    <div class="nav-section-label">المحتوى والتحليل</div>
+    <a class="nav-item" data-page="upload" onclick="goPage('upload',this)"><i class="fa-solid fa-cloud-arrow-up"></i> رفع المواد</a>
+    <a class="nav-item" data-page="graph" onclick="goPage('graph',this)"><i class="fa-solid fa-share-nodes"></i> خريطة المعرفة</a>
+    <a class="nav-item" data-page="analytics" onclick="goPage('analytics',this)"><i class="fa-solid fa-chart-line"></i> التحليلات</a>
+
+    <div class="nav-section-label">الحساب</div>
+    <a class="nav-item" data-page="profile" onclick="goPage('profile',this)"><i class="fa-solid fa-user"></i> الملف الشخصي</a>
+    <a class="nav-item" data-page="settings" onclick="goPage('settings',this)"><i class="fa-solid fa-sliders"></i> الإعدادات</a>
+
+    <div class="sidebar-footer">
+      <div class="user-chip" onclick="goPage('profile', document.querySelector('[data-page=profile]'))">
+        <div class="avatar">MS</div>
+        <div><div class="u-name">محمد صيام</div><div class="u-role">كلية الذكاء الاصطناعي</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="flex items-center gap-3">
+        <button class="btn-icon" style="display:none;" id="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+        <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i> ابحث في الشروحات، البطاقات، المفاهيم...<kbd>Ctrl K</kbd></div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn-icon" onclick="toggleTheme()" title="تبديل المظهر"><i class="fa-solid fa-circle-half-stroke" id="theme-icon"></i></button>
+        <button class="btn-icon"><i class="fa-regular fa-bell"></i></button>
+        <button class="btn btn-primary btn-sm" onclick="goPage('upload', document.querySelector('[data-page=upload]'))"><i class="fa-solid fa-plus"></i> مادة جديدة</button>
+      </div>
+    </div>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div><div class="eyebrow">مرحبًا من جديد</div><h1>أهلًا محمد 👋 لديك 3 مراجعات مستحقة اليوم</h1><p>خطتك مبنية على منحنى النسيان المتوقّع لكل مفهوم — استمر بنفس الوتيرة.</p></div>
+        <button class="btn btn-primary" onclick="goPage('adaptive', document.querySelector('[data-page=adaptive]'))"><i class="fa-solid fa-bolt"></i> ابدأ خطة اليوم</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">تقدّم اليوم</span><div class="stat-icon" style="background:var(--amber-soft); color:var(--amber);"><i class="fa-solid fa-fire"></i></div></div><div class="stat-value">68%</div><div class="progress-track" style="margin-top:10px;"><div class="progress-fill" style="width:68%;"></div></div></div>
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">مفاهيم ضعيفة</span><div class="stat-icon" style="background:var(--red-soft); color:var(--red);"><i class="fa-solid fa-triangle-exclamation"></i></div></div><div class="stat-value">7</div><div class="stat-label">تحتاج مراجعة مركّزة</div></div>
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">مراجعة اليوم</span><div class="stat-icon" style="background:var(--teal-soft); color:var(--teal);"><i class="fa-solid fa-rotate"></i></div></div><div class="stat-value">18</div><div class="stat-label">بطاقة مجدولة</div></div>
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">درجة الإتقان</span><div class="stat-icon" style="background:var(--violet-soft); color:var(--violet);"><i class="fa-solid fa-medal"></i></div></div><div class="stat-value">82<span style="font-size:14px;">/100</span></div><div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +4 هذا الأسبوع</div></div>
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">وقت الدراسة</span><div class="stat-icon" style="background:var(--green-soft); color:var(--green);"><i class="fa-solid fa-clock"></i></div></div><div class="stat-value">4س 20د</div><div class="stat-label">هذا الأسبوع</div></div>
+        <div class="card stat-card"><div class="stat-top"><span class="text-dim text-sm">امتحانات قادمة</span><div class="stat-icon" style="background:var(--amber-soft); color:var(--amber);"><i class="fa-solid fa-calendar-days"></i></div></div><div class="stat-value">2</div><div class="stat-label">أقربها بعد 5 أيام</div></div>
+      </div>
+
+      <div class="dash-cols">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-chart-column"></i> منحنى التقدّم الأسبوعي</div>
+          <div class="bars">
+            <div class="bar-col"><div class="bar" style="height:40%"></div><span>سبت</span></div>
+            <div class="bar-col"><div class="bar" style="height:65%"></div><span>أحد</span></div>
+            <div class="bar-col"><div class="bar" style="height:50%"></div><span>إثنين</span></div>
+            <div class="bar-col"><div class="bar" style="height:80%"></div><span>ثلاثاء</span></div>
+            <div class="bar-col"><div class="bar" style="height:55%"></div><span>أربعاء</span></div>
+            <div class="bar-col"><div class="bar" style="height:70%"></div><span>خميس</span></div>
+            <div class="bar-col"><div class="bar today" style="height:90%"></div><span>جمعة</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-list-check"></i> النشاط الأخير</div>
+          <div style="margin-top:6px;">
+            <div class="activity-row"><div class="act-icon" style="background:var(--green-soft); color:var(--green);"><i class="fa-solid fa-check"></i></div><div><div class="act-title">أنهيت اختبار "الشبكات العصبية"</div><div class="act-time">قبل ساعتين — 88%</div></div></div>
+            <div class="activity-row"><div class="act-icon" style="background:var(--teal-soft); color:var(--teal);"><i class="fa-solid fa-clone"></i></div><div><div class="act-title">راجعت 12 بطاقة تعليمية</div><div class="act-time">اليوم 10:20 ص</div></div></div>
+            <div class="activity-row"><div class="act-icon" style="background:var(--amber-soft); color:var(--amber);"><i class="fa-solid fa-file-arrow-up"></i></div><div><div class="act-title">رفعت محاضرة "التعلّم المعزّز.pdf"</div><div class="act-time">أمس 9:14 م</div></div></div>
+            <div class="activity-row"><div class="act-icon" style="background:var(--violet-soft); color:var(--violet);"><i class="fa-solid fa-comments"></i></div><div><div class="act-title">سألت المساعد عن "تجزئة البيانات"</div><div class="act-time">أمس 6:02 م</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= UPLOAD ================= -->
+    <section class="page" id="page-upload">
+      <div class="page-header"><div><div class="eyebrow">المحتوى</div><h1>رفع المواد الدراسية</h1><p>سيتم استخراج النص، وبناء التضمينات الدلالية، وتحديث خريطة المعرفة تلقائيًا.</p></div></div>
+
+      <div class="dropzone" id="dz" ondragover="event.preventDefault(); this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="event.preventDefault(); this.classList.remove('drag')">
+        <div class="dz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <h3 style="font-size:17px;">اسحب الملفات هنا أو انقر للاختيار</h3>
+        <p class="text-dim text-sm" style="margin-top:6px;">حتى 200 ميجابايت للملف الواحد — تتم المعالجة محليًا أو سحابيًا حسب إعداداتك</p>
+        <button class="btn btn-primary" style="margin-top:18px;"><i class="fa-solid fa-folder-open"></i> اختيار ملفات</button>
+        <div class="filetypes">
+          <span class="filetype-chip"><i class="fa-solid fa-file-pdf" style="color:#E2685A;"></i> PDF</span>
+          <span class="filetype-chip"><i class="fa-solid fa-file-word" style="color:#4FBDB4;"></i> DOCX</span>
+          <span class="filetype-chip"><i class="fa-solid fa-file-powerpoint" style="color:#E3A857;"></i> PPTX</span>
+          <span class="filetype-chip"><i class="fa-solid fa-file-image" style="color:#8B85D6;"></i> صور</span>
+          <span class="filetype-chip"><i class="fa-solid fa-file-audio" style="color:#6FCF97;"></i> صوت</span>
+          <span class="filetype-chip"><i class="fa-solid fa-file-video" style="color:#E2685A;"></i> فيديو</span>
+        </div>
+      </div>
+
+      <h3 style="margin:26px 0 14px; font-size:16px;">قيد المعالجة</h3>
+
+      <div class="upload-item">
+        <div class="upload-item-head">
+          <div class="file-icon" style="background:var(--red-soft); color:var(--red);"><i class="fa-solid fa-file-pdf"></i></div>
+          <div style="flex:1;"><div style="font-weight:700; font-size:14px;">محاضرة_7_التعلم_العميق.pdf</div><div class="text-xs text-faint">24.6 ميجابايت — رُفع قبل دقيقتين</div></div>
+          <span class="chip chip-amber"><i class="fa-solid fa-spinner fa-spin"></i> جارٍ المعالجة</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:72%;"></div></div>
+        <div class="pipeline">
+          <div class="pipeline-step"><div class="ps-head" style="color:var(--green);"><i class="fa-solid fa-circle-check"></i> استخراج OCR</div><span class="text-xs text-faint">اكتمل — 58 صفحة</span></div>
+          <div class="pipeline-step"><div class="ps-head" style="color:var(--amber);"><i class="fa-solid fa-spinner fa-spin"></i> بناء التضمين</div><span class="text-xs text-faint">312 / 480 مقطع</span></div>
+          <div class="pipeline-step"><div class="ps-head text-faint"><i class="fa-regular fa-circle"></i> خريطة المعرفة</div><span class="text-xs text-faint">بانتظار الدور</span></div>
+        </div>
+      </div>
+
+      <div class="upload-item">
+        <div class="upload-item-head">
+          <div class="file-icon" style="background:var(--green-soft); color:var(--green);"><i class="fa-solid fa-file-word"></i></div>
+          <div style="flex:1;"><div style="font-weight:700; font-size:14px;">ملخص_قواعد_البيانات.docx</div><div class="text-xs text-faint">3.1 ميجابايت — رُفع أمس</div></div>
+          <span class="chip chip-green"><i class="fa-solid fa-check"></i> جاهز</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%;"></div></div>
+        <div class="pipeline">
+          <div class="pipeline-step"><div class="ps-head" style="color:var(--green);"><i class="fa-solid fa-circle-check"></i> استخراج OCR</div><span class="text-xs text-faint">اكتمل</span></div>
+          <div class="pipeline-step"><div class="ps-head" style="color:var(--green);"><i class="fa-solid fa-circle-check"></i> بناء التضمين</div><span class="text-xs text-faint">142 مقطع</span></div>
+          <div class="pipeline-step"><div class="ps-head" style="color:var(--green);"><i class="fa-solid fa-circle-check"></i> خريطة المعرفة</div><span class="text-xs text-faint">19 مفهوم مُضاف</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAT ================= -->
+    <section class="page" id="page-chat">
+      <div class="page-header"><div><div class="eyebrow">المساعد الذكي</div><h1>اسأل عن أي مفهوم في موادّك</h1></div></div>
+      <div class="chat-layout">
+        <div class="chat-panel">
+          <div class="mode-tabs">
+            <div class="mode-tab active" onclick="setMode(this)"><i class="fa-solid fa-chalkboard-user"></i> مدرّس</div>
+            <div class="mode-tab" onclick="setMode(this)"><i class="fa-solid fa-file-pen"></i> امتحان</div>
+            <div class="mode-tab" onclick="setMode(this)"><i class="fa-solid fa-lightbulb"></i> شرح</div>
+            <div class="mode-tab" onclick="setMode(this)"><i class="fa-solid fa-compress"></i> تلخيص</div>
+            <div class="mode-tab" onclick="setMode(this)"><i class="fa-solid fa-magnifying-glass-chart"></i> بحث</div>
+            <div class="mode-tab" onclick="setMode(this)"><i class="fa-solid fa-code"></i> كود</div>
+          </div>
+          <div class="chat-body">
+            <div class="msg user"><div class="m-avatar">مس</div><div class="bubble">إيه الفرق بين الـ Bagging والـ Boosting باختصار؟</div></div>
+            <div class="msg ai"><div class="m-avatar"><i class="fa-solid fa-sparkles"></i></div><div class="bubble">
+              الـ Bagging بيدرّب نماذج متعددة بالتوازي على عينات عشوائية من البيانات، وبيجمع نتايجهم بالتصويت أو المتوسط — الهدف تقليل التباين (Variance).
+              أما الـ Boosting فبيدرّب النماذج بالتتابع، وكل نموذج بيركّز على أخطاء اللي قبله — الهدف تقليل الانحياز (Bias).
+              <span class="cite"><i class="fa-solid fa-file-lines"></i> محاضرة_7 ص.14</span><span class="cite"><i class="fa-solid fa-file-lines"></i> ملخص_ML ص.3</span>
+            </div></div>
+            <div class="msg user"><div class="m-avatar">مس</div><div class="bubble">اعملّي كام سؤال اختيار من متعدد على الموضوع ده</div></div>
+            <div class="msg ai"><div class="m-avatar"><i class="fa-solid fa-sparkles"></i></div><div class="bubble">تمام، جهّزت 5 أسئلة اختيار من متعدد بمستوى صعوبة متدرّج — تقدر تبدأهم دلوقتي من زر "توليد أسئلة" تحت، أو أفتحهملك كاختبار قصير.</div></div>
+          </div>
+          <div class="quick-actions">
+            <button class="btn btn-outline btn-sm"><i class="fa-solid fa-list-check"></i> توليد أسئلة</button>
+            <button class="btn btn-outline btn-sm"><i class="fa-solid fa-clone"></i> توليد بطاقات</button>
+            <button class="btn btn-outline btn-sm"><i class="fa-solid fa-compress"></i> توليد ملخّص</button>
+            <button class="btn btn-outline btn-sm"><i class="fa-solid fa-diagram-project"></i> خريطة ذهنية</button>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" placeholder="اكتب سؤالك هنا...">
+            <button class="btn-icon" style="background:var(--amber); color:#1B1408;"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+        <div class="sources-panel">
+          <div class="card-title" style="margin-bottom:14px;"><i class="fa-solid fa-link"></i> المصادر والاستشهادات</div>
+          <div class="source-item"><div class="src-title"><i class="fa-solid fa-file-pdf" style="color:var(--red);"></i> محاضرة_7_التعلم_العميق.pdf</div><span class="text-faint">الصفحة 14 — قسم "طرق التجميع"</span></div>
+          <div class="source-item"><div class="src-title"><i class="fa-solid fa-file-word" style="color:var(--teal);"></i> ملخص_قواعد_البيانات.docx</div><span class="text-faint">الصفحة 3 — جدول مقارنة</span></div>
+          <div class="source-item"><div class="src-title"><i class="fa-solid fa-share-nodes" style="color:var(--violet);"></i> مفهوم مرتبط</div><span class="text-faint">Ensemble Learning → Random Forest</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= KNOWLEDGE GRAPH ================= -->
+    <section class="page" id="page-graph">
+      <div class="page-header"><div><div class="eyebrow">خريطة المعرفة</div><h1>العلاقات بين المفاهيم والمتطلبات السابقة</h1></div>
+        <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-maximize"></i> ملء الشاشة</button>
+      </div>
+      <div class="graph-legend">
+        <span class="text-sm text-dim"><span class="legend-dot" style="background:var(--green);"></span>متقَن</span>
+        <span class="text-sm text-dim"><span class="legend-dot" style="background:var(--amber);"></span>قيد التقدّم</span>
+        <span class="text-sm text-dim"><span class="legend-dot" style="background:var(--red);"></span>ضعيف</span>
+        <span class="text-sm text-dim"><span class="legend-dot" style="background:var(--text-faint);"></span>مقفَل (متطلب سابق ناقص)</span>
+      </div>
+      <div class="graph-canvas">
+        <svg style="position:absolute; inset:0; width:100%; height:100%;">
+          <g stroke="var(--border)" stroke-width="1.5" fill="none">
+            <line x1="18%" y1="20%" x2="38%" y2="42%"/><line x1="38%" y1="42%" x2="62%" y2="22%"/>
+            <line x1="38%" y1="42%" x2="30%" y2="68%"/><line x1="62%" y1="22%" x2="80%" y2="45%"/>
+            <line x1="30%" y1="68%" x2="55%" y2="78%"/><line x1="62%" y1="22%" x2="55%" y2="78%"/>
+            <line x1="80%" y1="45%" x2="88%" y2="72%"/>
+          </g>
+        </svg>
+        <div class="graph-node node-mastered" style="top:16%; right:15%;">الاحتمالات الأساسية</div>
+        <div class="graph-node node-mastered" style="top:38%; right:32%;">الانحدار الخطي</div>
+        <div class="graph-node node-progress" style="top:18%; right:58%;">الشبكات العصبية</div>
+        <div class="graph-node node-weak" style="top:64%; right:22%;">التحسين بالتدرج</div>
+        <div class="graph-node node-progress" style="top:74%; right:47%;">دوال الخسارة</div>
+        <div class="graph-node node-locked" style="top:41%; right:76%;">التعلّم المعزّز</div>
+        <div class="graph-node node-locked" style="top:68%; right:82%;">الشبكات التوليدية</div>
+      </div>
+    </section>
+
+    <!-- ================= PROFILE ================= -->
+    <section class="page" id="page-profile">
+      <div class="page-header"><div><div class="eyebrow">الملف الشخصي</div><h1>ملفك التعلّمي</h1></div><button class="btn btn-ghost"><i class="fa-solid fa-pen"></i> تعديل</button></div>
+
+      <div class="profile-hero card">
+        <div class="profile-avatar">مس</div>
+        <div style="flex:1;">
+          <h2 style="font-size:19px;">محمد صيام</h2>
+          <p class="text-dim text-sm">كلية الذكاء الاصطناعي — السنة الثالثة</p>
+          <div class="pill-row" style="margin-top:10px;"><span class="chip chip-amber">نمط تعلّم: بصري / تطبيقي</span><span class="chip chip-teal">اللغة المفضّلة: العربية</span><span class="chip chip-violet">وتيرة التعلّم: متوسّطة إلى سريعة</span></div>
+        </div>
+        <div style="text-align:center;">
+          <div class="radial"><svg width="110" height="110"><circle cx="55" cy="55" r="46" fill="none" stroke="var(--surface-3)" stroke-width="10"/><circle cx="55" cy="55" r="46" fill="none" stroke="var(--amber)" stroke-width="10" stroke-dasharray="289" stroke-dashoffset="52" stroke-linecap="round"/></svg><div class="radial-value"><b>82%</b><span>الإتقان الحالي</span></div></div>
+        </div>
+      </div>
+
+      <div class="dash-cols" style="margin-top:18px;">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-bullseye"></i> الأهداف والهدف الأسبوعي</div>
+          <p class="text-dim text-sm" style="margin-top:8px;">إتقان أساسيات التعلّم العميق قبل امتحان منتصف الفصل، مع الحفاظ على معدّل مراجعة يومي ثابت.</p>
+          <div style="margin-top:16px;"><div class="flex justify-between text-sm"><span>الهدف الأسبوعي: 6 ساعات دراسة</span><span class="text-dim">4س 20د / 6س</span></div><div class="progress-track" style="margin-top:8px;"><div class="progress-fill" style="width:72%;"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> نقاط القوة والضعف</div>
+          <div style="margin-top:10px;"><span class="text-xs text-faint">نقاط القوة</span><div class="pill-row" style="margin-top:8px;"><span class="chip strong-tag">الاحتمالات</span><span class="chip strong-tag">SQL</span><span class="chip strong-tag">هياكل البيانات</span></div></div>
+          <div style="margin-top:14px;"><span class="text-xs text-faint">نقاط تحتاج عمل</span><div class="pill-row" style="margin-top:8px;"><span class="chip weak-tag">التحسين بالتدرج</span><span class="chip weak-tag">الشبكات التلافيفية</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ADAPTIVE LEARNING ================= -->
+    <section class="page" id="page-adaptive">
+      <div class="page-header"><div><div class="eyebrow">التعلّم التكيّفي</div><h1>خطة اليوم</h1><p>مُرتّبة حسب أولوية النسيان المتوقّع وصعوبة المفهوم.</p></div></div>
+
+      <div class="dash-cols">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-calendar-check"></i> مهام اليوم</div>
+          <div style="margin-top:14px;">
+            <div class="plan-item"><div class="plan-check"></div><div style="flex:1;"><div style="font-weight:700; font-size:13.8px;">مراجعة: التحسين بالتدرج</div><div class="text-xs text-faint">10 بطاقات — أولوية عالية</div></div><span class="chip chip-red">استحقاق اليوم</span></div>
+            <div class="plan-item"><div class="plan-check"></div><div style="flex:1;"><div style="font-weight:700; font-size:13.8px;">اختبار قصير: الشبكات العصبية</div><div class="text-xs text-faint">8 أسئلة — 10 دقائق تقريبًا</div></div><span class="chip chip-amber">موصى به</span></div>
+            <div class="plan-item"><div class="plan-check" style="background:var(--green-soft); border-color:var(--green);"></div><div style="flex:1;"><div style="font-weight:700; font-size:13.8px; text-decoration:line-through; color:var(--text-faint);">مراجعة: الاحتمالات الأساسية</div><div class="text-xs text-faint">أُنجزت الساعة 9:10 ص</div></div><span class="chip chip-green">مكتمل</span></div>
+            <div class="plan-item"><div class="plan-check"></div><div style="flex:1;"><div style="font-weight:700; font-size:13.8px;">قراءة: مقدّمة الشبكات التوليدية</div><div class="text-xs text-faint">مفهوم جديد — 15 دقيقة</div></div><span class="chip chip-violet">جديد</span></div>
+          </div>
+        </div>
+        <div class="grid" style="gap:18px;">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-hourglass-half"></i> المراجعة القادمة</div>
+            <div class="text-center" style="text-align:center; padding:10px 0;"><div style="font-size:30px; font-weight:800; font-family:var(--font-display); color:var(--amber);">3:45:12</div><div class="text-dim text-sm">حتى استحقاق "دوال الخسارة"</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> النسيان المتوقّع</div>
+            <div style="margin-top:10px;">
+              <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>التحسين بالتدرج</span><span style="color:var(--red);">78%</span></div><div class="progress-track" style="margin-bottom:12px;"><div class="progress-fill" style="width:78%; background:var(--red);"></div></div>
+              <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>دوال الخسارة</span><span style="color:var(--amber);">45%</span></div><div class="progress-track" style="margin-bottom:12px;"><div class="progress-fill" style="width:45%; background:var(--amber);"></div></div>
+              <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>الاحتمالات الأساسية</span><span style="color:var(--green);">12%</span></div><div class="progress-track"><div class="progress-fill" style="width:12%; background:var(--green);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title"><i class="fa-solid fa-table-cells"></i> خريطة حرارية للإتقان — آخر 12 أسبوعًا</div>
+        <div class="heatmap" style="margin-top:16px;">
+          <script>document.write(Array.from({length:60}).map(()=>{const v=Math.random();const c=v>0.75?'var(--green)':v>0.5?'rgba(111,207,151,0.5)':v>0.3?'var(--amber)':'var(--red)';return `<div class="heat-cell" style="background:${c}"></div>`}).join(''))</script>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ANALYTICS ================= -->
+    <section class="page" id="page-analytics">
+      <div class="page-header"><div><div class="eyebrow">التحليلات</div><h1>أداؤك بالتفصيل</h1></div>
+        <select class="select-box"><option>آخر 7 أيام</option><option selected>آخر 30 يومًا</option><option>الفصل الدراسي</option></select>
+      </div>
+
+      <div class="stat-grid">
+        <div class="card stat-card"><div class="stat-label">متوسط الدقة</div><div class="stat-value" style="margin-top:6px;">86%</div><div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +6%</div></div>
+        <div class="card stat-card"><div class="stat-label">بطاقات رُوجعت</div><div class="stat-value" style="margin-top:6px;">412</div><div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +58</div></div>
+        <div class="card stat-card"><div class="stat-label">ساعات التعلّم</div><div class="stat-value" style="margin-top:6px;">21س</div><div class="trend down"><i class="fa-solid fa-arrow-trend-down"></i> -2س</div></div>
+        <div class="card stat-card"><div class="stat-label">مفاهيم مُتقنة</div><div class="stat-value" style="margin-top:6px;">34</div><div class="trend up"><i class="fa-solid fa-arrow-trend-up"></i> +5</div></div>
+        <div class="card stat-card"><div class="stat-label">تسلسل الأيام</div><div class="stat-value" style="margin-top:6px;">🔥 11</div><div class="text-faint text-xs">يومًا متتاليًا</div></div>
+        <div class="card stat-card"><div class="stat-label">أفضل وقت أداء</div><div class="stat-value" style="margin-top:6px;">21:00</div><div class="text-faint text-xs">أعلى دقة إجابة</div></div>
+      </div>
+
+      <div class="dash-cols">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-chart-area"></i> الجدول الزمني للإتقان</div>
+          <svg viewBox="0 0 500 180" style="width:100%; height:180px; margin-top:10px;">
+            <polyline fill="none" stroke="var(--teal)" stroke-width="3" points="0,150 60,140 120,120 180,110 240,85 300,80 360,55 420,45 480,25" stroke-linecap="round"/>
+            <polyline fill="rgba(79,189,180,0.12)" stroke="none" points="0,150 60,140 120,120 180,110 240,85 300,80 360,55 420,45 480,25 480,180 0,180"/>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-chart-pie"></i> توزيع الوقت حسب الموضوع</div>
+          <div style="margin-top:14px;">
+            <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>التعلّم العميق</span><span>38%</span></div><div class="progress-track" style="margin-bottom:12px;"><div class="progress-fill" style="width:38%;"></div></div>
+            <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>قواعد البيانات</span><span>27%</span></div><div class="progress-track" style="margin-bottom:12px;"><div class="progress-fill" style="width:27%; background:var(--teal);"></div></div>
+            <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>الخوارزميات</span><span>21%</span></div><div class="progress-track" style="margin-bottom:12px;"><div class="progress-fill" style="width:21%; background:var(--violet);"></div></div>
+            <div class="flex justify-between text-sm" style="margin-bottom:6px;"><span>أخرى</span><span>14%</span></div><div class="progress-track"><div class="progress-fill" style="width:14%; background:var(--text-faint);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title"><i class="fa-solid fa-chart-simple"></i> رادار الكفاءات</div>
+        <div class="radar-wrap">
+          <svg width="360" height="320" viewBox="0 0 360 320">
+            <g stroke="var(--border)" fill="none">
+              <polygon points="180,30 300,110 260,250 100,250 60,110"/>
+              <polygon points="180,70 260,130 232,220 128,220 100,130"/>
+              <polygon points="180,110 220,150 204,190 156,190 140,150"/>
+            </g>
+            <polygon points="180,45 275,120 235,235 150,215 85,125" fill="rgba(227,168,87,0.22)" stroke="var(--amber)" stroke-width="2"/>
+            <g fill="var(--text-dim)" font-size="12" font-family="Tajawal">
+              <text x="180" y="20" text-anchor="middle">التطبيق العملي</text>
+              <text x="310" y="108" text-anchor="middle">النظري</text>
+              <text x="272" y="270" text-anchor="middle">الاستدعاء</text>
+              <text x="90" y="270" text-anchor="middle">التحليل</text>
+              <text x="42" y="108" text-anchor="middle">السرعة</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EXAMS ================= -->
+    <section class="page" id="page-exams">
+      <div class="page-header"><div><div class="eyebrow">الاختبارات</div><h1>اختبار تكيّفي — الشبكات العصبية</h1><p>يتكيّف مستوى الصعوبة تلقائيًا حسب إجاباتك.</p></div><span class="chip chip-amber"><i class="fa-solid fa-bolt"></i> وضع تكيّفي</span></div>
+
+      <div class="exam-progress-dots">
+        <div class="exam-dot done"></div><div class="exam-dot done"></div><div class="exam-dot done"></div>
+        <div class="exam-dot current"></div><div class="exam-dot"></div><div class="exam-dot"></div><div class="exam-dot"></div><div class="exam-dot"></div>
+      </div>
+
+      <div class="card">
+        <span class="chip chip-violet" style="margin-bottom:14px;">اختيار من متعدد — سؤال 4 من 8</span>
+        <h3 style="font-size:17px; font-weight:600; line-height:1.7; margin-bottom:20px;">أي من الوظائف التالية تُستخدم غالبًا في الطبقة الأخيرة لمسائل التصنيف متعدد الفئات؟</h3>
+        <div class="option-row selected"><div class="option-letter">أ</div> Softmax</div>
+        <div class="option-row"><div class="option-letter">ب</div> ReLU</div>
+        <div class="option-row"><div class="option-letter">ج</div> Sigmoid</div>
+        <div class="option-row"><div class="option-letter">د</div> Tanh</div>
+        <div class="flex justify-between" style="margin-top:22px;">
+          <button class="btn btn-ghost"><i class="fa-solid fa-arrow-right"></i> السابق</button>
+          <button class="btn btn-primary">التالي <i class="fa-solid fa-arrow-left"></i></button>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px;">
+        <div class="card" style="text-align:center; padding:14px;"><div class="text-xs text-faint">MCQ</div><i class="fa-solid fa-list-check" style="color:var(--amber); margin:8px 0; display:block; font-size:18px;"></i></div>
+        <div class="card" style="text-align:center; padding:14px;"><div class="text-xs text-faint">صح / خطأ</div><i class="fa-solid fa-toggle-on" style="color:var(--teal); margin:8px 0; display:block; font-size:18px;"></i></div>
+        <div class="card" style="text-align:center; padding:14px;"><div class="text-xs text-faint">أكمل الفراغ</div><i class="fa-solid fa-pen" style="color:var(--violet); margin:8px 0; display:block; font-size:18px;"></i></div>
+        <div class="card" style="text-align:center; padding:14px;"><div class="text-xs text-faint">مقالي</div><i class="fa-solid fa-align-right" style="color:var(--red); margin:8px 0; display:block; font-size:18px;"></i></div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title"><i class="fa-solid fa-chart-simple"></i> نتيجة آخر اختبار — الاحتمالات الأساسية</div>
+        <div class="flex items-center gap-4" style="margin-top:14px; flex-wrap:wrap;">
+          <div class="radial"><svg width="90" height="90"><circle cx="45" cy="45" r="38" fill="none" stroke="var(--surface-3)" stroke-width="8"/><circle cx="45" cy="45" r="38" fill="none" stroke="var(--green)" stroke-width="8" stroke-dasharray="239" stroke-dashoffset="33" stroke-linecap="round"/></svg><div class="radial-value"><b>86%</b></div></div>
+          <div style="flex:1; min-width:220px;">
+            <div class="text-sm" style="margin-bottom:8px;"><i class="fa-solid fa-circle-xmark" style="color:var(--red);"></i> أخطأت في: التوزيع الطبيعي المشترك، قاعدة بايز الشرطية</div>
+            <div class="text-sm"><i class="fa-solid fa-lightbulb" style="color:var(--amber);"></i> موصى به: راجع بطاقات "الاحتمال الشرطي" قبل الغد</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FLASHCARDS ================= -->
+    <section class="page" id="page-flashcards">
+      <div class="page-header"><div><div class="eyebrow">البطاقات التعليمية</div><h1>مراجعة اليوم — 18 بطاقة</h1></div><span class="chip chip-teal"><i class="fa-solid fa-rotate"></i> بطاقة 5 من 18</span></div>
+
+      <div class="flash-stage">
+        <div class="flashcard" id="fc" onclick="this.classList.toggle('flipped')">
+          <div class="flash-inner">
+            <div class="flash-face"><div><span class="chip chip-amber" style="margin-bottom:16px;">التحسين بالتدرج</span><h3 style="font-size:18px; font-weight:600; line-height:1.7;">ما وظيفة معدّل التعلّم (Learning Rate) في خوارزمية Gradient Descent؟</h3><p class="text-faint text-xs" style="margin-top:16px;">انقر لقلب البطاقة</p></div></div>
+            <div class="flash-face back"><div><h3 style="font-size:16px; font-weight:600; line-height:1.8;">يتحكّم في حجم الخطوة التي يتحرّكها النموذج باتجاه الحل الأمثل في كل تكرار — قيمة مرتفعة قد تتخطى الحل، وقيمة منخفضة تُبطئ التقارب.</h3></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="flash-diff-row">
+        <div class="diff-btn diff-again">إعادة<div class="text-xs" style="opacity:.7;">&lt;1 د</div></div>
+        <div class="diff-btn diff-hard">صعب<div class="text-xs" style="opacity:.7;">6 د</div></div>
+        <div class="diff-btn diff-good">جيد<div class="text-xs" style="opacity:.7;">2 يوم</div></div>
+        <div class="diff-btn diff-easy">سهل<div class="text-xs" style="opacity:.7;">5 أيام</div></div>
+      </div>
+      <p class="text-center text-faint text-sm" style="text-align:center; margin-top:6px;">مبني على خوارزمية التكرار المتباعد (Spaced Repetition) — مثل Anki</p>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section class="page" id="page-settings">
+      <div class="page-header"><div><div class="eyebrow">الإعدادات</div><h1>تخصيص النظام</h1></div></div>
+
+      <div class="dash-cols">
+        <div class="grid" style="gap:18px;">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-server"></i> وضع التشغيل</div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px;">
+              <div class="model-card"><i class="fa-solid fa-cloud" style="color:var(--teal);"></i><div style="font-weight:700; font-size:13px; margin-top:8px;">سحابي</div><div class="text-xs text-faint">أسرع، يتطلّب اتصالًا</div></div>
+              <div class="model-card selected"><i class="fa-solid fa-shuffle" style="color:var(--amber);"></i><div style="font-weight:700; font-size:13px; margin-top:8px;">هجين</div><div class="text-xs text-faint">توازن بين الخصوصية والسرعة</div></div>
+              <div class="model-card"><i class="fa-solid fa-laptop" style="color:var(--violet);"></i><div style="font-weight:700; font-size:13px; margin-top:8px;">محلي بالكامل</div><div class="text-xs text-faint">خصوصية تامة، أبطأ</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-microchip"></i> اختيار النماذج</div>
+            <div class="settings-row"><div><div class="sr-label">نموذج الاستدلال (Reasoning)</div><div class="sr-desc">يُستخدم في الشرح والمحادثة والتقييم</div></div><select class="select-box"><option>Claude Sonnet 4.6</option><option>Llama 3.1 محلي</option><option>GPT-4o</option></select></div>
+            <div class="settings-row"><div><div class="sr-label">نموذج التضمين (Embedding)</div><div class="sr-desc">لبناء الفهرس الدلالي والبحث</div></div><select class="select-box"><option>bge-m3</option><option>text-embedding-3</option></select></div>
+            <div class="settings-row"><div><div class="sr-label">نموذج OCR</div><div class="sr-desc">استخراج النص من الصور والمسحات الضوئية</div></div><select class="select-box"><option>Tesseract + تصحيح عربي</option><option>Surya OCR</option></select></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-gear"></i> عام</div>
+            <div class="settings-row"><div><div class="sr-label">اللغة</div><div class="sr-desc">لغة الواجهة والشروحات</div></div><select class="select-box"><option>العربية</option><option>English</option></select></div>
+            <div class="settings-row"><div><div class="sr-label">المظهر الداكن</div><div class="sr-desc">مريح للعين أثناء المذاكرة الليلية</div></div><div class="toggle on" onclick="this.classList.toggle('on'); toggleTheme();"></div></div>
+            <div class="settings-row"><div><div class="sr-label">إشعارات المراجعة</div><div class="sr-desc">تذكير عند استحقاق بطاقة</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+
+        <div class="grid" style="gap:18px; align-content:start;">
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-box-archive"></i> الحزمة دون اتصال</div>
+            <p class="text-dim text-sm" style="margin-top:8px;">نزّل نسخة من موادك ونماذجك المحلية لاستخدامها بدون إنترنت.</p>
+            <button class="btn btn-primary" style="width:100%; margin-top:14px;"><i class="fa-solid fa-download"></i> تنزيل الحزمة (1.2 جيجابايت)</button>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-hard-drive"></i> استخدام التخزين</div>
+            <div class="storage-bar"><div style="width:45%; background:var(--amber);"></div><div style="width:25%; background:var(--teal);"></div><div style="width:15%; background:var(--violet);"></div><div style="flex:1; background:var(--surface-3);"></div></div>
+            <div class="text-xs text-faint" style="margin-top:10px;">2.1 جيجابايت من 5 جيجابايت مستخدَمة</div>
+            <div class="grid" style="gap:6px; margin-top:12px;">
+              <div class="flex justify-between text-xs"><span><span class="legend-dot" style="background:var(--amber);"></span>ملفات ومحاضرات</span><span class="text-faint">920 م.ب</span></div>
+              <div class="flex justify-between text-xs"><span><span class="legend-dot" style="background:var(--teal);"></span>نماذج محلية</span><span class="text-faint">540 م.ب</span></div>
+              <div class="flex justify-between text-xs"><span><span class="legend-dot" style="background:var(--violet);"></span>خرائط المعرفة</span><span class="text-faint">310 م.ب</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+function enterApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-shell').classList.remove('hidden');
+}
+function setAuthTab(el, idx){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('auth-signin').classList.toggle('hidden', idx!==0);
+  document.getElementById('auth-signup').classList.toggle('hidden', idx!==1);
+}
+function goPage(name, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0,0);
+}
+function toggleTheme(){
+  document.documentElement.classList.toggle('light');
+  const icon = document.getElementById('theme-icon');
+}
+function setMode(el){
+  el.parentElement.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

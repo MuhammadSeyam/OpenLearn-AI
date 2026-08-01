@@ -1,0 +1,2387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenLearn AI — Adaptive Educational Intelligence Platform</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<style>
+/* ============================================
+   CSS RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #2563EB;
+  --secondary: #7C3AED;
+  --accent: #14B8A6;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --bg: #F8FAFC;
+  --dark: #0F172A;
+  --light-text: #64748B;
+  --card-bg: #FFFFFF;
+  --glass-bg: rgba(255,255,255,0.7);
+  --glass-border: rgba(255,255,255,0.3);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 40px rgba(37,99,235,0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --font-ar: 'Noto Sans Arabic', 'Inter', sans-serif;
+  --font-en: 'Inter', 'Noto Sans Arabic', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-ar);
+  background: var(--bg);
+  color: var(--dark);
+  direction: rtl;
+}
+
+/* ============================================
+   SLIDE SYSTEM
+   ============================================ */
+.slide-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  overflow: hidden;
+  pointer-events: none;
+  padding: 60px 80px;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  z-index: 10;
+}
+
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(37,99,235,0.1);
+  z-index: 100;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.4s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ============================================
+   SLIDE NUMBER & NAV
+   ============================================ */
+.slide-nav {
+  position: fixed;
+  bottom: 16px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 100;
+  font-family: var(--font-en);
+  font-size: 12px;
+  color: rgba(100,116,139,0.7);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.2);
+  direction: ltr;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.3s;
+}
+
+.slide-nav .current-slide {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.slide-nav.nav-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.slide-title {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: 42px;
+  line-height: 1.2;
+  color: var(--dark);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.slide-title.en {
+  font-family: var(--font-en);
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.slide-subtitle {
+  font-family: var(--font-ar);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.6;
+  color: var(--light-text);
+  margin-bottom: 32px;
+}
+
+.slide-subtitle.en {
+  font-family: var(--font-en);
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.en-term {
+  font-family: var(--font-en);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.highlight {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.highlight-accent {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.highlight-secondary {
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+/* ============================================
+   CARDS & COMPONENTS
+   ============================================ */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.card-title .en-term {
+  font-size: 16px;
+}
+
+.card-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--light-text);
+}
+
+/* ============================================
+   ICON CIRCLE
+   ============================================ */
+.icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.icon-circle.blue { background: rgba(37,99,235,0.12); color: var(--primary); }
+.icon-circle.purple { background: rgba(124,58,237,0.12); color: var(--secondary); }
+.icon-circle.teal { background: rgba(20,184,166,0.12); color: var(--accent); }
+.icon-circle.green { background: rgba(34,197,94,0.12); color: var(--success); }
+.icon-circle.orange { background: rgba(245,158,11,0.12); color: var(--warning); }
+
+/* ============================================
+   TAG / BADGE
+   ============================================ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+.tag-blue { background: rgba(37,99,235,0.12); color: var(--primary); }
+.tag-purple { background: rgba(124,58,237,0.12); color: var(--secondary); }
+.tag-teal { background: rgba(20,184,166,0.12); color: var(--accent); }
+.tag-green { background: rgba(34,197,94,0.12); color: var(--success); }
+.tag-orange { background: rgba(245,158,11,0.12); color: var(--warning); }
+
+/* ============================================
+   TABLE
+   ============================================ */
+.comp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.comp-table thead th {
+  background: var(--dark);
+  color: white;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: var(--font-en);
+  direction: ltr;
+  text-align: center;
+}
+
+.comp-table thead th:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.comp-table thead th:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.comp-table tbody td {
+  padding: 12px 18px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+.comp-table tbody td:first-child {
+  text-align: start;
+  font-family: var(--font-ar);
+  direction: rtl;
+  font-weight: 500;
+}
+
+.comp-table tbody tr:hover {
+  background: rgba(37,99,235,0.04);
+}
+
+.comp-table .check { color: var(--success); font-weight: 700; }
+.comp-table .cross { color: #EF4444; font-weight: 700; }
+.comp-table .partial { color: var(--warning); font-weight: 700; }
+
+/* ============================================
+   FLOW / PIPELINE
+   ============================================ */
+.flow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  direction: ltr;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.flow-node {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  min-width: 100px;
+  position: relative;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.flow-node:hover {
+  border-color: var(--primary);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow);
+}
+
+.flow-node .icon {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.flow-node .label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+.flow-node .desc {
+  font-size: 11px;
+  color: var(--light-text);
+  font-family: var(--font-ar);
+  direction: rtl;
+  margin-top: 4px;
+}
+
+.flow-arrow {
+  font-size: 20px;
+  color: var(--primary);
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   LAYER DIAGRAM
+   ============================================ */
+.layer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  direction: ltr;
+  width: 100%;
+  max-width: 800px;
+}
+
+.layer {
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.layer:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.layer .layer-name {
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+.layer .layer-desc {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  font-family: var(--font-ar);
+  direction: rtl;
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  direction: ltr;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.timeline-marker {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font-en);
+  color: white;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.04);
+  flex-grow: 1;
+}
+
+.timeline-content .phase-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+.timeline-content .phase-desc {
+  font-size: 13px;
+  color: var(--light-text);
+  line-height: 1.5;
+  font-family: var(--font-ar);
+  direction: rtl;
+}
+
+/* ============================================
+   GRID LAYOUTS
+   ============================================ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.anim-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.anim-item.anim-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.anim-item.anim-visible:nth-child(1) { transition-delay: 0.1s; }
+.anim-item.anim-visible:nth-child(2) { transition-delay: 0.2s; }
+.anim-item.anim-visible:nth-child(3) { transition-delay: 0.3s; }
+.anim-item.anim-visible:nth-child(4) { transition-delay: 0.4s; }
+.anim-item.anim-visible:nth-child(5) { transition-delay: 0.5s; }
+.anim-item.anim-visible:nth-child(6) { transition-delay: 0.6s; }
+.anim-item.anim-visible:nth-child(7) { transition-delay: 0.7s; }
+.anim-item.anim-visible:nth-child(8) { transition-delay: 0.8s; }
+.anim-item.anim-visible:nth-child(9) { transition-delay: 0.9s; }
+.anim-item.anim-visible:nth-child(10) { transition-delay: 1.0s; }
+
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.section-number {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 48px;
+  color: var(--primary);
+  opacity: 0.15;
+  line-height: 1;
+  direction: ltr;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+.stat-card {
+  text-align: center;
+  padding: 24px;
+}
+
+.stat-number {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 36px;
+  color: var(--primary);
+  direction: ltr;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--light-text);
+  margin-top: 4px;
+}
+
+/* ============================================
+   COMPARISON BLOCKS
+   ============================================ */
+.vs-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.vs-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--warning);
+  padding: 80px 0;
+}
+
+.vs-block {
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.vs-block.traditional {
+  background: rgba(239,68,68,0.06);
+  border: 2px solid rgba(239,68,68,0.2);
+}
+
+.vs-block.openlearn {
+  background: rgba(37,99,235,0.06);
+  border: 2px solid rgba(37,99,235,0.2);
+}
+
+.vs-block-title {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.vs-block.traditional .vs-block-title { color: #EF4444; }
+.vs-block.openlearn .vs-block-title { color: var(--primary); }
+
+.vs-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.vs-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.vs-icon.red { color: #EF4444; }
+.vs-icon.green { color: var(--success); }
+
+/* ============================================
+   SPECIAL: TITLE SLIDE
+   ============================================ */
+.title-slide-content {
+  text-align: center;
+  max-width: 900px;
+}
+
+.title-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+  box-shadow: var(--shadow-glow);
+}
+
+.title-logo svg {
+  width: 40px;
+  height: 40px;
+}
+
+.title-main {
+  font-family: var(--font-en);
+  font-weight: 900;
+  font-size: 64px;
+  letter-spacing: -0.03em;
+  color: var(--dark);
+  direction: ltr;
+  margin-bottom: 16px;
+}
+
+.title-tagline {
+  font-family: var(--font-ar);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--light-text);
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+
+.title-meta {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 16px;
+  color: var(--light-text);
+  direction: ltr;
+}
+
+.title-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-meta-item i {
+  font-size: 18px;
+  color: var(--primary);
+}
+
+/* ============================================
+   TECH STACK CARD
+   ============================================ */
+.tech-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.04);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.tech-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.tech-card .tech-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.tech-card .tech-name {
+  font-family: var(--font-en);
+  font-weight: 600;
+  font-size: 14px;
+  direction: ltr;
+}
+
+.tech-card .tech-desc {
+  font-size: 11px;
+  color: var(--light-text);
+  margin-top: 4px;
+}
+
+/* ============================================
+   ARCHITECTURE NODE
+   ============================================ */
+.arch-node {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s;
+}
+
+.arch-node:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(-4px);
+}
+
+.arch-node.secondary { border-left-color: var(--secondary); }
+.arch-node.accent { border-left-color: var(--accent); }
+.arch-node.success { border-left-color: var(--success); }
+.arch-node.warning { border-left-color: var(--warning); }
+
+.arch-node .node-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.arch-node .node-name {
+  font-family: var(--font-en);
+  font-weight: 600;
+  font-size: 14px;
+  direction: ltr;
+}
+
+.arch-node .node-desc {
+  font-size: 12px;
+  color: var(--light-text);
+  font-family: var(--font-ar);
+  direction: rtl;
+}
+
+/* ============================================
+   DEMO JOURNEY
+   ============================================ */
+.demo-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+
+.demo-step:hover {
+  background: rgba(37,99,235,0.04);
+  transform: translateX(-4px);
+}
+
+.demo-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.demo-step-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.demo-step-desc {
+  font-size: 13px;
+  color: var(--light-text);
+}
+
+/* ============================================
+   MODEL ECOSYSTEM
+   ============================================ */
+.model-group-title {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 12px;
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-family: var(--font-en);
+  font-size: 13px;
+  font-weight: 500;
+  direction: ltr;
+  margin: 4px;
+  transition: all 0.2s;
+}
+
+.model-pill:hover {
+  transform: scale(1.05);
+}
+
+.model-pill.required { background: rgba(37,99,235,0.1); color: var(--primary); border: 1px solid rgba(37,99,235,0.2); }
+.model-pill.optional { background: rgba(20,184,166,0.1); color: var(--accent); border: 1px solid rgba(20,184,166,0.2); }
+.model-pill.future { background: rgba(124,58,237,0.1); color: var(--secondary); border: 1px solid rgba(124,58,237,0.2); }
+
+/* ============================================
+   SVG DIAGRAMS
+   ============================================ */
+.diagram-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ============================================
+   QUESTION SLIDE
+   ============================================ */
+.questions-content {
+  text-align: center;
+  max-width: 600px;
+}
+
+.questions-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 40px;
+  box-shadow: 0 0 60px rgba(37,99,235,0.3);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1200px) {
+  .slide { padding: 40px; }
+  .slide-title { font-size: 32px; }
+  .title-main { font-size: 48px; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ============================================
+   PRINT HINT
+   ============================================ */
+@media print {
+  .slide { opacity: 1 !important; transform: none !important; }
+  .slide-nav { opacity: 0.4; font-size: 10px; padding: 4px 10px; }
+  .progress-bar { height: 3px; }
+}
+
+/* ============================================
+   OVERVIEW MODE
+   ============================================ */
+.overview-mode .slide {
+  opacity: 0.3;
+  transform: scale(0.3);
+  pointer-events: none;
+  position: relative;
+  display: inline-block;
+  width: 30vw;
+  height: 17vh;
+  margin: 1vh;
+  overflow: hidden;
+}
+
+.overview-mode .slide.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 10;
+  pointer-events: all;
+}
+
+/* ============================================
+   BACKGROUND DECORATIONS
+   ============================================ */
+.slide-bg-deco {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+}
+
+.bg-blob-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--primary);
+  top: -100px;
+  right: -100px;
+}
+
+.bg-blob-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--secondary);
+  bottom: -100px;
+  left: -100px;
+}
+
+.bg-blob-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bg-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ============================================
+   TITLE SLIDE SPECIAL
+   ============================================ */
+#slide-1 {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+  color: white;
+}
+
+#slide-1 .slide-title,
+#slide-1 .title-main {
+  color: white !important;
+}
+
+#slide-1 .slide-subtitle,
+#slide-1 .title-tagline {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+#slide-1 .section-number {
+  color: rgba(255,255,255,0.1);
+}
+
+#slide-1 .title-meta {
+  color: rgba(255,255,255,0.6);
+}
+
+#slide-1 .title-meta-item i {
+  color: rgba(255,255,255,0.8);
+}
+
+#slide-1 .highlight,
+#slide-1 .en-term {
+  color: #60A5FA !important;
+}
+
+#slide-1 .tag {
+  color: white !important;
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+}
+
+#slide-1 .tag-blue { background: rgba(37,99,235,0.3) !important; border-color: rgba(37,99,235,0.4) !important; }
+#slide-1 .tag-purple { background: rgba(124,58,237,0.3) !important; border-color: rgba(124,58,237,0.4) !important; }
+#slide-1 .tag-teal { background: rgba(20,184,166,0.3) !important; border-color: rgba(20,184,166,0.4) !important; }
+
+#slide-1 .card-text,
+#slide-1 .stat-label {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+/* ============================================
+   QUESTIONS SLIDE SPECIAL
+   ============================================ */
+#slide-20 {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+  color: white;
+}
+
+#slide-20 .slide-title {
+  color: white !important;
+}
+
+#slide-20 .en-term {
+  color: #60A5FA !important;
+}
+
+#slide-20 .slide-subtitle,
+#slide-20 .questions-content > div:nth-child(3) {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+#slide-20 .card-glass {
+  background: rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: rgba(255,255,255,0.8);
+}
+
+#slide-20 .card-glass span {
+  color: rgba(255,255,255,0.9);
+}
+
+#slide-20 .card-glass i {
+  color: rgba(255,255,255,0.7);
+}
+</style>
+</head>
+<body>
+<!-- Progress Bar -->
+<div class="progress-bar">
+  <div class="progress-fill" style="width:5%;"></div>
+</div>
+
+<!-- Navigation -->
+<div class="slide-nav">
+  <span class="current-slide">1</span>
+  <span>/</span>
+  <span class="total-slide">20</span>
+</div>
+
+
+<!-- ============ SLIDE 1: TITLE ============ -->
+<div class="slide" id="slide-1">
+  <div class="slide-bg-deco">
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+    <div class="bg-blob bg-blob-3"></div>
+  </div>
+  <div class="title-slide-content anim-item" style="z-index:1;">
+    <div class="title-logo anim-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
+    <div class="title-main anim-item">OpenLearn AI</div>
+    <div class="title-tagline anim-item">
+      منصة <span class="en-term">Adaptive Educational Intelligence</span> مفتوحة المصدر
+    </div>
+    <div style="display:flex;justify-content:center;gap:12px;margin-bottom:32px;" class="anim-item">
+      <span class="tag tag-blue">Hybrid Architecture</span>
+      <span class="tag tag-purple">Provider-Agnostic</span>
+      <span class="tag tag-teal">Open Source</span>
+    </div>
+    <div class="title-meta anim-item">
+      <div class="title-meta-item"><i data-lucide="users"></i> مشروع تخرج</div>
+      <div class="title-meta-item"><i data-lucide="graduation-cap"></i> جامعة</div>
+      <div class="title-meta-item"><i data-lucide="shield"></i> AGPL-3.0</div>
+      <div class="title-meta-item"><i data-lucide="calendar"></i> 2025</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 2: THE PROBLEM ============ -->
+<div class="slide" id="slide-2">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">01</div>
+      <div>
+        <div class="slide-title">المشكلة</div>
+        <div class="slide-subtitle">لماذا تفشل أدوات التعلم الحالية؟</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:32px;">
+      <div class="card anim-item" style="border-top:3px solid #EF4444;">
+        <div class="icon-circle orange"><i data-lucide="book-open"></i></div>
+        <div class="card-title">استهلاك سلبي</div>
+        <div class="card-text">الأدوات الحالية تعتمد على القراءة السلبية و<span class="en-term">Chat</span> فقط — لا تقيّم الفهم ولا تتكيف مع مستوى الطالب. الطالب يقرأ ويسأل، لكن لا أحد يعرف هل فهم فعلاً.</div>
+      </div>
+      <div class="card anim-item" style="border-top:3px solid #EF4444;">
+        <div class="icon-circle orange"><i data-lucide="copy"></i></div>
+        <div class="card-title">نموذج واحد للجميع</div>
+        <div class="card-text">جميع الطلاب يحصلون على نفس المحتوى ونفس الأسئلة — بلا تخصيص، بلا مراعاة لفروق الفهم. <span class="en-term">One-size-fits-all</span> لا يعمل في التعليم.</div>
+      </div>
+      <div class="card anim-item" style="border-top:3px solid #EF4444;">
+        <div class="icon-circle orange"><i data-lucide="brain"></i></div>
+        <div class="card-title">لا نموذج معرفة</div>
+        <div class="card-text">لا توجد أداة تبني <span class="en-term">Student Knowledge Model</span> — لا تعرف ما يعرفه الطالب وما يفتقده. بدون هذا النموذج، أي تخصيص هو تخمين.</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:16px;">
+      <div class="stat-card card anim-item">
+        <div class="stat-number">70%</div>
+        <div class="stat-label">من الطلاب لا يتذكرون المحتوى بعد أسبوع</div>
+      </div>
+      <div class="stat-card card anim-item">
+        <div class="stat-number">0</div>
+        <div class="stat-label">أدوات تقدم <span class="en-term">Adaptive Learning</span> حقيقي</div>
+      </div>
+      <div class="stat-card card anim-item">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">محتوى بدون تكرار متباعد</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 3: CURRENT SOLUTIONS ============ -->
+<div class="slide" id="slide-3">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">02</div>
+      <div>
+        <div class="slide-title">الحلول الحالية</div>
+        <div class="slide-subtitle">أدوات موجودة — لكنها لا تكفي</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:24px;">
+      <div class="card anim-item" style="border-left:4px solid #EF4444;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-en);font-weight:700;font-size:18px;direction:ltr;">ChatPDF</span>
+          <span class="tag tag-orange" style="font-size:11px;">Chat Only</span>
+        </div>
+        <div class="card-text">محادثة مع PDF فقط. لا <span class="en-term">Knowledge Graph</span>، لا <span class="en-term">Student Model</span>، لا تكرار متباعد، لا تقييم تكيفي.</div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid #F59E0B;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-en);font-weight:700;font-size:18px;direction:ltr;">NotebookLM</span>
+          <span class="tag tag-orange" style="font-size:11px;">Summary Only</span>
+        </div>
+        <div class="card-text">ملخصات وإجابة أسئلة — لكن بدون <span class="en-term">Adaptive Engine</span> أو <span class="en-term">Spaced Repetition</span>. مقفل ومملوك.</div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid #F59E0B;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-en);font-weight:700;font-size:18px;direction:ltr;">RemNote</span>
+          <span class="tag tag-orange" style="font-size:11px;">Notes + Flashcards</span>
+        </div>
+        <div class="card-text">تكرار متباعد أساسي — لكن بدون <span class="en-term">Knowledge Graph</span>، بدون <span class="en-term">Student Model</span>، بدون <span class="en-term">Adaptive Exam</span>.</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:16px;">
+      <div class="card anim-item" style="border-left:4px solid #F59E0B;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-en);font-weight:700;font-size:18px;direction:ltr;">Quizgecko</span>
+          <span class="tag tag-orange" style="font-size:11px;">Quiz Generator</span>
+        </div>
+        <div class="card-text">يولّد أسئلة من نص — لكن لا يكيّف صعوبة السؤال لمستوى الطالب. لا <span class="en-term">CAT</span>، لا <span class="en-term">BKT</span>.</div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid #F59E0B;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-en);font-weight:700;font-size:18px;direction:ltr;">Anki</span>
+          <span class="tag tag-orange" style="font-size:11px;">Flashcards Only</span>
+        </div>
+        <div class="card-text">تكرار متباعد قوي — لكن الطالب يبني البطاقات يدوياً. لا <span class="en-term">AI</span>، لا <span class="en-term">Knowledge Graph</span>، لا تحليل أداء.</div>
+      </div>
+      <div class="card-glass anim-item" style="text-align:center;padding:20px;">
+        <div style="font-weight:700;font-size:20px;color:var(--primary);margin-bottom:8px;">
+          <i data-lucide="lightbulb" style="width:24px;height:24px;"></i>
+        </div>
+        <div style="font-size:15px;font-weight:600;">النقص المشترك</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;margin-top:8px;">
+          لا <span class="en-term">Student Model</span><br>
+          لا <span class="en-term">Knowledge Graph</span><br>
+          لا <span class="en-term">Adaptive Learning</span><br>
+          لا <span class="en-term">Hybrid Architecture</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 4: OUR VISION ============ -->
+<div class="slide" id="slide-4">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">03</div>
+      <div>
+        <div class="slide-title">رؤيتنا</div>
+        <div class="slide-subtitle">لماذا وُجدت <span class="en-term">OpenLearn AI</span></div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:32px;">
+      <div class="card anim-item" style="border-top:4px solid var(--primary);padding:28px;">
+        <div class="icon-circle blue"><i data-lucide="compass"></i></div>
+        <div class="card-title" style="font-size:20px;">المهمة <span class="en-term" style="font-size:16px;">Mission</span></div>
+        <div class="card-text" style="font-size:16px;line-height:1.8;">
+          بناء منصة تعليمية ذكية مفتوحة المصدر تتكيف مع كل طالب — تفهم ما يعرفه، ما يفتقده، وتوجّهه بخط تعلم شخصي بدل إلقاء محتوى واحد على الجميع.
+        </div>
+      </div>
+      <div class="card anim-item" style="border-top:4px solid var(--secondary);padding:28px;">
+        <div class="icon-circle purple"><i data-lucide="eye"></i></div>
+        <div class="card-title" style="font-size:20px;">الرؤية <span class="en-term" style="font-size:16px;">Vision</span></div>
+        <div class="card-text" style="font-size:16px;line-height:1.8;">
+          كل طالب يحصل على تجربة تعلم فريدة — نظام يفهمه، يقيّمه، يتكيف معه، ويتكرر معه. منصة حيث <span class="en-term">AI</span> يعمل كمرشد تعليمي، لا كأداة بحث.
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px;" class="anim-item">
+      <div class="card" style="padding:24px;border-top:4px solid var(--accent);">
+        <div class="card-title" style="font-size:18px;">الفلسفة الأساسية <span class="en-term" style="font-size:14px;">Core Philosophy</span></div>
+        <div class="grid-4" style="margin-top:16px;">
+          <div style="text-align:center;padding:12px;">
+            <div style="font-size:28px;color:var(--primary);margin-bottom:8px;"><i data-lucide="user-check"></i></div>
+            <div style="font-weight:600;font-size:14px;">الطالب أولاً</div>
+            <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Student-Centric</span></div>
+          </div>
+          <div style="text-align:center;padding:12px;">
+            <div style="font-size:28px;color:var(--secondary);margin-bottom:8px;"><i data-lucide="git-branch"></i></div>
+            <div style="font-weight:600;font-size:14px;">مفتوح المصدر</div>
+            <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Open Source</span></div>
+          </div>
+          <div style="text-align:center;padding:12px;">
+            <div style="font-size:28px;color:var(--accent);margin-bottom:8px;"><i data-lucide="layers"></i></div>
+            <div style="font-weight:600;font-size:14px;">تكيفي</div>
+            <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Adaptive</span></div>
+          </div>
+          <div style="text-align:center;padding:12px;">
+            <div style="font-size:28px;color:var(--success);margin-bottom:8px;"><i data-lucide="shield"></i></div>
+            <div style="font-weight:600;font-size:14px;">خصوصية أولاً</div>
+            <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Privacy-First</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 5: WHAT MAKES IT DIFFERENT ============ -->
+<div class="slide" id="slide-5">
+  <div class="slide-bg-deco"><div class="bg-blob bg-blob-2"></div><div class="bg-grid"></div></div>
+  <div style="width:100%;max-width:1100px;z-index:1;">
+    <div class="section-header anim-item">
+      <div class="section-number">04</div>
+      <div>
+        <div class="slide-title">ما الفرق؟</div>
+        <div class="slide-subtitle"><span class="en-term">Chat with PDF</span> التقليدي VS <span class="en-term">OpenLearn AI</span></div>
+      </div>
+    </div>
+    <div class="vs-container anim-item" style="margin-top:16px;">
+      <div class="vs-block traditional">
+        <div class="vs-block-title"><span class="en-term" style="direction:ltr;">ChatPDF</span> التقليدي</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> محادثة مع PDF فقط</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> لا نموذج معرفة طالب</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> لا <span class="en-term">Knowledge Graph</span></div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> لا تكرار متباعد</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> لا تقييم تكيفي</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> لا خط تعلم شخصي</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> بنية واحدة فقط</div>
+        <div class="vs-item"><span class="vs-icon red">✗</span> مقفل ومملوك</div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-block openlearn">
+        <div class="vs-block-title"><span class="en-term" style="direction:ltr;">OpenLearn AI</span></div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Adaptive Learning Engine</span></div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Student Knowledge Model</span> (<span class="en-term">BKT</span>)</div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Knowledge Graph</span> تلقائي</div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Spaced Repetition</span> ذكي</div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Adaptive Exam</span> (<span class="en-term">CAT</span>)</div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Personalized Learning Path</span></div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> <span class="en-term">Hybrid Architecture</span></div>
+        <div class="vs-item"><span class="vs-icon green">✓</span> مفتوح المصدر (<span class="en-term">AGPL-3.0</span>)</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;" class="anim-item">
+      <div class="card-glass" style="padding:16px 24px;display:inline-block;">
+        <span style="font-size:16px;font-weight:600;">OpenLearn AI ليست <span class="en-term">ChatPDF</span> أخرى — هي <span class="en-term">Adaptive Educational Intelligence Platform</span> كاملة</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 6: SYSTEM OVERVIEW ============ -->
+<div class="slide" id="slide-6">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">05</div>
+      <div>
+        <div class="slide-title">النظام العام</div>
+        <div class="slide-subtitle"><span class="en-term">System Overview</span> — المنصة الكاملة</div>
+      </div>
+    </div>
+    <div class="layer-stack anim-item" style="margin-top:16px;direction:ltr;">
+      <div class="layer" style="background:linear-gradient(135deg,var(--primary),#1d4ed8);color:white;">
+        <div><span class="layer-name">Frontend Layer</span> <span class="layer-desc">واجهة المستخدم</span></div>
+        <div class="layer-desc">Next.js 15 · React 19 · Tailwind CSS 4</div>
+      </div>
+      <div class="layer" style="background:linear-gradient(135deg,var(--secondary),#6d28d9);color:white;">
+        <div><span class="layer-name">API Gateway Layer</span> <span class="layer-desc">بوابة APIs</span></div>
+        <div class="layer-desc">FastAPI · REST + WebSocket · JWT Auth</div>
+      </div>
+      <div class="layer" style="background:linear-gradient(135deg,var(--accent),#0d9488);color:white;">
+        <div><span class="layer-name">Service Layer</span> <span class="layer-desc">خدمات الأعمال</span></div>
+        <div class="layer-desc">Knowledge · Adaptive · Exam · Analytics</div>
+      </div>
+      <div class="layer" style="background:linear-gradient(135deg,var(--success),#16a34a);color:white;">
+        <div><span class="layer-name">AI / Provider Layer</span> <span class="layer-desc">طبقة الذكاء الاصطناعي</span></div>
+        <div class="layer-desc">Local Models · Cloud APIs · Hybrid Mode</div>
+      </div>
+      <div class="layer" style="background:linear-gradient(135deg,var(--warning),#d97706);color:white;">
+        <div><span class="layer-name">Data Layer</span> <span class="layer-desc">طبقة البيانات</span></div>
+        <div class="layer-desc">PostgreSQL · Neo4j · ChromaDB · Redis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 7: HYBRID ARCHITECTURE ============ -->
+<div class="slide" id="slide-7">
+  <div class="slide-bg-deco"><div class="bg-blob bg-blob-1"></div><div class="bg-blob bg-blob-2"></div><div class="bg-grid"></div></div>
+  <div style="width:100%;max-width:1100px;z-index:1;">
+    <div class="section-header anim-item">
+      <div class="section-number">06</div>
+      <div>
+        <div class="slide-title">بنية <span class="en-term">Hybrid</span></div>
+        <div class="slide-subtitle">التصميم المعماري الأساسي — لماذا وكيف</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:20px;">
+      <div class="card" style="border-top:4px solid var(--primary);padding:20px;text-align:center;">
+        <div class="icon-circle blue" style="margin:0 auto 12px;"><i data-lucide="hard-drive"></i></div>
+        <div class="card-title"><span class="en-term">Local AI</span></div>
+        <div class="card-text" style="font-size:13px;">نماذج تعمل على جهاز المستخدم. خصوصية كاملة، عمل بدون إنترنت، تكلفة صفر.</div>
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;direction:ltr;">
+          <span class="tag tag-blue" style="font-size:11px;">Ollama</span>
+          <span class="tag tag-blue" style="font-size:11px;">vLLM</span>
+          <span class="tag tag-blue" style="font-size:11px;">GGUF</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);padding:20px;text-align:center;">
+        <div class="icon-circle purple" style="margin:0 auto 12px;"><i data-lucide="cloud"></i></div>
+        <div class="card-title"><span class="en-term">Cloud AI</span></div>
+        <div class="card-text" style="font-size:13px;">نماذج سحابية قوية. أداء أعلى، نماذج أكبر، لا تحتاج GPU.</div>
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;direction:ltr;">
+          <span class="tag tag-purple" style="font-size:11px;">OpenAI</span>
+          <span class="tag tag-purple" style="font-size:11px;">Anthropic</span>
+          <span class="tag tag-purple" style="font-size:11px;">Gemini</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);padding:20px;text-align:center;">
+        <div class="icon-circle teal" style="margin:0 auto 12px;"><i data-lucide="shuffle"></i></div>
+        <div class="card-title"><span class="en-term">Hybrid Mode</span></div>
+        <div class="card-text" style="font-size:13px;">المستخدم يختار. <span class="en-term">Local</span> للخصوصية، <span class="en-term">Cloud</span> للقوة. تبديل سلس عبر <span class="en-term">Provider Abstraction</span>.</div>
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;direction:ltr;">
+          <span class="tag tag-teal" style="font-size:11px;">DI</span>
+          <span class="tag tag-teal" style="font-size:11px;">Strategy Pattern</span>
+          <span class="tag tag-teal" style="font-size:11px;">User-Selectable</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px;" class="anim-item">
+      <div class="card" style="border:2px solid var(--primary);padding:20px;">
+        <div class="card-title" style="font-size:16px;">لماذا <span class="en-term">Hybrid</span>؟ <span class="en-term" style="font-size:14px;">Why This Architecture?</span></div>
+        <div class="grid-4" style="margin-top:12px;">
+          <div style="padding:8px;">
+            <div style="font-size:20px;color:var(--primary);"><i data-lucide="shield"></i></div>
+            <div style="font-weight:600;font-size:13px;margin-top:4px;">خصوصية</div>
+            <div style="font-size:11px;color:var(--light-text);">بيانات الطالب لا تخرج من جهازه</div>
+          </div>
+          <div style="padding:8px;">
+            <div style="font-size:20px;color:var(--accent);"><i data-lucide="wifi-off"></i></div>
+            <div style="font-weight:600;font-size:13px;margin-top:4px;">عمل بدون إنترنت</div>
+            <div style="font-size:11px;color:var(--light-text);"><span class="en-term">Offline</span> كامل مع <span class="en-term">Local</span></div>
+          </div>
+          <div style="padding:8px;">
+            <div style="font-size:20px;color:var(--secondary);"><i data-lucide="trending-up"></i></div>
+            <div style="font-weight:600;font-size:13px;margin-top:4px;">قابلية التوسع</div>
+            <div style="font-size:11px;color:var(--light-text);"><span class="en-term">Scale</span> مع <span class="en-term">Cloud</span> عند الحاجة</div>
+          </div>
+          <div style="padding:8px;">
+            <div style="font-size:20px;color:var(--success);"><i data-lucide="puzzle"></i></div>
+            <div style="font-weight:600;font-size:13px;margin-top:4px;">مرونة</div>
+            <div style="font-size:11px;color:var(--light-text);">تبديل <span class="en-term">Provider</span> بدون تغيير كود</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 8: AI PIPELINE ============ -->
+<div class="slide" id="slide-8">
+  <div class="slide-bg-deco"><div class="bg-blob bg-blob-1"></div><div class="bg-blob bg-blob-3"></div></div>
+  <div style="width:100%;max-width:1100px;z-index:1;">
+    <div class="section-header anim-item">
+      <div class="section-number">07</div>
+      <div>
+        <div class="slide-title">خط <span class="en-term">AI Pipeline</span></div>
+        <div class="slide-subtitle">من رفع الملف إلى تعلم تكيفي — المسار الكامل</div>
+      </div>
+    </div>
+    <div class="flow-container anim-item" style="margin-top:24px;direction:ltr;flex-wrap:nowrap;overflow-x:auto;">
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--warning);">
+          <div class="label">Upload</div>
+          <div class="desc">رفع PDF</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--warning);">
+          <div class="label">OCR</div>
+          <div class="desc">استخراج النص</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--primary);">
+          <div class="label">Chunking</div>
+          <div class="desc">تقسيم ذكي</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--primary);">
+          <div class="label">Embeddings</div>
+          <div class="desc">تمثيل رقمي</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--accent);">
+          <div class="label">Knowledge Graph</div>
+          <div class="desc">رسم المعرفة</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+    </div>
+    <div class="flow-container anim-item" style="margin-top:8px;direction:ltr;flex-wrap:nowrap;overflow-x:auto;">
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--secondary);">
+          <div class="label">Student Model</div>
+          <div class="desc">نموذج المعرفة</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--secondary);">
+          <div class="label">Adaptive Engine</div>
+          <div class="desc">محرك التكيف</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--success);">
+          <div class="label">Generation</div>
+          <div class="desc">إنتاج المحتوى</div>
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-node" style="border-color:var(--success);">
+          <div class="label">Analytics</div>
+          <div class="desc">تحليلات</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2 anim-item" style="margin-top:24px;">
+      <div class="card" style="padding:20px;">
+        <div class="card-title"><span class="en-term">RAG</span> + <span class="en-term">Knowledge Graph</span></div>
+        <div class="card-text" style="font-size:14px;">الاسترجاع ليس فقط بحث في <span class="en-term">Vector DB</span> — بل يمر عبر <span class="en-term">Knowledge Graph</span> لفهم العلاقات بين المفاهيم قبل الإنتاج. هذا يجعل الإجابات أكثر دقة وعمقاً.</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div class="card-title"><span class="en-term">Student Model</span> → <span class="en-term">Adaptive</span></div>
+        <div class="card-text" style="font-size:14px;">كل إنتاج يمر عبر <span class="en-term">Student Knowledge Model</span>. النظام لا يولّد محتوى عشوائي — يكيّف الصعوبة والمحتوى بناء على ما يعرفه الطالب فعلاً.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 9: CORE AI COMPONENTS ============ -->
+<div class="slide" id="slide-9">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">08</div>
+      <div>
+        <div class="slide-title">مكونات <span class="en-term">AI</span> الأساسية</div>
+        <div class="slide-subtitle">كل مكون ذكي في المنصة — وما يقدمه</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:20px;">
+      <div class="card" style="border-left:4px solid var(--accent);padding:20px;">
+        <div class="icon-circle teal"><i data-lucide="share-2"></i></div>
+        <div class="card-title"><span class="en-term">Knowledge Graph</span></div>
+        <div class="card-text" style="font-size:13px;">رسم معرفة تلقائي من المحتوى. مفاهيم، علاقات، اعتمادات. يبنى عبر <span class="en-term">LLM</span> ويخزن في <span class="en-term">Neo4j</span>.</div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--secondary);padding:20px;">
+        <div class="icon-circle purple"><i data-lucide="brain"></i></div>
+        <div class="card-title"><span class="en-term">Student Knowledge Model</span></div>
+        <div class="card-text" style="font-size:13px;">نموذج <span class="en-term">BKT</span> يتبع مستوى فهم الطالب لكل مفهوم. <span class="en-term">P(Know)</span>, <span class="en-term">P(Transit)</span>, <span class="en-term">P(Guess)</span>, <span class="en-term">P(Slip)</span>.</div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--primary);padding:20px;">
+        <div class="icon-circle blue"><i data-lucide="sliders"></i></div>
+        <div class="card-title"><span class="en-term">Adaptive Learning Engine</span></div>
+        <div class="card-text" style="font-size:13px;">يكيّف المحتوى والصعوبة بناء على <span class="en-term">Student Model</span>. يقرر ما يعرض، ما يكرر، ما يختبر.</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:16px;">
+      <div class="card" style="border-left:4px solid var(--success);padding:20px;">
+        <div class="icon-circle green"><i data-lucide="clock"></i></div>
+        <div class="card-title"><span class="en-term">Spaced Repetition</span></div>
+        <div class="card-text" style="font-size:13px;">تكرار متباعد ذكي بناء على <span class="en-term">SM-2</span> معدّل. يحدد وقت المراجعة بناء على <span class="en-term">Mastery Score</span> و<span class="en-term">Ease Factor</span>.</div>
+      </div>
+      <div class="card" style="border-left:4px solid var(--warning);padding:20px;">
+        <div class="icon-circle orange"><i data-lucide="route"></i></div>
+        <div class="card-title"><span class="en-term">Personalized Learning Path</span></div>
+        <div class="card-text" style="font-size:13px;">خط تعلم شخصي بناء على <span class="en-term">Knowledge Graph</span> و<span class="en-term">Student Model</span>. يحدد الترتيب والاعتمادات.</div>
+      </div>
+      <div class="card" style="border-left:4px solid #EF4444;padding:20px;">
+        <div class="icon-circle" style="background:rgba(239,68,68,0.12);color:#EF4444;"><i data-lucide="file-check"></i></div>
+        <div class="card-title"><span class="en-term">Adaptive Exam</span></div>
+        <div class="card-text" style="font-size:13px;">اختبار تكيفي <span class="en-term">CAT</span>. يكيّف صعوبة السؤال التالي بناء على إجابة السؤال الحالي عبر <span class="en-term">BKT</span>.</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;" class="anim-item">
+      <div class="card" style="border-left:4px solid var(--accent);padding:16px;">
+        <div class="card-title"><span class="en-term">Analytics Dashboard</span></div>
+        <div class="card-text" style="font-size:13px;">تحليلات شاملة: تقدم الطالب، توزيع الفهم، <span class="en-term">Mastery Heatmap</span>، <span class="en-term">Learning Velocity</span>، <span class="en-term">Retention Rate</span>، مقترحات للتطوير.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 10: LOCAL VS CLOUD ============ -->
+<div class="slide" id="slide-10">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">09</div>
+      <div>
+        <div class="slide-title"><span class="en-term">Local</span> VS <span class="en-term">Cloud</span></div>
+        <div class="slide-subtitle">مقارنة شاملة — الأداء، التكلفة، الخصوصية</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;overflow-x:auto;" class="anim-item">
+      <table class="comp-table" style="min-width:700px;">
+        <thead>
+          <tr>
+            <th>المعيار</th>
+            <th><span class="en-term">Local AI</span></th>
+            <th><span class="en-term">Cloud AI</span></th>
+            <th><span class="en-term">Hybrid</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>الأداء</td>
+            <td>متوسط</td>
+            <td class="check">مرتفع ✓</td>
+            <td class="check">مرتفع ✓</td>
+          </tr>
+          <tr>
+            <td>التكلفة</td>
+            <td class="check">صفر ✓</td>
+            <td>مدفوعة</td>
+            <td class="partial">متوسط ◐</td>
+          </tr>
+          <tr>
+            <td>الخصوصية</td>
+            <td class="check">كاملة ✓</td>
+            <td>محدودة</td>
+            <td class="check">كاملة ✓</td>
+          </tr>
+          <tr>
+            <td>عمل بدون إنترنت</td>
+            <td class="check">نعم ✓</td>
+            <td class="cross">لا ✗</td>
+            <td class="check">نعم ✓</td>
+          </tr>
+          <tr>
+            <td>متطلبات <span class="en-term">GPU</span></td>
+            <td class="cross">نعم ✗</td>
+            <td class="check">لا ✓</td>
+            <td class="partial">اختياري ◐</td>
+          </tr>
+          <tr>
+            <td>قابلية التوسع</td>
+            <td class="cross">محدودة ✗</td>
+            <td class="check">مرتفعة ✓</td>
+            <td class="check">مرتفعة ✓</td>
+          </tr>
+          <tr>
+            <td>المرونة</td>
+            <td class="partial">متوسطة ◐</td>
+            <td class="partial">متوسطة ◐</td>
+            <td class="check">كاملة ✓</td>
+          </tr>
+          <tr>
+            <td>نماذج متاحة</td>
+            <td class="partial">محدودة ◐</td>
+            <td class="check">كاملة ✓</td>
+            <td class="check">كاملة ✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:20px;text-align:center;" class="anim-item">
+      <div class="card-glass" style="padding:16px 24px;display:inline-block;">
+        <span style="font-size:15px;font-weight:600;">الخلاصة: <span class="en-term">Hybrid</span> = أفضل ما في <span class="en-term">Local</span> + أفضل ما في <span class="en-term">Cloud</span>، مع اختيار المستخدم</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 11: MODEL ECOSYSTEM ============ -->
+<div class="slide" id="slide-11">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">10</div>
+      <div>
+        <div class="slide-title">نظام <span class="en-term">Model Ecosystem</span></div>
+        <div class="slide-subtitle">النماذج الذكية — مطلوبة، اختيارية، مستقبلية</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:20px;">
+      <div class="card" style="border-top:4px solid var(--primary);padding:20px;">
+        <div class="model-group-title" style="color:var(--primary);"><i data-lucide="circle-dot" style="width:16px;height:16px;"></i> Required Models</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;direction:ltr;">
+          <span class="model-pill required">OCR (Tesseract / PaddleOCR)</span>
+          <span class="model-pill required">Embeddings (all-MiniLM-L6)</span>
+          <span class="model-pill required">LLM (7B–13B Local / GPT-4o)</span>
+          <span class="model-pill required">Chunking (Semantic)</span>
+          <span class="model-pill required">RAG Retrieval</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);padding:20px;">
+        <div class="model-group-title" style="color:var(--accent);"><i data-lucide="circle" style="width:16px;height:16px;"></i> Optional Models</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;direction:ltr;">
+          <span class="model-pill optional">Speech-to-Text (Whisper)</span>
+          <span class="model-pill optional">Text-to-Speech (Coqui)</span>
+          <span class="model-pill optional">Visual Retrieval (CLIP)</span>
+          <span class="model-pill optional">Document AI (Nougat)</span>
+          <span class="model-pill optional">Reasoning (QwQ / DeepSeek-R1)</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);padding:20px;">
+        <div class="model-group-title" style="color:var(--secondary);"><i data-lucide="sparkles" style="width:16px;height:16px;"></i> Future Models</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;direction:ltr;">
+          <span class="model-pill future">Arabic NLP Fine-tuned</span>
+          <span class="model-pill future">Multimodal Agent</span>
+          <span class="model-pill future">Knowledge Tracing ML</span>
+          <span class="model-pill future">CAT Algorithm v2</span>
+          <span class="model-pill future">Education Domain LLM</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px;" class="anim-item">
+      <div class="card" style="padding:16px;border-left:4px solid var(--primary);">
+        <div class="card-text" style="font-size:14px;">
+          كل <span class="en-term">Model</span> يُحقن عبر <span class="en-term">Provider Abstraction Layer</span>. تبديل <span class="en-term">Tesseract</span> إلى <span class="en-term">PaddleOCR</span> أو <span class="en-term">GPT-4o</span> إلى <span class="en-term">Claude</span> — تغيير إعداد، لا تغيير كود. <span class="en-term">DI</span> + <span class="en-term">Strategy Pattern</span> يضمن مرونة كاملة.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 12: TECHNICAL ARCHITECTURE ============ -->
+<div class="slide" id="slide-12">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">11</div>
+      <div>
+        <div class="slide-title">البنية التقنية</div>
+        <div class="slide-subtitle"><span class="en-term">High-Level Architecture</span> — كل طبقة ومكون</div>
+      </div>
+    </div>
+    <div class="grid-2 anim-item" style="margin-top:20px;gap:20px;">
+      <div>
+        <div class="en-term" style="font-weight:700;font-size:16px;margin-bottom:12px;color:var(--primary);direction:ltr;">Frontend & API</div>
+        <div class="arch-node anim-item"><span class="node-icon" style="color:var(--primary);">◉</span> <span class="node-name">Next.js 15</span> <span class="node-desc">واجهة المستخدم</span></div>
+        <div class="arch-node anim-item"><span class="node-icon" style="color:var(--primary);">◉</span> <span class="node-name">FastAPI</span> <span class="node-desc">بوابة APIs</span></div>
+        <div class="arch-node anim-item"><span class="node-icon" style="color:var(--primary);">◉</span> <span class="node-name">WebSocket</span> <span class="node-desc">تفاعل حي</span></div>
+        <div class="arch-node anim-item secondary"><span class="node-icon" style="color:var(--secondary);">◉</span> <span class="node-name">Celery Workers</span> <span class="node-desc">معالجة خلفية</span></div>
+        <div class="arch-node anim-item secondary"><span class="node-icon" style="color:var(--secondary);">◉</span> <span class="node-name">Redis</span> <span class="node-desc">طوابير + تخزين مؤقت</span></div>
+      </div>
+      <div>
+        <div class="en-term" style="font-weight:700;font-size:16px;margin-bottom:12px;color:var(--accent);direction:ltr;">Data & AI Layer</div>
+        <div class="arch-node accent anim-item"><span class="node-icon" style="color:var(--accent);">◉</span> <span class="node-name">PostgreSQL</span> <span class="node-desc">بيانات رئيسية</span></div>
+        <div class="arch-node accent anim-item"><span class="node-icon" style="color:var(--accent);">◉</span> <span class="node-name">Neo4j</span> <span class="node-desc">رسم المعرفة</span></div>
+        <div class="arch-node accent anim-item"><span class="node-icon" style="color:var(--accent);">◉</span> <span class="node-name">ChromaDB</span> <span class="node-desc">بحث متجهي</span></div>
+        <div class="arch-node success anim-item"><span class="node-icon" style="color:var(--success);">◉</span> <span class="node-name">Provider Layer</span> <span class="node-desc">DI + Strategy</span></div>
+        <div class="arch-node warning anim-item"><span class="node-icon" style="color:var(--warning);">◉</span> <span class="node-name">MinIO / S3</span> <span class="node-desc">تخزين ملفات</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 13: TECHNOLOGY STACK ============ -->
+<div class="slide" id="slide-13">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">12</div>
+      <div>
+        <div class="slide-title">مجموعة التقنيات</div>
+        <div class="slide-subtitle"><span class="en-term">Technology Stack</span> — مصنفة حسب الفئة</div>
+      </div>
+    </div>
+    <div class="grid-4 anim-item" style="margin-top:20px;">
+      <div class="tech-card" style="border-top:3px solid var(--primary);">
+        <div class="tech-icon">⚛️</div>
+        <div class="tech-name">Next.js 15</div>
+        <div class="tech-desc">Frontend Framework</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--primary);">
+        <div class="tech-icon">🐍</div>
+        <div class="tech-name">FastAPI</div>
+        <div class="tech-desc">Backend Framework</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--secondary);">
+        <div class="tech-icon">🗄️</div>
+        <div class="tech-name">PostgreSQL</div>
+        <div class="tech-desc">Primary Database</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--secondary);">
+        <div class="tech-icon">🕸️</div>
+        <div class="tech-name">Neo4j</div>
+        <div class="tech-desc">Graph Database</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--accent);">
+        <div class="tech-icon">🔍</div>
+        <div class="tech-name">ChromaDB</div>
+        <div class="tech-desc">Vector Database</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--accent);">
+        <div class="tech-icon">⚡</div>
+        <div class="tech-name">Redis</div>
+        <div class="tech-desc">Cache & Queue</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--success);">
+        <div class="tech-icon">🤖</div>
+        <div class="tech-name">Ollama</div>
+        <div class="tech-desc">Local LLM Runner</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--success);">
+        <div class="tech-icon">🧠</div>
+        <div class="tech-name">vLLM</div>
+        <div class="tech-desc">High-Perf Inference</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--warning);">
+        <div class="tech-icon">🎨</div>
+        <div class="tech-name">Tailwind CSS 4</div>
+        <div class="tech-desc">Styling</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid var(--warning);">
+        <div class="tech-icon">📦</div>
+        <div class="tech-name">Celery</div>
+        <div class="tech-desc">Task Workers</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid #EF4444;">
+        <div class="tech-icon">🔑</div>
+        <div class="tech-name">JWT + OAuth2</div>
+        <div class="tech-desc">Authentication</div>
+      </div>
+      <div class="tech-card" style="border-top:3px solid #EF4444;">
+        <div class="tech-icon">🐳</div>
+        <div class="tech-name">Docker</div>
+        <div class="tech-desc">Deployment</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 14: DEVELOPMENT ROADMAP ============ -->
+<div class="slide" id="slide-14">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">13</div>
+      <div>
+        <div class="slide-title">خارطة التطوير</div>
+        <div class="slide-subtitle"><span class="en-term">Roadmap</span> — من <span class="en-term">P0</span> إلى <span class="en-term">P7</span></div>
+      </div>
+    </div>
+    <div class="timeline anim-item" style="margin-top:20px;">
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--primary);">P0</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.1 — Core Foundation</div>
+          <div class="phase-desc">بنية أساسية: <span class="en-term">FastAPI</span> + <span class="en-term">PostgreSQL</span> + <span class="en-term">Provider Abstraction</span>. رفع PDF + <span class="en-term">OCR</span> + <span class="en-term">Chunking</span> + <span class="en-term">Embeddings</span> + <span class="en-term">Vector Store</span>.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--secondary);">P1</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.2 — Knowledge & Chat</div>
+          <div class="phase-desc"><span class="en-term">Knowledge Graph</span> تلقائي + <span class="en-term">RAG Chat</span> مع استرجاع عبر <span class="en-term">Vector DB</span> و<span class="en-term">Graph</span>.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--accent);">P2</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.3 — Student Model</div>
+          <div class="phase-desc"><span class="en-term">Student Knowledge Model</span> (<span class="en-term">BKT</span>) + <span class="en-term">Mastery Score</span> لكل مفهوم. بداية التكيف.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--success);">P3</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.4 — Adaptive Engine</div>
+          <div class="phase-desc"><span class="en-term">Adaptive Learning Engine</span> + <span class="en-term">Spaced Repetition</span> (<span class="en-term">SM-2</span>) + <span class="en-term">Flashcards</span> ذكية.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--warning);">P4</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.5 — Adaptive Exam</div>
+          <div class="phase-desc"><span class="en-term">Adaptive Exam</span> (<span class="en-term">CAT</span>) + <span class="en-term">Personalized Learning Path</span>. اختبار يكيّف نفسه.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--dark);">P5</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.6 — Frontend MVP</div>
+          <div class="phase-desc">واجهة كاملة: رفع، محادثة، بطاقات، اختبار، تحليلات. تجربة مستخدم متكاملة.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:var(--dark);">P6</div>
+        <div class="timeline-content">
+          <div class="phase-title">v0.8 — Analytics & Polish</div>
+          <div class="phase-desc"><span class="en-term">Analytics Dashboard</span> + <span class="en-term">Mastery Heatmap</span> + تحسينات <span class="en-term">UX</span>.</div>
+        </div>
+      </div>
+      <div class="timeline-item anim-item">
+        <div class="timeline-marker" style="background:linear-gradient(135deg,var(--primary),var(--secondary));">P7</div>
+        <div class="timeline-content" style="border:2px solid var(--primary);">
+          <div class="phase-title">v1.0 — Production Release</div>
+          <div class="phase-desc">إطلاق رسمي. <span class="en-term">Docker</span> + <span class="en-term">CI/CD</span> + <span class="en-term">Documentation</span> + <span class="en-term">Community</span>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 15: DEMO WALKTHROUGH ============ -->
+<div class="slide" id="slide-15">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">14</div>
+      <div>
+        <div class="slide-title">رحلة المستخدم</div>
+        <div class="slide-subtitle"><span class="en-term">Demo Walkthrough</span> — من رفع الملف إلى تحليلات</div>
+      </div>
+    </div>
+    <div class="grid-2 anim-item" style="margin-top:20px;gap:16px;">
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">1</div>
+        <div>
+          <div class="demo-step-title">رفع PDF <span class="en-term">Upload</span></div>
+          <div class="demo-step-desc">الطالب يرفع ملف PDF أو DOCX أو PPTX</div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">2</div>
+        <div>
+          <div class="demo-step-title">ملخص تلقائي <span class="en-term">Summary</span></div>
+          <div class="demo-step-desc">النظام يولّد ملخص ذكي بناء على <span class="en-term">RAG</span></div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">3</div>
+        <div>
+          <div class="demo-step-title">محادثة ذكية <span class="en-term">Chat</span></div>
+          <div class="demo-step-desc">أسئلة مع استرجاع عبر <span class="en-term">KG</span> + <span class="en-term">Vector DB</span></div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">4</div>
+        <div>
+          <div class="demo-step-title">بطاقات ذكية <span class="en-term">Flashcards</span></div>
+          <div class="demo-step-desc">بطاقات مولّدة تلقائي مع <span class="en-term">Spaced Repetition</span></div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">5</div>
+        <div>
+          <div class="demo-step-title">اختبار تكيفي <span class="en-term">Adaptive Exam</span></div>
+          <div class="demo-step-desc"><span class="en-term">CAT</span> يكيّف صعوبة كل سؤال</div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">6</div>
+        <div>
+          <div class="demo-step-title">جدول مراجعة <span class="en-term">Review Schedule</span></div>
+          <div class="demo-step-desc"><span class="en-term">SM-2</span> يحدد الوقت الأمثل للمراجعة</div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">7</div>
+        <div>
+          <div class="demo-step-title">تحليلات <span class="en-term">Analytics</span></div>
+          <div class="demo-step-desc"><span class="en-term">Mastery Heatmap</span> + <span class="en-term">Progress</span> + مقترحات</div>
+        </div>
+      </div>
+      <div class="demo-step anim-item">
+        <div class="demo-step-num">∞</div>
+        <div>
+          <div class="demo-step-title">تعلم مستمر <span class="en-term">Continuous Learning</span></div>
+          <div class="demo-step-desc">النظام يتكيف مع كل <span class="en-term">interaction</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 16: RESEARCH OPPORTUNITIES ============ -->
+<div class="slide" id="slide-16">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">15</div>
+      <div>
+        <div class="slide-title">فرص بحثية</div>
+        <div class="slide-subtitle"><span class="en-term">Research Opportunities</span> — من البحث إلى التطبيق</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:20px;">
+      <div class="card" style="border-top:4px solid var(--primary);padding:20px;">
+        <div class="icon-circle blue"><i data-lucide="target"></i></div>
+        <div class="card-title"><span class="en-term">Knowledge Tracing</span></div>
+        <div class="card-text" style="font-size:13px;">تتبع المعرفة عبر <span class="en-term">BKT</span> و<span class="en-term">DKT</span>. نمذجة ديناميكية لفهم الطالب. فرصة لتحسين خوارزميات التتبع.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);padding:20px;">
+        <div class="icon-circle purple"><i data-lucide="file-check"></i></div>
+        <div class="card-title"><span class="en-term">CAT</span> — اختبار تكيفي</div>
+        <div class="card-text" style="font-size:13px;">تكييف صعوبة السؤال في الوقت الحقيقي. بحث في <span class="en-term">Item Response Theory</span> و<span class="en-term">Adaptive Item Selection</span>.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);padding:20px;">
+        <div class="icon-circle teal"><i data-lucide="timer"></i></div>
+        <div class="card-title">نمذجة النسيان</div>
+        <div class="card-text" style="font-size:13px;"><span class="en-term">Forgetting Prediction</span>. بحث في <span class="en-term">Ebbinghaus Curve</span> معدّل لكل طالب. تكرار متباعد شخصي.</div>
+      </div>
+    </div>
+    <div class="grid-3 anim-item" style="margin-top:16px;">
+      <div class="card" style="border-top:4px solid var(--success);padding:20px;">
+        <div class="icon-circle green"><i data-lucide="graduation-cap"></i></div>
+        <div class="card-title"><span class="en-term">Education AI</span></div>
+        <div class="card-text" style="font-size:13px;">تطبيق <span class="en-term">AI</span> في التعليم: <span class="en-term">Generative</span> + <span class="en-term">Adaptive</span> + <span class="en-term">Personalized</span>. مجال بحثي متقدم.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--warning);padding:20px;">
+        <div class="icon-circle orange"><i data-lucide="languages"></i></div>
+        <div class="card-title"><span class="en-term">Arabic NLP</span></div>
+        <div class="card-text" style="font-size:13px;">نماذج <span class="en-term">NLP</span> مخصصة للعربية. <span class="en-term">Fine-tuning</span> على محتوى تعليمي عربي. <span class="en-term">Embeddings</span> عربية.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--dark);padding:20px;">
+        <div class="icon-circle" style="background:rgba(15,23,42,0.1);color:var(--dark);"><i data-lucide="code-2"></i></div>
+        <div class="card-title">منصة مفتوحة المصدر</div>
+        <div class="card-text" style="font-size:13px;">فرصة بحثية في <span class="en-term">Open-Source Ecosystem</span>. <span class="en-term">Community</span> + <span class="en-term">Plugins</span> + <span class="en-term">API</span>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 17: FUTURE VISION ============ -->
+<div class="slide" id="slide-17">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">16</div>
+      <div>
+        <div class="slide-title">الرؤية المستقبلية</div>
+        <div class="slide-subtitle"><span class="en-term">OpenLearn AI</span> بعد التخرج</div>
+      </div>
+    </div>
+    <div class="grid-4 anim-item" style="margin-top:20px;">
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--primary);">
+        <div style="font-size:28px;color:var(--primary);margin-bottom:8px;"><i data-lucide="users"></i></div>
+        <div style="font-weight:600;font-size:14px;">مجتمع</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Community</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--secondary);">
+        <div style="font-size:28px;color:var(--secondary);margin-bottom:8px;"><i data-lucide="puzzle"></i></div>
+        <div style="font-weight:600;font-size:14px;">إضافات</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Plugins</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--accent);">
+        <div style="font-size:28px;color:var(--accent);margin-bottom:8px;"><i data-lucide="smartphone"></i></div>
+        <div style="font-weight:600;font-size:14px;">تطبيق جوال</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Mobile App</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--success);">
+        <div style="font-size:28px;color:var(--success);margin-bottom:8px;"><i data-lucide="presentation"></i></div>
+        <div style="font-weight:600;font-size:14px;">للمعلمين</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Teachers</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--warning);">
+        <div style="font-size:28px;color:var(--warning);margin-bottom:8px;"><i data-lucide="building"></i></div>
+        <div style="font-weight:600;font-size:14px;">جامعات</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Universities</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--primary);">
+        <div style="font-size:28px;color:var(--primary);margin-bottom:8px;"><i data-lucide="plug"></i></div>
+        <div style="font-weight:600;font-size:14px;">API عام</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Public API</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--secondary);">
+        <div style="font-size:28px;color:var(--secondary);margin-bottom:8px;"><i data-lucide="store"></i></div>
+        <div style="font-weight:600;font-size:14px;">سوق</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Marketplace</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center;border-top:3px solid var(--accent);">
+        <div style="font-size:28px;color:var(--accent);margin-bottom:8px;"><i data-lucide="bot"></i></div>
+        <div style="font-weight:600;font-size:14px;">وكيل ذكي</div>
+        <div style="font-size:12px;color:var(--light-text);"><span class="en-term">Agent Ecosystem</span></div>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center;" class="anim-item">
+      <div class="card-glass" style="padding:20px 32px;display:inline-block;">
+        <div style="font-size:18px;font-weight:700;color:var(--primary);margin-bottom:8px;">الهدف: منصة تعليمية ذكية يبنيها مجتمع</div>
+        <div style="font-size:14px;color:var(--light-text);">لا مشروع تخرج ينتهي — بل منصة مفتوحة تستمر وتنمو</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 18: IMPACT ============ -->
+<div class="slide" id="slide-18">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">17</div>
+      <div>
+        <div class="slide-title">الأثر</div>
+        <div class="slide-subtitle"><span class="en-term">Impact</span> — على من وكيف</div>
+      </div>
+    </div>
+    <div class="grid-auto anim-item" style="margin-top:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+      <div class="card" style="border-top:4px solid var(--primary);padding:24px;text-align:center;">
+        <div style="font-size:36px;color:var(--primary);margin-bottom:12px;"><i data-lucide="user"></i></div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:8px;">الطلاب</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;">تعلم تكيفي شخصي، تكرار ذكي، اختبار يكيّف نفسه. كل طالب يحصل على خط تعلم فريد.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--accent);padding:24px;text-align:center;">
+        <div style="font-size:36px;color:var(--accent);margin-bottom:12px;"><i data-lucide="school"></i></div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:8px;">المدارس</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;">أداة تعليمية مفتوحة المصدر. لا تكلفة اشتراك. <span class="en-term">Hybrid</span> يعمل بدون إنترنت.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--secondary);padding:24px;text-align:center;">
+        <div style="font-size:36px;color:var(--secondary);margin-bottom:12px;"><i data-lucide="building"></i></div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:8px;">الجامعات</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;">منصة بحثية. فرص في <span class="en-term">Knowledge Tracing</span> و<span class="en-term">CAT</span> و<span class="en-term">Arabic NLP</span>.</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--warning);padding:24px;text-align:center;">
+        <div style="font-size:36px;color:var(--warning);margin-bottom:12px;"><i data-lucide="book-open"></i></div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:8px;">التعليم العربي</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;">دعم كامل للعربية. <span class="en-term">RTL</span>. نماذج <span class="en-term">NLP</span> مخصصة. المحتوى العربي أولوية.</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;" class="anim-item">
+      <div class="card" style="border-top:4px solid var(--success);padding:24px;text-align:center;">
+        <div style="font-size:36px;color:var(--success);margin-bottom:12px;"><i data-lucide="github"></i></div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:8px;">مجتمع المصدر المفتوح</div>
+        <div style="font-size:13px;color:var(--light-text);line-height:1.6;">
+          <span class="en-term">AGPL-3.0</span> يضمن حرية الاستخدام والتطوير. المجتمع يبني إضافات، نماذج، أدوات. كل مساهمة تفيد كل مستخدم.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 19: CONCLUSION ============ -->
+<div class="slide" id="slide-19">
+  <div style="width:100%;max-width:1100px;">
+    <div class="section-header anim-item">
+      <div class="section-number">18</div>
+      <div>
+        <div class="slide-title">الخلاصة</div>
+        <div class="slide-subtitle"><span class="en-term">Key Takeaways</span></div>
+      </div>
+    </div>
+    <div class="grid-2 anim-item" style="margin-top:24px;gap:20px;">
+      <div class="card anim-item" style="border-left:4px solid var(--primary);padding:24px;">
+        <div style="font-size:20px;color:var(--primary);margin-bottom:8px;"><i data-lucide="layers"></i></div>
+        <div class="card-title" style="font-size:18px;">ليس <span class="en-term">ChatPDF</span> آخر</div>
+        <div class="card-text" style="font-size:15px;line-height:1.8;">
+          <span class="en-term">OpenLearn AI</span> هي <span class="en-term">Adaptive Educational Intelligence Platform</span> كاملة — مع <span class="en-term">Knowledge Graph</span>، <span class="en-term">Student Model</span>، <span class="en-term">Adaptive Engine</span>، <span class="en-term">Spaced Repetition</span>، و<span class="en-term">Adaptive Exam</span>.
+        </div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid var(--secondary);padding:24px;">
+        <div style="font-size:20px;color:var(--secondary);margin-bottom:8px;"><i data-lucide="shuffle"></i></div>
+        <div class="card-title" style="font-size:18px;">بنية <span class="en-term">Hybrid</span> ذكية</div>
+        <div class="card-text" style="font-size:15px;line-height:1.8;">
+          <span class="en-term">Local</span> للخصوصية، <span class="en-term">Cloud</span> للقوة، <span class="en-term">Hybrid</span> للمرونة. <span class="en-term">Provider Abstraction</span> يضمن تبديل سلس.
+        </div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid var(--accent);padding:24px;">
+        <div style="font-size:20px;color:var(--accent);margin-bottom:8px;"><i data-lucide="route"></i></div>
+        <div class="card-title" style="font-size:18px;">خارطة واقعية</div>
+        <div class="card-text" style="font-size:15px;line-height:1.8;">
+          <span class="en-term">P0 → P7</span> — خارطة تطوير واضحة من الأساس إلى الإطلاق. كل مرحلة تنتج قيمة حقيقية.
+        </div>
+      </div>
+      <div class="card anim-item" style="border-left:4px solid var(--success);padding:24px;">
+        <div style="font-size:20px;color:var(--success);margin-bottom:8px;"><i data-lucide="shield"></i></div>
+        <div class="card-title" style="font-size:18px;">قرارات مهنية</div>
+        <div class="card-text" style="font-size:15px;line-height:1.8;">
+          كل قرار معماري مبني على تحليل — <span class="en-term">DI</span>، <span class="en-term">Strategy Pattern</span>، <span class="en-term">Graph DB</span>، <span class="en-term">Vector DB</span>، <span class="en-term">BKT</span>. ليس تخمين.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ SLIDE 20: QUESTIONS ============ -->
+<div class="slide" id="slide-20">
+  <div class="slide-bg-deco"><div class="bg-blob bg-blob-1"></div><div class="bg-blob bg-blob-2"></div><div class="bg-blob bg-blob-3"></div></div>
+  <div class="questions-content anim-item" style="z-index:1;">
+    <div class="questions-icon anim-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:48px;height:48px;">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+    </div>
+    <div style="font-family:var(--font-en);font-weight:800;font-size:56px;color:var(--dark);direction:ltr;margin-bottom:16px;" class="anim-item">Questions?</div>
+    <div style="font-weight:500;font-size:22px;color:var(--light-text);margin-bottom:40px;" class="anim-item">أسئلة؟ نرحب بكل استفسار</div>
+    <div style="display:flex;justify-content:center;gap:24px;" class="anim-item">
+      <div class="card-glass" style="padding:12px 20px;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="github" style="width:18px;height:18px;color:var(--dark);"></i>
+        <span style="font-family:var(--font-en);font-size:14px;direction:ltr;">github.com/openlearn-ai</span>
+      </div>
+      <div class="card-glass" style="padding:12px 20px;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="globe" style="width:18px;height:18px;color:var(--dark);"></i>
+        <span style="font-family:var(--font-en);font-size:14px;direction:ltr;">openlearn-ai.org</span>
+      </div>
+    </div>
+    <div style="margin-top:40px;font-size:16px;color:var(--light-text);" class="anim-item">
+      شكراً لكم — <span class="en-term">OpenLearn AI</span> Team
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+// ============================================
+// SLIDE NAVIGATION SYSTEM — CSS-driven, no inline style overrides
+// ============================================
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+let isOverview = false;
+
+const progressFill = document.querySelector('.progress-fill');
+const currentSlideEl = document.querySelector('.current-slide');
+const totalSlideEl = document.querySelector('.total-slide');
+const slideNav = document.querySelector('.slide-nav');
+let navFadeTimer = null;
+
+if (totalSlideEl) totalSlideEl.textContent = totalSlides;
+
+function showNav() {
+  if (slideNav) {
+    slideNav.classList.remove('nav-fade');
+    clearTimeout(navFadeTimer);
+    navFadeTimer = setTimeout(() => {
+      slideNav.classList.add('nav-fade');
+    }, 2000);
+  }
+}
+
+function goToSlide(index) {
+  if (index < 0 || index >= totalSlides || index === currentSlide) return;
+
+  const prev = slides[currentSlide];
+  const next = slides[index];
+
+  // Deactivate previous slide
+  prev.classList.remove('active');
+
+  // Re-trigger animations: briefly remove anim-visible, then re-add
+  const nextAnimItems = next.querySelectorAll('.anim-item');
+  nextAnimItems.forEach(item => {
+    item.classList.remove('anim-visible');
+  });
+
+  // Activate new slide
+  next.classList.add('active');
+
+  currentSlide = index;
+
+  // Update progress bar
+  const progress = ((currentSlide + 1) / totalSlides) * 100;
+  progressFill.style.width = progress + '%';
+  if (currentSlideEl) currentSlideEl.textContent = currentSlide + 1;
+
+  // Show nav briefly then fade
+  showNav();
+
+  // Trigger staggered animations after a tiny delay
+  requestAnimationFrame(() => {
+    nextAnimItems.forEach(item => {
+      item.classList.add('anim-visible');
+    });
+  });
+}
+
+// Initialize first slide
+slides[0].classList.add('active');
+progressFill.style.width = ((1 / totalSlides) * 100) + '%';
+if (currentSlideEl) currentSlideEl.textContent = 1;
+showNav(); // Show nav briefly then auto-fade
+
+// Trigger first slide animations
+const firstAnimItems = slides[0].querySelectorAll('.anim-item');
+firstAnimItems.forEach(item => {
+  item.classList.add('anim-visible');
+});
+
+// Keyboard navigation — RTL: ArrowRight = previous, ArrowLeft = next
+document.addEventListener('keydown', (e) => {
+  switch(e.key) {
+    case 'ArrowLeft':
+    case 'ArrowDown':
+    case ' ':
+    case 'PageDown':
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+      break;
+    case 'ArrowRight':
+    case 'ArrowUp':
+    case 'PageUp':
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+      break;
+    case 'Home':
+      e.preventDefault();
+      goToSlide(0);
+      break;
+    case 'End':
+      e.preventDefault();
+      goToSlide(totalSlides - 1);
+      break;
+    case 'o':
+      toggleOverview();
+      break;
+  }
+});
+
+// Navigation is keyboard-only (ArrowLeft/ArrowRight in RTL, Space, Escape)
+
+// Overview mode
+function toggleOverview() {
+  isOverview = !isOverview;
+  document.body.classList.toggle('overview-mode', isOverview);
+}
+
+// ============================================
+// INITIALIZE LUCIDE ICONS
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.lucide) lucide.createIcons();
+});
+setTimeout(() => {
+  if (window.lucide) lucide.createIcons();
+}, 500);
+</script>
+
+</body>
+</html>
