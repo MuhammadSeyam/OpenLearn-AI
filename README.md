@@ -7,7 +7,7 @@
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Contributing](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Docs](docs/) · [Architecture](docs/architecture/SystemArchitecture.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Docs](docs/) · [Architecture](docs/architecture/SystemArchitecture.md) · [Roadmap](planning/Roadmap/MASTER_ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
