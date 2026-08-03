@@ -2,11 +2,11 @@
 
 | Field | Value |
 |---|---|
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Approved — Companion to `MASTER_ROADMAP.md` |
 | **Audience** | All engineering team members (9-person graduation team) |
-| **Document Owner** | TPM (rotating) |
-| **Review Cadence** | At each TPM rotation (every 4 weeks) |
+| **Document Owner** | TPM |
+| **Review Cadence** | Every 4 weeks |
 | **Source of Truth** | `MASTER_ROADMAP.md` is the SSOT for what ships and when. This handbook explains how we work together. |
 
 ---
@@ -34,46 +34,36 @@ Our six values take precedence over any rule written elsewhere. When unsure, com
 
 ## 3. Team Structure
 
-We are a 9-person team organized into **4 specialized pods** plus **3 rotating roles**. Pods are cross-functional enough to deliver vertical slices but specialized enough to build deep competence. Every pod has a single lead who is the point of contact for that pod.
+We are a 9-person team organized into **4 specialized pods** plus **1 fixed coordination role**. Pods are cross-functional enough to deliver vertical slices but specialized enough to build deep competence. Every pod has a single lead who is the point of contact for that pod. No role rotates — everyone picks a lane at the start of the project and stays in it.
 
 ```
                          ┌──────────────────────────────┐
-                         │  Rotating TPM (4-week stint)  │
+                         │            TPM                │
                          │  Roadmap · Sprints · Risks    │
                          └───────────────┬──────────────┘
                                          │
               ┌──────────────┬───────────┼───────────┬──────────────┐
-              ▼              ▼           ▼           ▼              ▼
-        ┌──────────┐   ┌──────────┐ ┌──────────┐ ┌──────────┐  ┌─────────────┐
-        │  Pod A   │   │  Pod B   │ │  Pod C   │ │  Pod D   │  │ Rotating    │
-        │ Backend  │   │  AI/ML   │ │Frontend  │ │DevOps/QA │  │ Firefighter │
-        │  2 eng   │   │  3 eng   │ │  2 eng   │ │  2 eng   │  │  (2-wk stnt)│
-        │ + Lead   │   │ + Lead   │ │ + Lead   │ │ + Lead   │  │             │
-        └──────────┘   └──────────┘ └──────────┘ └──────────┘  └─────────────┘
-              │              │           │           │
-              └──────────────┴───────────┴───────────┘
-                             │
-                  ┌──────────▼──────────┐
-                  │ Rotating Docs Owner │
-                  │  (4-week stint, CI  │
-                  │  gate enforced)     │
-                  └─────────────────────┘
+              ▼              ▼           ▼           ▼
+        ┌──────────┐   ┌──────────┐ ┌──────────┐ ┌──────────┐
+        │  Pod A   │   │  Pod B   │ │  Pod C   │ │  Pod D   │
+        │ Backend  │   │  AI/ML   │ │Frontend  │ │DevOps/QA │
+        │  2 eng   │   │  3 eng   │ │  2 eng   │ │  2 eng   │
+        │ + Lead   │   │ + Lead   │ │ + Lead   │ │ + Lead   │
+        └──────────┘   └──────────┘ └──────────┘ └──────────┘
 ```
 
-| Pod | Headcount | Lead | Focus |
+| Pod / Role | Headcount | Lead | Focus |
 |---|---|---|---|
 | **A — Backend & Platform** | 2 | Backend Lead | APIs, DB, auth, async jobs, vector DB ops |
 | **B — AI/ML** | 3 | AI Lead | OCR, embeddings, RAG, KG, cognitive model, adaptive engine |
 | **C — Frontend & UX** | 2 | Frontend Lead | UI, dashboards, design system, accessibility |
 | **D — DevOps, QA & Eval** | 2 | DevOps/QA Lead | CI/CD, environments, monitoring, security, eval harness |
-| **Rotating: TPM** | 0 (shared) | — | Roadmap, sprint ops, risk register, advisor comms |
-| **Rotating: Firefighter** | 0 (shared) | — | Picks up whatever is most behind each sprint |
-| **Rotating: Docs Owner** | 0 (shared) | — | Doc completeness, CI gate, Docusaurus site |
+| **TPM** | 1 (fixed, one of the 9) | — | Roadmap, sprint ops, risk register, advisor comms |
 | **Total** | **9** | — | — |
 
-The firefighter, TPM, and docs owner are **rotating roles**, not additional headcount. One of the 9 engineers takes on each role for a defined stint (4 weeks for TPM and Docs Owner, 2 weeks for Firefighter) and then returns to their pod. This is how we share the management work without burning out any single person.
+The TPM is one of the 9 team members, holding the role for the whole project rather than rotating through it. Documentation ownership is folded into each pod lead's normal responsibilities (see Section 6) rather than living in a separate role. If a pod falls visibly behind, the TPM and that pod's lead ask other pods for help on an as-needed basis for that sprint — there is no standing "firefighter" assignment.
 
-**Why this structure.** It solves four real problems: (1) bus factor — Pod D has 2 people from day one, and at least 3 people are cross-trained on DevOps tasks by Feature Freeze; (2) AI complexity — Pod B has 3 people because the AI work is the longest critical path; (3) operational realism — Pod D owns CI/monitoring/security so it does not become "everyone's job and therefore no one's"; (4) load-balancing — rotating roles redistribute management work so no one is permanently stuck in meetings.
+**Why this structure.** It solves three real problems: (1) bus factor — Pod D has 2 people from day one, and at least 3 people are cross-trained on DevOps tasks by Feature Freeze; (2) AI complexity — Pod B has 3 people because the AI work is the longest critical path; (3) operational realism — Pod D owns CI/monitoring/security so it does not become "everyone's job and therefore no one's." Keeping the TPM role fixed rather than rotating removes handoff overhead and lets one person build real continuity with the advisor and the roadmap.
 
 ---
 
@@ -162,6 +152,7 @@ Every pod has one lead. The lead is the single point of contact for the pod and 
 - **Code review.** You are the default reviewer for PRs in your pod. You review within 24 hours or explicitly delegate. You hold the bar on quality, tests, and contract compliance. You approve PRs that touch frozen interfaces (these need 2 reviewers; the lead is one). You mentor junior members through review comments, not by rewriting their code.
 - **Mentoring.** You pair-program with less-experienced members when they are stuck. You explain *why* the code looks the way it does, not just *what* to type. You delegate stretch tasks that help them grow, not just grunt work. You give feedback early and often, not just at retro time.
 - **Quality.** You are accountable for the pod's output quality. Tests exist and pass before merge. Coverage on critical paths meets the bar (≥ 60% by Feature Freeze). Tech debt is logged, not hidden. The pod's work is demoable on staging by Friday.
+- **Documentation.** You are accountable for your pod's documentation being current — new endpoints, schemas, components, and ADRs get a doc file in the same PR that introduces them. The CI docs-check gate enforces this. You run a quick docs check as part of your own Friday demo prep; there is no separate docs reviewer.
 - **Communication.** You attend the Tuesday cross-pod sync and represent your pod's status, blockers, and needs. You communicate contract changes to other pods before you write code. You escalate risks to the TPM as soon as you see them. You write the pod's section of the weekly status update.
 - **Risk escalation.** You are the first line of defense on risks. You log risks to the register as soon as you spot them — do not wait for the monthly review. You escalate red risks to the TPM within 24 hours. You propose mitigations, not just problems. You trigger the relevant playbook when a trigger metric is met.
 
@@ -169,20 +160,21 @@ If you find yourself spending more than 20% of your week on lead duties, you are
 
 ---
 
-## 7. Rotating TPM Responsibilities
+## 7. TPM Responsibilities
 
-The TPM (Technical Program Manager) role rotates every 4 weeks among pod leads. The TPM is the glue that holds the team together week-to-week. It is **not** a manager role; it is a facilitator role.
+The TPM (Technical Program Manager) is a fixed role held by one team member for the duration of the project. It is **not** a manager role; it is a facilitator role, and it is **not** a pure administrative job — the person in it can still contribute code where their schedule allows, but the role itself does not rotate.
 
 - **Sprint planning.** You run the Friday sprint planning session. You make sure every sprint has 1 owner, 1 deliverable, and 1 exit criterion. You balance pod allocations. You publish the sprint plan by Friday EOD.
 - **Weekly meetings.** You facilitate the Tuesday cross-pod sync (30 min, blockers only), the Friday demo (30 min + 30 min discussion), the biweekly retrospective (60 min), and the monthly milestone review (90 min, last Friday of the month).
 - **Roadmap tracking.** You track sprint exit criteria (met / at risk / missed) and update the roadmap weekly. You track buffer consumption and trigger the descope protocol if thresholds are crossed. You propose roadmap changes when reality diverges from plan. You maintain the Revision History.
 - **Risk register.** You review the register at every biweekly retro. You add new risks surfaced by pod leads. You close mitigated risks. You trigger playbooks when trigger metrics are met.
-- **Documentation.** The rotating Docs Owner handles day-to-day doc completeness, but the TPM ensures ADRs, the README, and the architecture diagram are current at phase boundaries.
+- **Documentation oversight.** Each pod lead owns their own pod's docs (Section 6). Your role is to make sure the README, the architecture diagram, and cross-pod ADRs are current at each phase boundary — not to review every individual doc.
 - **Stakeholder communication.** You are the single point of contact for the advisor and graduation committee. You send a written status update to the advisor every month after the milestone review. You schedule and facilitate advisor demos. You communicate descopes and slip risks before they become surprises.
-
-**Rotation process.** Stint length is 4 weeks. Eligibility: pod leads only (so the TPM has cross-pod context). Order: round-robin among the 4 pod leads. The outgoing TPM does a 30-minute handoff with the incoming TPM covering: open risks, in-flight roadmap changes, advisor expectations, anything sticky. Time commitment: ~20% of the TPM's week during their rotation.
+- **Load balancing.** Because this role does not rotate, watch your own bandwidth. Budget roughly 20% of your week for TPM duties on an ongoing basis. If you are also assigned to a pod, negotiate a lighter pod load with your lead. If you start feeling overloaded, raise it at the monthly milestone review — the team can rebalance your pod responsibilities, but the TPM role itself stays with you.
 
 **What the TPM is NOT.** The TPM is not your boss — they facilitate; your pod lead assigns you to tasks within your pod. The TPM is not the technical architect — architecture decisions are owned by the pod that owns the component; the TPM ensures ADRs are recorded. The TPM is not the product manager — product scope is defined in the roadmap; the TPM does not change it unilaterally.
+
+**Escalation if a pod falls behind.** There is no standing firefighter assignment. If a pod misses its Friday demo for 2 consecutive weeks, the TPM flags it in the risk register and asks the other pod leads, at the next cross-pod sync, whether anyone has spare capacity to help for that sprint. This is a one-sprint, opt-in arrangement — not a rotation, not a permanent reassignment.
 
 ---
 
@@ -209,7 +201,7 @@ Most project failures are collaboration failures, not technical failures. This s
 Every engineer — regardless of pod — is expected to meet these baseline expectations.
 
 - **Learning.** Budget real time for learning. Do not learn in isolation — surface what you are learning in the pod sync so others learn too. Track what you learn each week; this becomes material for retros and for the "what would you do differently" section of the graduation presentation.
-- **Documentation.** Write docs before code (docs-first workflow). Update docs when code changes — in the same PR. The CI gate enforces doc existence: a PR that adds a new endpoint/schema/ADR/component without a corresponding doc file is blocked. The rotating Docs Owner runs a 5-minute docs review at every Friday demo.
+- **Documentation.** Write docs before code (docs-first workflow). Update docs when code changes — in the same PR. The CI gate enforces doc existence: a PR that adds a new endpoint/schema/ADR/component without a corresponding doc file is blocked.
 - **Git discipline.** Work on short-lived feature branches (`feature/<short-description>`), merged within 1 week. Use Conventional Commits (`feat(auth): add refresh token rotation`). Squash-merge to keep `main` history clean. Never commit directly to `main`. Never force-push to `main` or shared branches. Keep branches up to date with `main` before merging.
 - **Testing.** Write tests alongside code, not after. Unit tests run in < 60 seconds and gate every PR. Integration tests run in < 5 minutes and gate every merge to `main`. E2E tests (Playwright) run nightly on staging and on every release tag. Coverage ≥ 60% on critical paths by Feature Freeze — this is a hard gate.
 - **Code review.** Review PRs within 24 hours. Use the code review checklist (in the roadmap's Git Workflow section). Be kind — comment on the code, not the person. Approve explicitly — silence is not approval. Hold the bar — if a PR introduces tech debt, require it to be logged before approval.
@@ -332,4 +324,4 @@ Ship the v0.4 thin MVP at W16 (21 November 2026). If the team ships that on time
 
 ---
 
-*End of TEAM_HANDBOOK.md v1.0.*
+*End of TEAM_HANDBOOK.md v1.1.*
