@@ -12,6 +12,56 @@
 
 ---
 
+## Executive Summary
+
+**OpenLearn AI** is an AI-powered adaptive learning platform built by a 9-person team over 44 weeks (August 2026 → June 2027) for a graduation defense. A student or instructor uploads PDFs; the platform runs OCR, chunks and embeds the content, builds a RAG layer with citations, extracts concepts into a Knowledge Graph, models each student's cognitive state from quiz performance, and uses that model to drive personalized recommendations and adaptive quiz difficulty.
+
+**The single most important date is W16 (21 November 2026) — the v0.4 Thin MVP.** A pre-loaded PDF, no auth, a single chat box, an answer with citations. If that ships on time, the rest of the plan has enough slack to absorb almost any problem. If it doesn't, every subsequent date is at risk.
+
+### The Numbers
+
+- **9 engineers** organized into 4 pods: A (Backend, 2), B (AI/ML, 3), C (Frontend, 2), D (DevOps + QA + Eval, 2), plus rotating TPM, Docs Owner, and Firefighter roles drawn from the 9.
+- **1,820 usable engineering hours** (pessimistic model, after a 60% productivity multiplier for meetings, rework, context-switching, and university workload).
+- **5 quality gates** that must pass or graduation slips: v0.4 Thin MVP (W16), Tier 1 Architecture Freeze (W20), Tier 2 Architecture Freeze (W30), Feature Freeze (W38), Code Freeze (W42).
+- **4 weeks of critical-path slack** distributed across the plan, not concentrated at the end.
+- **6 contingency playbooks** for the top red risks: OCR quality, RAG quality, adaptive engine convergence, Pod D bus factor, exam crunch collapse, MVP slip.
+- **7 scoped component-level fallbacks** (e.g., Qdrant → pgvector, Neo4j → JSONB, BGE-M3 → OpenAI embeddings) — invoked independently, never as a full stack swap.
+- **15 items on the signed Out-of-Scope list** (mobile app, multi-tenant, SSO/SAML, real-time collaboration, proctoring, etc.).
+- **~70% delivery confidence** for v1.0 by W44 — honest for a student team building an AI product in 10 months.
+
+### The Stack
+
+Next.js 16 + FastAPI (Python 3.12) + PostgreSQL 16 + Qdrant + Neo4j + LiteLLM gateway. PaddleOCR for OCR. BGE-M3 for embeddings. bge-reranker-v2-m3 for hybrid retrieval. Celery + Redis for async jobs. Docker + k3s for orchestration. GitHub Actions for CI. Grafana + Prometheus + Loki + Sentry for observability.
+
+### The Phases
+
+| Phase | Weeks | Calendar | Headline |
+|---|---|---|---|
+| P0 Pre-Flight | W1–4 | Aug 2026 | v0.1 deployed; CI; 5 ADRs; OOS signed |
+| P1 Foundations | W5–8 | Sep 2026 | v0.2: auth + courses + upload |
+| P2 AI Pipeline | W9–20 | Oct–Dec 2026 | v0.4 Thin MVP (W16); v0.5 + Tier 1 Freeze (W20) |
+| P3 Knowledge & Cognition | W21–30 | Dec–Feb | v0.7 + Tier 2 Freeze |
+| P4 Adaptation & Analytics | W31–38 | Mar–Apr | v0.9 + Feature Freeze |
+| P5 Hardening | W39–42 | Apr–May | v1.0-rc + Code Freeze |
+| P6 Graduation | W43–44 | May–Jun | v1.0 + presentation |
+
+### The Critical Path
+
+Stack lock → OCR → Chunking → Embeddings → Vector DB → RAG → **v0.4 Thin MVP** → Tier 1 Freeze → Concept Extraction → Knowledge Graph → Cognitive Model → Tier 2 Freeze → Adaptive Engine → Feature Freeze → Hardening → Code Freeze → Prod Deploy → Graduation.
+
+### How to Use This Document
+
+- **Week 1:** Print the Version Roadmap section and stick it on the wall.
+- **Every Monday:** Pod leads review the Sprint Timeline for the current week.
+- **Every Friday:** Demo on staging + retrospective + next-week sprint planning.
+- **Last Friday of every month:** Milestone review using the Monthly Timeline.
+- **When a risk triggers:** Open the relevant playbook in Risk Mitigation Strategy.
+- **When in doubt:** Optimize for working software over perfect architecture, incremental delivery over big-bang, and risk reduction over feature count.
+
+**Ship the thin MVP at W16. Everything else follows.**
+
+---
+
 ## Purpose
 
 This document is the single source of truth for the OpenLearn AI project. It is the engineering plan that the team will execute from August 2026 until the graduation defense in May/June 2027. Every phase, sprint, milestone, deliverable, risk, and freeze in this document is internally consistent and intended to be followed as written.
@@ -1784,4 +1834,196 @@ That is v0.5. Everything before it is scaffolding; everything after it is depth.
 
 ### Thin MVP Statement (v0.4)
 
-> **A pre-loaded PDF is already in the system. A user (no auth required) asks
+> **A pre-loaded PDF is already in the system. A user (no auth required) asks a question in a text box and gets an answer with citations.**
+
+The thin MVP proves the AI pipeline works end-to-end (OCR → chunking → embeddings → vector DB → RAG → chat UI) without depending on backend foundations being complete. If the thin MVP ships at W16, the team has 4 weeks to add auth + courses + uploads for v0.5. If the thin MVP does not ship at W16, the team knows the AI pipeline is the bottleneck — before investing further in backend work.
+
+### Thin MVP Exit Criteria
+
+1. A specific PDF is pre-loaded (chosen by Pod B in W3).
+2. OCR has run on it; text + chunks are in the DB.
+3. Embeddings are in the vector DB.
+4. A simple chat UI (single page, no auth) accepts a question.
+5. The system returns an answer with at least 2 citations.
+6. Deployed to a public URL.
+7. The demo survives 5 questions without crashing.
+
+---
+
+## Decision Review Process
+
+### Decision Tiers
+
+Decisions are classified into three tiers based on their blast radius. Each tier has a defined review path, approval authority, and maximum time-to-decision.
+
+| Tier | Scope | Examples | Review Forum | Approvers | Max Time-to-Decision |
+|---|---|---|---|---|---|
+| **T1 — Tactical** | Single-pod, no cross-pod impact, reversible | Variable naming, minor refactor, test addition, bug fix approach | Pod-level sync | Pod lead | 2 business days |
+| **T2 — Architectural** | Cross-pod impact, affects interfaces or data model, reversible only with effort | New API endpoint, schema change within a frozen contract boundary, library upgrade, fallback invocation | Weekly cross-pod sync | TPM + 2 pod leads | 1 week |
+| **T3 — Strategic** | Project-wide impact, affects graduation delivery, not reversible without re-plan | Scope change, freeze exception, stack change, OOS list amendment, timeline slip | Monthly milestone review (emergency session if needed) | TPM + all pod leads + advisor | 2 weeks |
+
+### Decision Workflow
+
+Every T2 and T3 decision follows this workflow:
+
+1. **Proposal.** The decision owner opens an ADR draft containing: context, decision, alternatives considered, consequences, open questions.
+2. **Review.** The ADR is circulated to the relevant approvers. Reviewers must respond within the tier's max time-to-decision. Silence is not approval.
+3. **Decision.** Approvers sign the ADR (GitHub PR review approval is sufficient). Dissent is recorded in the ADR; the TPM has tie-breaking authority for T2 and final escalation authority for T3.
+4. **Recording.** The ADR is merged to `docs/adr/` with status `Accepted`. The decision is logged in the Revision History of this roadmap if it affects the plan.
+5. **Implementation.** The decision owner executes; the ADR status moves to `Superseded` only if a later ADR replaces it.
+
+### Decision Logs
+
+- All T2 and T3 decisions are recorded as ADRs in `docs/adr/`.
+- ADRs are numbered sequentially (`ADR-001`, `ADR-002`, …).
+- A live ADR index is maintained at `docs/adr/README.md`.
+- The TPM maintains a decision log in the project management tool with: ADR number, date, owner, status, summary.
+
+### Escalation
+
+If a decision cannot be resolved at its tier within the max time-to-decision:
+
+- T1 → escalate to TPM.
+- T2 → escalate to TPM + advisor.
+- T3 → escalate to advisor + graduation committee.
+
+Escalation is **expected, not exceptional**. A pod lead who escalates a stuck decision is acting correctly; a pod lead who lets a decision drift past its deadline without escalating is not.
+
+### Anti-patterns
+
+- Decisions made in private chat and not recorded in an ADR.
+- "Let's just try it and see" without an ADR — this is a T2 decision disguised as a T1.
+- ADRs written after the decision was already made and shipped (post-hoc rationalization).
+- Silence treated as approval — silence is silence; explicit sign-off is required.
+
+---
+
+## Change Management Policy
+
+### What Constitutes a Change
+
+A change is any modification to:
+
+1. This roadmap (any section).
+2. A frozen interface contract (see Architecture Freeze, Feature Freeze, Code Freeze).
+3. The signed Out-of-Scope list.
+4. The Technology Stack decisions.
+5. The team pod structure or ownership boundaries.
+6. The sprint timeline or milestone dates.
+
+Changes to implementation details inside a module — code, tests, internal data structures — are **not** changes under this policy. They follow standard PR review.
+
+### Change Categories
+
+| Category | Description | Approval Path | Documentation |
+|---|---|---|---|
+| **Minor** | Typo fix, clarification, internal cross-reference fix | TPM review | Direct edit; noted in Revision History |
+| **Substantive** | New content consistent with existing plan (e.g., adding a risk to the register, adding a sprint deliverable that fits the existing theme) | TPM + relevant pod lead | Direct edit; new Revision History entry |
+| **Major** | Change to dates, scope, pod structure, stack, or freeze terms | TPM + all pod leads | New ADR + Revision History entry |
+| **Critical** | Change to graduation deliverables, OOS list, or freeze gates | TPM + all pod leads + advisor | New ADR + advisor sign-off + Revision History entry |
+
+### Change Process
+
+1. **Change request.** Opened as a GitHub issue tagged `roadmap-change`. The issue contains: what changes, why, what section, what category, what alternatives were considered.
+2. **Triage.** TPM categorizes the change within 3 business days. Category may be upgraded (not downgraded) during triage.
+3. **Review.** For Major and Critical changes, an ADR is drafted. Reviewers are the approvers defined for the category.
+4. **Decision.** Approvals are recorded in the ADR. TPM updates this roadmap in a PR that references the ADR.
+5. **Communication.** Approved changes are announced in the team channel and reviewed at the next weekly demo. All team members are expected to acknowledge the announcement within 48 hours.
+
+### Freeze Exceptions
+
+Changes to frozen items follow a stricter path:
+
+- **Architecture Freeze exception:** Requires a new ADR + migration plan + TPM approval + 2 pod leads' review.
+- **Feature Freeze exception:** Requires TPM + Tech Lead joint approval + explicit decision on what gets descoped to make room + update to graduation demo script.
+- **Code Freeze exception:** Requires TPM + D-Lead joint approval + classification as P0 or P1 (graduation-blocking) + smoke tests re-run before and after merge.
+
+Freeze exceptions are **rare and rationed**. The default answer to a freeze exception request is "no." The burden of proof is on the requester.
+
+### Change Authority Matrix
+
+| Change Type | TPM | Pod Leads | Advisor | Graduation Committee |
+|---|---|---|---|---|
+| Minor | Approves | Informed | — | — |
+| Substantive | Approves | 1+ approves | Informed | — |
+| Major | Approves | All approve | Informed | — |
+| Critical | Approves | All approve | Approves | Informed |
+| Freeze exception | Approves | 2+ approve (Arch) / joint (Feat / Code) | Informed | — |
+
+### Anti-patterns
+
+- Stealth edits to the roadmap without a Revision History entry.
+- Verbal agreements that do not get written into an ADR.
+- Approving a change without checking what else it affects (cascading impact).
+- Skipping the change process "because it's urgent" — the process exists precisely for urgent cases.
+
+---
+
+## Roadmap Maintenance Rules
+
+### Living Document Principle
+
+This roadmap is a **living document**. It is not a one-time artifact. It is updated whenever reality diverges from plan, whenever a decision is made that affects the plan, and whenever new information arrives that changes the assumptions the plan is built on.
+
+However, "living" does not mean "fluid." The structure (sections, tables, gates, freezes) is stable. The content within those structures is what gets updated.
+
+### Update Cadence
+
+| Update Type | Trigger | Owner | Cadence |
+|---|---|---|---|
+| **Sprint-level** | Sprint completes; exit criterion status changes | TPM | Weekly (Friday after sprint close) |
+| **Risk register** | New risk identified, risk score changes, risk closed | Risk owner | Biweekly (at minimum); immediately for new red risks |
+| **Milestone status** | Monthly milestone review completes | TPM | Monthly (last Friday) |
+| **Phase exit** | Phase gate signed | TPM | At each phase boundary (W4, W8, W20, W30, W38, W42, W44) |
+| **ADR-driven** | ADR is merged that affects the plan | ADR owner | Within 1 week of ADR merge |
+| **Emergency** | Critical risk triggers; playbook invoked | TPM | Within 24 hours |
+
+### What Gets Updated
+
+- **Sprint Timeline:** Status of each sprint's exit criterion (met / at risk / missed).
+- **Milestones:** Status of each milestone (on track / slipped / descoped).
+- **Risk Register:** Likelihood and impact scores; new risks; closed risks; playbook invocations.
+- **Buffer Periods:** Buffer burn-down chart; consumed buffer.
+- **Revision History:** Every update — major or minor — gets an entry.
+
+### What Does NOT Get Updated Without a Major Change
+
+- **Project Vision, Objectives, Success Criteria** — these are the contract with the advisor and graduation committee; changing them requires Critical-category approval.
+- **Out-of-Scope list** — items can be removed (brought into scope) only via scope-change ADR; items cannot be silently added.
+- **Freeze terms** — once a freeze is signed, the frozen items cannot change without a freeze exception (see Change Management Policy).
+- **Pod structure** — changes require Major-category approval and a re-allocation plan.
+
+### Versioning
+
+- This document uses semantic versioning: `MAJOR.MINOR`.
+- **MAJOR** version increments when a Critical or Major change is merged (e.g., scope change, phase slip, freeze exception). Example: 1.0 → 2.0.
+- **MINOR** version increments when a Substantive change is merged (e.g., new risk added, new sprint deliverable, clarifying edit). Example: 1.0 → 1.1.
+- Minor changes (typo fixes) do not increment the version; they are noted in the Revision History only.
+- The version number in the metadata table at the top of this document is the current version.
+
+### Review Cadence
+
+- **Weekly:** TPM reviews sprint-level updates at the Friday sprint close.
+- **Biweekly:** Pod leads review the risk register at the biweekly retrospective.
+- **Monthly:** Full team reviews the roadmap at the monthly milestone review.
+- **At each phase exit:** All pod leads sign off that the roadmap reflects reality.
+- **At Code Freeze (W42):** The roadmap is **frozen** along with the code. No further updates except Revision History entries for post-freeze decisions, until v1.0 is shipped.
+
+### Anti-patterns
+
+- Letting the roadmap go stale ("we'll update it later" — later never comes).
+- Updating the roadmap without updating the Revision History.
+- Updating the roadmap without communicating the change to the team.
+- Treating the roadmap as a historical artifact ("this is what we planned") rather than a living commitment ("this is what we are doing").
+
+---
+
+## Revision History
+
+| Version | Date | Author | Change Summary |
+|---|---|---|---|
+| **1.0** | 2026-08-03 | Senior TPM / Staff Architect | Initial approved version. Single source of truth for the OpenLearn AI project, committed to the GitHub repository as `MASTER_ROADMAP.md`. Establishes: 44-week plan (W1–W44), 7 phases (P0–P6), 9-person team across 4 pods, 5 quality gates (v0.4, Tier 1, Tier 2, Feature, Code), 32-risk register with 6 contingency playbooks, 7 scoped component-level fallbacks, signed Out-of-Scope list (15 items), 1,820-hour pessimistic capacity budget, 22-week graduation prep runway, and the engineering principles of working software over perfect architecture, incremental delivery over big-bang, and risk reduction over feature count. |
+
+---
+
+*End of MASTER_ROADMAP.md v1.0.*
