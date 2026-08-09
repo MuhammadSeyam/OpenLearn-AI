@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (lint + pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Lint with ruff
+        run: python -m ruff check .
+
+      - name: Run pytest
+        run: python -m pytest
+
+  frontend:
+    name: Frontend (lint + vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if frontend exists
+        id: check_frontend
+        run: |
+          if [ -f "frontend/package.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node
+        if: steps.check_frontend.outputs.exists == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Run Vitest
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: npm run test -- --run
+
+      - name: Skip notice
+        if: steps.check_frontend.outputs.exists == 'false'
+        run: echo "No frontend/ folder yet — skipping frontend checks (Pod C hasn't scaffolded it)."
