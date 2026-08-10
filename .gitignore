@@ -1,2 +1,22 @@
 __pycache__/
 *.pyc
+
+# Python
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Environment files (secrets — never commit these)
+.env
+.env.local
+*.env
+
+# Node (للـ frontend لما يتضاف)
+node_modules/
+.next/
+
+# OS files
+.DS_Store
+Thumbs.db
