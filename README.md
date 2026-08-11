@@ -1,6 +1,6 @@
 <div align="center">
 
-# OpenLearn AI
+# OpenLearn  AI
 
 **Open-source adaptive learning, without the vendor lock-in.**
 
