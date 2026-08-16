@@ -7,6 +7,8 @@ __pycache__/
 *.egg-info/
 .coverage
 htmlcov/
+.venv/
+__pycache__/
 
 # Environment files (secrets — never commit these)
 .env
