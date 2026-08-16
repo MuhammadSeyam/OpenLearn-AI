@@ -5,6 +5,18 @@ Internal reference for contributors working on OpenLearn AI. This document descr
 
 This document is not user-facing. It exists for the people writing code, reviewing pull requests, and making architectural decisions in this repository over the life of the project.
 
+> **Current-state note (2026-08-16, foundation cleanup):** This guide describes
+> *target* conventions. The repository today contains only `backend/`
+> (skeleton), `frontend/` (scaffold), `infra/`, `experiments/`, `docs/`,
+> `planning/`, `presentations/`, and `.github/`. Where this guide and the real
+> tree disagree, [`docs/README.md`](../README.md) and the
+> [ADRs](../adr/) win. Domain modules live as packages under
+> `backend/app/services/` per [ADR-0001](../adr/0001-modular-monolith.md) —
+> there is no top-level `services/` directory. **Never pre-create empty
+> directories or placeholder files listed here; create them when the first
+> real content exists** (see the
+> [foundation audit](../repository-foundation-audit.md) for why).
+
 ---
 
 ## 1. Purpose of this Guide
@@ -19,10 +31,10 @@ This guide is the answer to those questions. It should be updated whenever a con
 
 The repository is organized around one principle: **separation by concern, not by convenience.** Code, documentation, research, planning, and experimentation are deliberately kept apart because they have different audiences, different lifecycles, and different quality bars.
 
-- **Services are isolated** (`services/`) because the system is designed as a modular monolith with hard interface boundaries between domains (ingestion, RAG, knowledge graph, student model, etc.). Isolating them in the folder structure enforces the same discipline in the codebase that the architecture requires — a contributor working on `ocr` should not need to understand the internals of `adaptive-engine`, only its interface.
+- **Services are isolated** (as packages under `backend/app/services/`, per ADR-0001) because the system is designed as a modular monolith with hard interface boundaries between domains (ingestion, RAG, knowledge graph, student model, etc.). Isolating them as separate packages enforces the same discipline in the codebase that the architecture requires — a contributor working on `ocr` should not need to understand the internals of `adaptive-engine`, only its interface.
 - **Documentation is separated from code** (`docs/`) because documentation has a different review cadence and different authors than code. Architecture and research documents often precede implementation by weeks; keeping them out of `backend/` and `frontend/` avoids coupling doc changes to code PRs.
 - **Research is separated from architecture** because research is exploratory and can be wrong, outdated, or superseded — it should never be mistaken for a decision that has been made. Architecture documents and ADRs represent decisions; `docs/research/` represents the evidence and reasoning that led to them.
-- **Experiments are separated from production code** because prototypes are disposable by design. Nothing under `experiments/` should ever be imported by `backend/`, `frontend/`, or `services/`.
+- **Experiments are separated from production code** because prototypes are disposable by design. Nothing under `experiments/` should ever be imported by `backend/`, `frontend/`, or any production module.
 - **Planning is separated from documentation** because sprint plans and meeting notes are time-bound and operational, not a lasting reference — they should never be required reading to understand the system.
 
 This structure is meant to scale by addition, not reorganization: new services, new docs, new experiments all have an obvious home. If something doesn't have an obvious home, that's a sign the top-level structure needs to change — see [Section 19](#19-suggested-repository-improvements) before improvising.
@@ -34,8 +46,8 @@ This structure is meant to scale by addition, not reorganization: new services, 
 ### `backend/`
 **Purpose:** The FastAPI application — API gateway, route handlers, and the composition point where service modules are wired together via dependency injection.
 **Belongs here:** Route definitions, request/response models, auth middleware, the Celery worker entrypoints, database migrations (`migrations/`), and backend-specific tests (`tests/`).
-**Does not belong here:** Business logic for a specific domain (ingestion, RAG, adaptive engine, etc.) — that lives in `services/`. `backend/` calls services; it does not implement them.
-**Example:** `backend/app/main.py` wires the FastAPI app and includes routers; a router calls `services/rag`'s interface rather than implementing retrieval logic inline.
+**Does not belong here:** Business logic for a specific domain (ingestion, RAG, adaptive engine, etc.) — that lives in `backend/app/services/`. `backend/`'s API layer calls service interfaces; it does not implement them.
+**Example:** `backend/app/main.py` wires the FastAPI app and includes routers; a router calls the `rag` service's interface rather than implementing retrieval logic inline.
 
 ### `frontend/`
 **Purpose:** The Next.js application.
@@ -43,22 +55,22 @@ This structure is meant to scale by addition, not reorganization: new services, 
 **Does not belong here:** API logic beyond thin fetch/query wrappers. The frontend is a consumer of the backend API, not a place to duplicate backend logic.
 **Example:** A new dashboard view goes under `features/analytics/`, not directly into `app/` as a monolithic page.
 
-### `services/`
-**Purpose:** Independently defined domain modules (`ingestion`, `ocr`, `embeddings`, `rag`, `knowledge-graph`, `student-model`, `adaptive-engine`, `generation`, `analytics`). See [Section 8](#8-services-architecture) for details.
+### `backend/app/services/` (domain modules — not yet created)
+**Purpose:** Independently defined domain modules (`ingestion`, `ocr`, `embeddings`, `rag`, `knowledge-graph`, `student-model`, `adaptive-engine`, `generation`, `analytics`), created inside the backend process as Python packages (ADR-0001). See [Section 8](#8-services-architecture) for details.
 **Belongs here:** Domain logic, the service's own interface definition, and unit tests scoped to that service.
-**Does not belong here:** Cross-service orchestration (that's `backend/`) or direct provider/vendor SDK calls (those go through the Provider Abstraction Layer, not directly inside a service).
+**Does not belong here:** Cross-service orchestration (that's the API layer in `backend/app/`) or direct provider/vendor SDK calls (those go through the Provider Abstraction Layer, not directly inside a service).
 
-### `models/`
-**Purpose:** Configuration for AI models, prompt templates, and locally-hosted model assets. See [Section 9](#9-models-directory).
+### `models/` (not yet created)
+**Purpose:** Configuration for AI models, prompt templates, and locally-hosted model assets. See [Section 9](#9-models-directory). Create on first real need — do not pre-create.
 
-### `datasets/`
-**Purpose:** Sample data, evaluation sets, and benchmark data used for testing and research. See [Section 10](#10-datasets).
+### `datasets/` (not yet created)
+**Purpose:** Sample data, evaluation sets, and benchmark data used for testing and research. See [Section 10](#10-datasets). Note: the OCR benchmark data currently lives in `experiments/OCR/ocr-benchmark/data/` (evaluation-only, isolated environment) — a future `datasets/` location, if ever created, must not silently duplicate it.
 
 ### `experiments/`
 **Purpose:** Notebooks, prototypes, and benchmark scripts that have not been promoted to production code. See [Section 11](#11-experiments).
 
-### `infrastructure/`
-**Purpose:** Deployment and operations — Docker, Kubernetes manifests, Nginx configuration, monitoring setup, and operational scripts.
+### `infra/` (note the name — not `infrastructure/`)
+**Purpose:** Deployment and operations — Docker Compose files, future Kubernetes manifests, Nginx configuration, monitoring setup, and operational scripts.
 **Belongs here:** Anything needed to run the system, not anything needed to build a feature.
 **Does not belong here:** Application code of any kind.
 
@@ -71,11 +83,11 @@ This structure is meant to scale by addition, not reorganization: new services, 
 ### `presentations/`
 **Purpose:** Slide decks and demo materials for proposal, midterm, and final presentations. Not referenced by any other part of the repository — purely archival/output artifacts.
 
-### `assets/`
+### `assets/` (not yet created)
 **Purpose:** Logo, diagrams, and screenshots referenced by the README and documentation. Diagrams that are also maintained as Mermaid source should live alongside their source in `docs/architecture/`, with only exported images here.
 
-### `scripts/`
-**Purpose:** One-off or repeatable repository-level scripts (e.g., `setup_project_structure.sh`). Anything specific to a service belongs inside that service's own directory, not here.
+### `scripts/` (currently empty / removed)
+**Purpose:** One-off or repeatable repository-level scripts. Anything specific to a service belongs inside that service's own directory, not here. (The former `setup_project_structure.sh` scaffolder was removed in the 2026-08-16 foundation cleanup — it created empty placeholder files and directories that contradicted the real structure.)
 
 ---
 
@@ -87,7 +99,7 @@ Every non-trivial change should move through the following stages. Trivial chang
 2. **Discussion** — Open questions are discussed on the issue or in a meeting; outcomes are captured in `planning/meeting-minutes/`.
 3. **Research** — If the idea requires evaluating an approach, model, or algorithm, this happens in `docs/research/` (or `experiments/` for hands-on evaluation) before any implementation begins.
 4. **Architecture** — If the change affects module boundaries, data flow, or a technology choice, it is documented as an ADR (Section 13) before code is written.
-5. **Implementation** — Code is written in the relevant `backend/`, `frontend/`, or `services/*` directory, on a feature branch.
+5. **Implementation** — Code is written in the relevant `backend/`, `frontend/`, or domain-module directory, on a feature branch.
 6. **Testing** — Unit tests accompany the implementation in the same PR. No feature is considered done without tests.
 7. **Documentation** — Relevant docs (architecture, API, or README) are updated in the same PR, not deferred.
 8. **Review** — Opened as a pull request against `develop` following the PR checklist (Section 15).
@@ -100,6 +112,10 @@ Skipping research or architecture for a change that clearly needs it is the sing
 ## 5. Git Workflow
 
 ### Branches
+
+> Current reality (2026-08-16): only `main` exists; feature PRs merge into
+> `main` (squash). The `develop`-based flow below is the target once release
+> cadence starts — adopt it at the first tagged release rather than now.
 
 | Branch | Purpose | Lifetime |
 |---|---|---|
@@ -163,7 +179,7 @@ release/v0.3.0
 
 - Python: `snake_case` for files, functions, variables; `PascalCase` for classes.
 - TypeScript/React: `camelCase` for functions/variables, `PascalCase` for components and types, files matching component names (`StudentDashboard.tsx`).
-- Directories: `kebab-case` throughout the repository (matches existing `services/adaptive-engine`, `services/knowledge-graph`).
+- Directories: `kebab-case` throughout the repository (e.g., future `backend/app/services/adaptive-engine`, `backend/app/services/knowledge-graph`).
 
 ### Formatting
 
@@ -177,13 +193,13 @@ release/v0.3.0
 | Document | Audience | Purpose |
 |---|---|---|
 | `README.md` | External visitors and new contributors | First impression, high-level orientation, entry point to everything else |
-| `docs/project/DeveloperGuide.md` (this document) | Internal team | How to work in this repository day to day |
-| `docs/project/OpenLearn_AI_v4_Technical_Specification.md` | Internal team, academic reviewers | Full system design — the source of truth for *what* the system is |
+| `docs/design/DeveloperGuide.md` (this document) | Internal team | How to work in this repository day to day |
+| `docs/design/OpenLearn_AI_v4_Technical_Specification.md` | Internal team, academic reviewers | Full system design — the source of truth for *what* the system is |
 | `docs/architecture/` | Internal team | *How* the system is built — diagrams, data flow, per-mode deployment details |
-| `docs/architecture/ADR/` | Internal team | *Why* a specific decision was made, at the time it was made |
-| `docs/research/` | Internal team | Evidence and evaluation behind a decision, before it becomes an ADR |
+| `docs/adr/` | Internal team | *Why* a specific decision was made, at the time it was made (ADRs override older spec text) |
+| `docs/research/` | Internal team | Evidence and evaluation behind a decision, before it becomes an ADR (`research/raw/` = unprocessed input, non-authoritative) |
 | `planning/` | Internal team | Time-bound operational tracking — sprints, meeting notes, weekly reports |
-| `docs/project/Roadmap.md` | Internal team and external visitors | Where the project is going, at a milestone level |
+| `planning/Roadmap/44-WEEK-EXECUTION-PLAN.md` | Internal team and external visitors | Where the project is going, week by week (schedule authority — see `docs/README.md`) |
 
 Rules:
 - Never duplicate content across these documents — link instead. If the Technical Specification already explains BKT, an architecture doc references it rather than re-explaining it.
@@ -194,7 +210,7 @@ Rules:
 
 ## 8. Services Architecture
 
-Each folder under `services/` is an independent domain module: `ingestion`, `ocr`, `embeddings`, `rag`, `knowledge-graph`, `student-model`, `adaptive-engine`, `generation`, `analytics`.
+Each domain module is an independent package under `backend/app/services/`: `ingestion`, `ocr`, `embeddings`, `rag`, `knowledge-graph`, `student-model`, `adaptive-engine`, `generation`, `analytics` (none exist yet — create on first real implementation; placement decision is ADR-0001).
 
 **Responsibility boundaries:**
 - A service exposes a single interface (`interface.py`) that other services and `backend/` depend on. No service imports another service's internals — only its interface.
@@ -262,7 +278,7 @@ Planning documents are operational and can be terse. They are not held to the sa
 
 ## 13. Architecture Decision Records (ADR)
 
-ADRs live in `docs/architecture/ADR/` and record decisions that are costly to reverse or that future contributors will reasonably ask "why was it done this way?" about.
+ADRs live in `docs/adr/` and record decisions that are costly to reverse or that future contributors will reasonably ask "why was it done this way?" about.
 
 **An ADR is warranted when:**
 - Choosing between two or more viable technologies or libraries (e.g., NetworkX vs. Neo4j for the knowledge graph).
@@ -282,7 +298,7 @@ Example: adding a new question type (e.g., matching questions) to the generation
 
 1. **Research** — If a new technique is needed (e.g., a new prompting strategy), document findings in `docs/research/`.
 2. **Architecture** — If it changes the `generation` service's interface, open an ADR describing the interface change.
-3. **Backend/Service** — Implement the new question type inside `services/generation/`, extending its interface rather than creating a new service. Add unit tests alongside the implementation.
+3. **Backend/Service** — Implement the new question type inside the `generation` module (`backend/app/services/generation/`), extending its interface rather than creating a new module. Add unit tests alongside the implementation.
 4. **Frontend** — Add the corresponding rendering/interaction component under `frontend/features/generation/` (or the relevant feature folder).
 5. **Testing** — Unit tests for the service logic, integration test for the API endpoint, and manual verification in the frontend.
 6. **Documentation** — Update `docs/architecture/SystemArchitecture.md` if the interface changed; update API docs if a new endpoint or field was added.
@@ -357,7 +373,7 @@ Non-negotiable, enforced via `.gitignore`, pre-commit hooks, and review:
 
 Over the life of the project, the structure should grow by extension, not restructuring:
 
-- New services are added as new folders under `services/`, each following the existing interface pattern — the number of services is expected to grow modestly (e.g., a future `speech` service), not proliferate without bound.
+- New services are added as new packages under `backend/app/services/`, each following the existing interface pattern — the number of services is expected to grow modestly (e.g., a future `speech` service), not proliferate without bound.
 - New documentation is added under the existing `docs/` subfolders; a new subfolder under `docs/` should only be introduced via an ADR, since it changes a convention every contributor relies on.
 - As the test suite grows, prefer expanding coverage within each service's existing `tests/` structure over introducing a separate top-level test framework.
 - Periodically (every few sprints) review `planning/` and `experiments/` for stale content — operational documents and abandoned prototypes should be archived or removed rather than left to accumulate indefinitely, since they are the folders most prone to rot.
@@ -372,6 +388,6 @@ The following are practical gaps observed against the current structure and Tech
 1. **No `CHANGELOG.md` update process is defined.** Recommend tying `CHANGELOG.md` entries to release branches (Section 5), populated from Conventional Commit messages since the last tag.
 2. **No shared/common code location for cross-service utilities** (e.g., logging setup, error types shared by multiple services). Recommend a `services/common/` (or `backend/app/core/`) module for genuinely shared code, to avoid duplication or inappropriate coupling between services as more are added.
 3. **No explicit test directory convention for `services/*` and `frontend/`** is visible in the current tree. Recommend each service and each frontend feature include its own `tests/` (or colocated `*.test.ts`) directory, matching `backend/tests/`.
-4. **Two roadmap files exist** (`ROADMAP.md` at root and `docs/project/Roadmap.md`). Recommend designating `docs/project/Roadmap.md` as canonical and reducing the root file to a one-line pointer, to avoid drift between the two.
+4. **Roadmap authority.** The roadmap lives at `planning/Roadmap/` (schedule authority: `44-WEEK-EXECUTION-PLAN.md`; strategy context: `MASTER_ROADMAP.md`; Arabic companion: `ROADMAP_GUIDE_AR.md`). Older references to `docs/project/Roadmap.md` or a root `ROADMAP.md` are obsolete — see `docs/README.md`.
 5. **`docs/api/` exists but has no defined authoring process.** Recommend documenting whether this is auto-generated from FastAPI's OpenAPI schema or hand-maintained, to avoid it silently going stale.
 6. **No `.env.example` is visible at the repository root or within `backend/`.** Recommend adding one as configuration surface grows, to keep the "never commit secrets" rule in Section 17 practical for new contributors.
