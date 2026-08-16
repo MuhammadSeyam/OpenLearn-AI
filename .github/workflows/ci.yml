@@ -67,6 +67,14 @@ jobs:
         if: steps.check_frontend.outputs.exists == 'true'
         working-directory: frontend
         run: npm run lint
+      - name: Typecheck
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: npx tsc --noEmit
+      - name: Build
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: npm run build
       - name: Run Vitest
         if: steps.check_frontend.outputs.exists == 'true' && steps.check_test_script.outputs.has_test == 'true'
         working-directory: frontend
