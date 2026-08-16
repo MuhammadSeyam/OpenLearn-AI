@@ -1,0 +1,18 @@
+# Generated artifacts — regenerate from data/ + configs/ + code, never hand-edit
+results/
+reports/
+data/processed/*
+!data/processed/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Environment / secrets
+.env
+
+# Notebooks
+.ipynb_checkpoints/

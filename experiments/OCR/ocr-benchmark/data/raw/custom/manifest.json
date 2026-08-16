@@ -1,0 +1,84 @@
+{
+  "schema": "openlearn-golden-pdfs-manifest",
+  "schema_version": 1,
+  "dataset": "custom_v1 (pilot)",
+  "description": "OpenLearn AI custom OCR benchmark documents. Pilot batch: 4 documents copied from experiments/OCR/benchmarks/ (originals preserved there). Ground truth does not exist yet; annotation is a separate upcoming task.",
+  "created": "2026-08-16",
+  "null_semantics": {
+    "expected_word_count": "null = cannot be reliably established before hand-verified ground truth exists. Will be filled during the annotation task. We deliberately do NOT estimate it from OCR output (circularity risk).",
+    "tricky_regions": "empty list = none observed during visual inspection; will be revised during annotation.",
+    "layout flags (has_table/has_formula/has_figure)": "null = not yet inspected at page level (multi-page document); false = inspected and absent."
+  },
+  "provenance": "Rights status for every document is UNKNOWN until recorded otherwise — see docs/provenance.md. No document may be redistributed or used outside internal benchmark research without resolving its provenance.",
+  "documents": [
+    {
+      "doc_id": "OL-C-001",
+      "path": "slides/1.png",
+      "lang": "en",
+      "type": "slide",
+      "scan_quality": "digital",
+      "has_table": false,
+      "has_formula": false,
+      "has_figure": false,
+      "expected_word_count": null,
+      "tricky_regions": [],
+      "pages": 1,
+      "provenance_status": "UNKNOWN",
+      "notes": "Born-digital English bullet-list slide, single column (visual inspection 2026-08-16). PaddleOCR output for this file exists in experiments/OCR/paddle-test/GPU-version-test.ipynb.",
+      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+    },
+    {
+      "doc_id": "OL-C-002",
+      "path": "slides/2.png",
+      "lang": "en",
+      "type": "slide",
+      "scan_quality": "digital",
+      "has_table": false,
+      "has_formula": false,
+      "has_figure": true,
+      "expected_word_count": null,
+      "tricky_regions": [
+        "labels scattered around a neuron diagram: short isolated text tokens, easy to miss or reorder"
+      ],
+      "pages": 1,
+      "provenance_status": "UNKNOWN",
+      "notes": "Born-digital English slide dominated by a labeled figure with few words (visual inspection 2026-08-16). Good probe for figure-region handling (no hallucinated text over the diagram).",
+      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+    },
+    {
+      "doc_id": "OL-C-003",
+      "path": "scanned/ar.png",
+      "lang": "ar",
+      "type": "scanned_page",
+      "scan_quality": "medium",
+      "has_table": false,
+      "has_formula": false,
+      "has_figure": false,
+      "expected_word_count": null,
+      "tricky_regions": [
+        "Arabic text with diacritics (tashkeel) — raw vs. diacritic-stripped CER must be reported separately",
+        "scan artifacts/noise; RTL reading order must be preserved"
+      ],
+      "pages": 1,
+      "provenance_status": "UNKNOWN",
+      "notes": "Scanned Arabic page (textbook-style content), single column, RTL (visual inspection 2026-08-16; scan_quality to be confirmed during annotation). PaddleOCR ran it with the arabic_PP-OCRv3_mobile_rec model — see notebook.",
+      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+    },
+    {
+      "doc_id": "OL-C-004",
+      "path": "lectures_digital/Data+Structre+lect1.pdf",
+      "lang": "en",
+      "type": "lecture_slides_pdf",
+      "scan_quality": "digital",
+      "has_table": null,
+      "has_formula": null,
+      "has_figure": null,
+      "expected_word_count": null,
+      "tricky_regions": [],
+      "pages": 24,
+      "provenance_status": "UNKNOWN",
+      "notes": "24-page born-digital English lecture PDF (720x540pt slides, Microsoft PowerPoint export — verified via pdfinfo 2026-08-16). Cover page: 'Data Structures', Kafrelsheikh University, Dr. Basma M. Hassan, 2024/2025. Layout flags are null: only the cover page has been inspected; pages 2-24 pending page-level inspection during annotation.",
+      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+    }
+  ]
+}
