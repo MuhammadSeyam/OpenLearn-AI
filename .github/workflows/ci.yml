@@ -16,21 +16,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-
       - name: Lint with ruff
         run: python -m ruff check .
-
       - name: Run pytest
         run: python -m pytest
 
@@ -40,7 +36,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Check if frontend exists
         id: check_frontend
         run: |
@@ -49,28 +44,36 @@ jobs:
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
-
+      - name: Check if frontend has a test script
+        id: check_test_script
+        if: steps.check_frontend.outputs.exists == 'true'
+        working-directory: frontend
+        run: |
+          if node -e "const s=require('./package.json').scripts; process.exit(s && s.test ? 0 : 1)"; then
+            echo "has_test=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_test=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Set up Node
         if: steps.check_frontend.outputs.exists == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
       - name: Install dependencies
         if: steps.check_frontend.outputs.exists == 'true'
         working-directory: frontend
         run: npm ci
-
       - name: Lint
         if: steps.check_frontend.outputs.exists == 'true'
         working-directory: frontend
         run: npm run lint
-
       - name: Run Vitest
-        if: steps.check_frontend.outputs.exists == 'true'
+        if: steps.check_frontend.outputs.exists == 'true' && steps.check_test_script.outputs.has_test == 'true'
         working-directory: frontend
         run: npm run test -- --run
-
+      - name: Skip test notice
+        if: steps.check_frontend.outputs.exists == 'true' && steps.check_test_script.outputs.has_test == 'false'
+        run: echo "frontend/package.json has no 'test' script yet — skipping Vitest step (Pod C hasn't added tests)."
       - name: Skip notice
         if: steps.check_frontend.outputs.exists == 'false'
         run: echo "No frontend/ folder yet — skipping frontend checks (Pod C hasn't scaffolded it)."
