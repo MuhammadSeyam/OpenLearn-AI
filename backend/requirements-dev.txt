@@ -1,4 +1,8 @@
+# Development/test dependencies (installed on top of requirements.txt).
 ruff==0.7.4
 pytest==8.3.3
 pytest-cov==6.0.0
-httpx2
+# HTTP client required by starlette's TestClient (used by backend/tests/test_main.py).
+# starlette>=1.6 uses the httpx2 line; the previous entry had the right package
+# but no version pin — pinned here for reproducibility.
+httpx2==2.10.0
