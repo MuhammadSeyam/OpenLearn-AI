@@ -3,3 +3,4 @@
 # Dev/test dependencies live in requirements-dev.txt.
 fastapi==0.138.1
 uvicorn==0.49.0
+pydantic-settings==2.15.0
