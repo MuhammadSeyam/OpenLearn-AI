@@ -1,84 +1,1229 @@
 {
-  "schema": "openlearn-golden-pdfs-manifest",
-  "schema_version": 1,
-  "dataset": "custom_v1 (pilot)",
-  "description": "OpenLearn AI custom OCR benchmark documents. Pilot batch: 4 documents copied from experiments/OCR/benchmarks/ (originals preserved there). Ground truth does not exist yet; annotation is a separate upcoming task.",
-  "created": "2026-08-16",
-  "null_semantics": {
-    "expected_word_count": "null = cannot be reliably established before hand-verified ground truth exists. Will be filled during the annotation task. We deliberately do NOT estimate it from OCR output (circularity risk).",
-    "tricky_regions": "empty list = none observed during visual inspection; will be revised during annotation.",
-    "layout flags (has_table/has_formula/has_figure)": "null = not yet inspected at page level (multi-page document); false = inspected and absent."
+  "schema": "openlearn-ocrbench-manifest",
+  "schema_version": 2,
+  "dataset": "custom_v2",
+  "created": "2026-08-17",
+  "sample_unit": "one benchmark sample = one document page or one standalone image",
+  "categories": {
+    "english_born_digital": "1. English born-digital",
+    "arabic_born_digital": "2. Arabic born-digital",
+    "english_scanned": "3.English scanned",
+    "arabic_scanned": "4. Arabic scanned",
+    "mixed_arabic_english": "5. Arabic + English mixed",
+    "multi_column": "6. Multi-column",
+    "tables": "7. Tables",
+    "formulas": "8. Formulas",
+    "figures_diagrams": "9. Figures-diagrams",
+    "slides": "10. Slides",
+    "dense_academic": "11. Dense academic page",
+    "noisy_low_quality": "12. Noisy-low-quality scan"
   },
-  "provenance": "Rights status for every document is UNKNOWN until recorded otherwise — see docs/provenance.md. No document may be redistributed or used outside internal benchmark research without resolving its provenance.",
+  "null_semantics": {
+    "ground_truth_status=pending": "no ground truth exists yet; manual annotation required (annotation-guidelines.md)",
+    "ground_truth_status=extracted_unverified": "text extracted from the PDF text layer as a starting point; NOT verified GT",
+    "provenance_status=UNKNOWN": "rights unknown; internal research use only (docs/provenance.md)"
+  },
+  "known_gaps": {
+    "arabic_born_digital": "no Arabic born-digital source material exists in Source/ (all Arabic files are scans/photos) — HUMAN ACTION REQUIRED",
+    "mixed_arabic_english": "only 1 verified mixed source; roadmap marks mixed Ar/En as highest priority — more sources needed",
+    "tables": "3 verified samples (target 5)",
+    "noisy_low_quality": "2 verified samples (target 5)"
+  },
   "documents": [
     {
-      "doc_id": "OL-C-001",
-      "path": "slides/1.png",
-      "lang": "en",
-      "type": "slide",
-      "scan_quality": "digital",
-      "has_table": false,
-      "has_formula": false,
-      "has_figure": false,
-      "expected_word_count": null,
-      "tricky_regions": [],
-      "pages": 1,
-      "provenance_status": "UNKNOWN",
-      "notes": "Born-digital English bullet-list slide, single column (visual inspection 2026-08-16). PaddleOCR output for this file exists in experiments/OCR/paddle-test/GPU-version-test.ipynb.",
-      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
-    },
-    {
-      "doc_id": "OL-C-002",
-      "path": "slides/2.png",
-      "lang": "en",
-      "type": "slide",
-      "scan_quality": "digital",
-      "has_table": false,
-      "has_formula": false,
-      "has_figure": true,
-      "expected_word_count": null,
-      "tricky_regions": [
-        "labels scattered around a neuron diagram: short isolated text tokens, easy to miss or reorder"
+      "sample_id": "custom_english_born_digital_001",
+      "dataset": "custom",
+      "category": "english_born_digital",
+      "category_dir": "1. English born-digital",
+      "language": [
+        "en"
       ],
-      "pages": 1,
+      "source_type": "born_digital",
+      "file": "1. English born-digital/custom_english_born_digital_001.png",
+      "page": 3,
+      "original_source": "CA lect1.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_001",
       "provenance_status": "UNKNOWN",
-      "notes": "Born-digital English slide dominated by a labeled figure with few words (visual inspection 2026-08-16). Good probe for figure-region handling (no hallucinated text over the diagram).",
-      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "born-digital lecture, text layer verified"
     },
     {
-      "doc_id": "OL-C-003",
-      "path": "scanned/ar.png",
-      "lang": "ar",
-      "type": "scanned_page",
-      "scan_quality": "medium",
-      "has_table": false,
-      "has_formula": false,
-      "has_figure": false,
-      "expected_word_count": null,
-      "tricky_regions": [
-        "Arabic text with diacritics (tashkeel) — raw vs. diacritic-stripped CER must be reported separately",
-        "scan artifacts/noise; RTL reading order must be preserved"
+      "sample_id": "custom_english_born_digital_002",
+      "dataset": "custom",
+      "category": "english_born_digital",
+      "category_dir": "1. English born-digital",
+      "language": [
+        "en"
       ],
-      "pages": 1,
+      "source_type": "born_digital",
+      "file": "1. English born-digital/custom_english_born_digital_002.png",
+      "page": 5,
+      "original_source": "Data+Structre+lect1.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_002",
       "provenance_status": "UNKNOWN",
-      "notes": "Scanned Arabic page (textbook-style content), single column, RTL (visual inspection 2026-08-16; scan_quality to be confirmed during annotation). PaddleOCR ran it with the arabic_PP-OCRv3_mobile_rec model — see notebook.",
-      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "born-digital lecture, text layer verified"
     },
     {
-      "doc_id": "OL-C-004",
-      "path": "lectures_digital/Data+Structre+lect1.pdf",
-      "lang": "en",
-      "type": "lecture_slides_pdf",
-      "scan_quality": "digital",
-      "has_table": null,
-      "has_formula": null,
-      "has_figure": null,
-      "expected_word_count": null,
-      "tricky_regions": [],
-      "pages": 24,
+      "sample_id": "custom_english_born_digital_003",
+      "dataset": "custom",
+      "category": "english_born_digital",
+      "category_dir": "1. English born-digital",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "1. English born-digital/custom_english_born_digital_003.png",
+      "page": 10,
+      "original_source": "AI_OS_Ch03.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_003",
       "provenance_status": "UNKNOWN",
-      "notes": "24-page born-digital English lecture PDF (720x540pt slides, Microsoft PowerPoint export — verified via pdfinfo 2026-08-16). Cover page: 'Data Structures', Kafrelsheikh University, Dr. Basma M. Hassan, 2024/2025. Layout flags are null: only the cover page has been inspected; pages 2-24 pending page-level inspection during annotation.",
-      "source": "Pre-existing repository sample (experiments/OCR/benchmarks/), original creator unknown; details in docs/provenance.md"
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "born-digital lecture, text layer verified"
+    },
+    {
+      "sample_id": "custom_english_born_digital_004",
+      "dataset": "custom",
+      "category": "english_born_digital",
+      "category_dir": "1. English born-digital",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "1. English born-digital/custom_english_born_digital_004.png",
+      "page": 20,
+      "original_source": "Object Oriented Programming in c++.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_004",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "born-digital lecture, text layer verified"
+    },
+    {
+      "sample_id": "custom_english_born_digital_005",
+      "dataset": "custom",
+      "category": "english_born_digital",
+      "category_dir": "1. English born-digital",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "1. English born-digital/custom_english_born_digital_005.png",
+      "page": 5,
+      "original_source": "1-MA212-Intro+to+IR+&+Boolean+Retrieval.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_005",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "born-digital lecture, text layer verified"
+    },
+    {
+      "sample_id": "custom_english_scanned_001",
+      "dataset": "custom",
+      "category": "english_scanned",
+      "category_dir": "3.English scanned",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "3.English scanned/custom_english_scanned_001.png",
+      "page": 2,
+      "original_source": "Vlec5.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "no text layer on any tested page (scanned)"
+    },
+    {
+      "sample_id": "custom_english_scanned_002",
+      "dataset": "custom",
+      "category": "english_scanned",
+      "category_dir": "3.English scanned",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "3.English scanned/custom_english_scanned_002.png",
+      "page": 3,
+      "original_source": "Vlec6.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "no text layer on any tested page (scanned)"
+    },
+    {
+      "sample_id": "custom_english_scanned_003",
+      "dataset": "custom",
+      "category": "english_scanned",
+      "category_dir": "3.English scanned",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "3.English scanned/custom_english_scanned_003.png",
+      "page": 2,
+      "original_source": "Learning Long Term Dependencies with Gradient Descent is Difficult.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "no text layer; two-column scanned paper"
+    },
+    {
+      "sample_id": "custom_english_scanned_004",
+      "dataset": "custom",
+      "category": "english_scanned",
+      "category_dir": "3.English scanned",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "3.English scanned/custom_english_scanned_004.png",
+      "page": 5,
+      "original_source": "lec+9+CP.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "no text layer on any tested page (scanned)"
+    },
+    {
+      "sample_id": "custom_english_scanned_005",
+      "dataset": "custom",
+      "category": "english_scanned",
+      "category_dir": "3.English scanned",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "3.English scanned/custom_english_scanned_005.png",
+      "page": 3,
+      "original_source": "Data-Link-Layer-Copy.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "near-zero text layer (scanned copy)"
+    },
+    {
+      "sample_id": "custom_arabic_scanned_001",
+      "dataset": "custom",
+      "category": "arabic_scanned",
+      "category_dir": "4. Arabic scanned",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "4. Arabic scanned/custom_arabic_scanned_001.png",
+      "page": null,
+      "original_source": "ar.png",
+      "difficulty": "very_hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "scanned Arabic textbook page, diacritics, RTL (visual inspection)"
+    },
+    {
+      "sample_id": "custom_arabic_scanned_002",
+      "dataset": "custom",
+      "category": "arabic_scanned",
+      "category_dir": "4. Arabic scanned",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "4. Arabic scanned/custom_arabic_scanned_002.png",
+      "page": 5,
+      "original_source": "الليالي البيضاء.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "scanned Arabic novel; no text layer (verified p3-90)"
+    },
+    {
+      "sample_id": "custom_arabic_scanned_003",
+      "dataset": "custom",
+      "category": "arabic_scanned",
+      "category_dir": "4. Arabic scanned",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "4. Arabic scanned/custom_arabic_scanned_003.png",
+      "page": 15,
+      "original_source": "الليالي البيضاء.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "scanned Arabic novel; no text layer"
+    },
+    {
+      "sample_id": "custom_arabic_scanned_004",
+      "dataset": "custom",
+      "category": "arabic_scanned",
+      "category_dir": "4. Arabic scanned",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "4. Arabic scanned/custom_arabic_scanned_004.png",
+      "page": 40,
+      "original_source": "الليالي البيضاء.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "scanned Arabic novel; no text layer"
+    },
+    {
+      "sample_id": "custom_arabic_scanned_005",
+      "dataset": "custom",
+      "category": "arabic_scanned",
+      "category_dir": "4. Arabic scanned",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "4. Arabic scanned/custom_arabic_scanned_005.png",
+      "page": 80,
+      "original_source": "الليالي البيضاء.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "scanned Arabic novel; no text layer"
+    },
+    {
+      "sample_id": "custom_mixed_arabic_english_001",
+      "dataset": "custom",
+      "category": "mixed_arabic_english",
+      "category_dir": "5. Arabic + English mixed",
+      "language": [
+        "ar",
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "5. Arabic + English mixed/custom_mixed_arabic_english_001.jpg",
+      "page": null,
+      "original_source": "Arabic English.jpg",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": true,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "handwritten mixed Arabic/English with formulas (visual inspection)"
+    },
+    {
+      "sample_id": "custom_multi_column_001",
+      "dataset": "custom",
+      "category": "multi_column",
+      "category_dir": "6. Multi-column",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "6. Multi-column/custom_multi_column_001.png",
+      "page": 2,
+      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_001",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "two-column academic paper (text layer verified)"
+    },
+    {
+      "sample_id": "custom_multi_column_002",
+      "dataset": "custom",
+      "category": "multi_column",
+      "category_dir": "6. Multi-column",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "6. Multi-column/custom_multi_column_002.png",
+      "page": 2,
+      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_002",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "two-column academic paper (text layer verified)"
+    },
+    {
+      "sample_id": "custom_multi_column_003",
+      "dataset": "custom",
+      "category": "multi_column",
+      "category_dir": "6. Multi-column",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "6. Multi-column/custom_multi_column_003.png",
+      "page": 2,
+      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_003",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "two-column academic paper (text layer verified)"
+    },
+    {
+      "sample_id": "custom_multi_column_004",
+      "dataset": "custom",
+      "category": "multi_column",
+      "category_dir": "6. Multi-column",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "6. Multi-column/custom_multi_column_004.png",
+      "page": 4,
+      "original_source": "Learning Long Term Dependencies with Gradient Descent is Difficult.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "two-column scanned paper page (no text layer)"
+    },
+    {
+      "sample_id": "custom_tables_001",
+      "dataset": "custom",
+      "category": "tables",
+      "category_dir": "7. Tables",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "7. Tables/custom_tables_001.png",
+      "page": 5,
+      "original_source": "lec1,2 statistics.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": true,
+        "formula": true,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_tables_001",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "6x4 data table + statistics symbols (visual inspection of rendered page)"
+    },
+    {
+      "sample_id": "custom_tables_002",
+      "dataset": "custom",
+      "category": "tables",
+      "category_dir": "7. Tables",
+      "language": [
+        "ar"
+      ],
+      "source_type": "scanned",
+      "file": "7. Tables/custom_tables_002.jpg",
+      "page": null,
+      "original_source": "470180880_1078242510765782_4224372347391521822_n.jpg",
+      "difficulty": "hard",
+      "features": {
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "photographed Arabic schedule table, low contrast/skew (visual inspection)"
+    },
+    {
+      "sample_id": "custom_tables_003",
+      "dataset": "custom",
+      "category": "tables",
+      "category_dir": "7. Tables",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "7. Tables/custom_tables_003.png",
+      "page": 3,
+      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": true,
+        "formula": true,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_tables_003",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "Table 1 + display equations + two-column (visual inspection)"
+    },
+    {
+      "sample_id": "custom_formulas_001",
+      "dataset": "custom",
+      "category": "formulas",
+      "category_dir": "8. Formulas",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "8. Formulas/custom_formulas_001.png",
+      "page": null,
+      "original_source": "Screenshot from 2026-08-17 14-40-44.png",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "handwritten derivation with multiple expressions (visual inspection)"
+    },
+    {
+      "sample_id": "custom_formulas_002",
+      "dataset": "custom",
+      "category": "formulas",
+      "category_dir": "8. Formulas",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "8. Formulas/custom_formulas_002.png",
+      "page": 4,
+      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_formulas_002",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "16 math tokens in text layer (verified)"
+    },
+    {
+      "sample_id": "custom_formulas_003",
+      "dataset": "custom",
+      "category": "formulas",
+      "category_dir": "8. Formulas",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "8. Formulas/custom_formulas_003.png",
+      "page": 3,
+      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
+      "difficulty": "hard",
+      "features": {
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_formulas_003",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "BN paper equation page (equations 3-7 region)"
+    },
+    {
+      "sample_id": "custom_figures_diagrams_001",
+      "dataset": "custom",
+      "category": "figures_diagrams",
+      "category_dir": "9. Figures-diagrams",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "9. Figures-diagrams/custom_figures_diagrams_001.png",
+      "page": null,
+      "original_source": "2.png",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "labeled neuron diagram slide (visual inspection)"
+    },
+    {
+      "sample_id": "custom_figures_diagrams_002",
+      "dataset": "custom",
+      "category": "figures_diagrams",
+      "category_dir": "9. Figures-diagrams",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "9. Figures-diagrams/custom_figures_diagrams_002.png",
+      "page": null,
+      "original_source": "5690_create-star-schema-data-model-using-microsoft-toolset.028.png",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "star-schema diagram (visual inspection)"
+    },
+    {
+      "sample_id": "custom_figures_diagrams_003",
+      "dataset": "custom",
+      "category": "figures_diagrams",
+      "category_dir": "9. Figures-diagrams",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "9. Figures-diagrams/custom_figures_diagrams_003.png",
+      "page": 4,
+      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_figures_diagrams_003",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "transformer architecture figure dominates page (visual inspection)"
+    },
+    {
+      "sample_id": "custom_slides_001",
+      "dataset": "custom",
+      "category": "slides",
+      "category_dir": "10. Slides",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "10. Slides/custom_slides_001.png",
+      "page": null,
+      "original_source": "1.png",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "born-digital bullet slide (visual inspection)"
+    },
+    {
+      "sample_id": "custom_slides_002",
+      "dataset": "custom",
+      "category": "slides",
+      "category_dir": "10. Slides",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "10. Slides/custom_slides_002.png",
+      "page": null,
+      "original_source": "Screenshot from 2026-08-17 14-39-17.png",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "handwritten-style slide (visual inspection)"
+    },
+    {
+      "sample_id": "custom_slides_003",
+      "dataset": "custom",
+      "category": "slides",
+      "category_dir": "10. Slides",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "10. Slides/custom_slides_003.png",
+      "page": null,
+      "original_source": "Screenshot from 2026-08-17 14-39-28.png",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "handwritten-style slide (visual inspection)"
+    },
+    {
+      "sample_id": "custom_slides_004",
+      "dataset": "custom",
+      "category": "slides",
+      "category_dir": "10. Slides",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "10. Slides/custom_slides_004.png",
+      "page": null,
+      "original_source": "Screenshot from 2026-08-17 14-39-40.png",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "handwritten-style slide (visual inspection)"
+    },
+    {
+      "sample_id": "custom_slides_005",
+      "dataset": "custom",
+      "category": "slides",
+      "category_dir": "10. Slides",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "10. Slides/custom_slides_005.png",
+      "page": 3,
+      "original_source": "Transformers 1.pdf",
+      "difficulty": "easy",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_slides_005",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "lecture slide export (text layer verified)"
+    },
+    {
+      "sample_id": "custom_dense_academic_001",
+      "dataset": "custom",
+      "category": "dense_academic",
+      "category_dir": "11. Dense academic page",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "11. Dense academic page/custom_dense_academic_001.png",
+      "page": 5,
+      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_001",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "dense two-column paper body (text layer verified)"
+    },
+    {
+      "sample_id": "custom_dense_academic_002",
+      "dataset": "custom",
+      "category": "dense_academic",
+      "category_dir": "11. Dense academic page",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "11. Dense academic page/custom_dense_academic_002.png",
+      "page": 6,
+      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_002",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "dense two-column paper body (text layer verified)"
+    },
+    {
+      "sample_id": "custom_dense_academic_003",
+      "dataset": "custom",
+      "category": "dense_academic",
+      "category_dir": "11. Dense academic page",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "11. Dense academic page/custom_dense_academic_003.png",
+      "page": 4,
+      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": true,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_003",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "dense two-column paper body (text layer verified)"
+    },
+    {
+      "sample_id": "custom_dense_academic_004",
+      "dataset": "custom",
+      "category": "dense_academic",
+      "category_dir": "11. Dense academic page",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "11. Dense academic page/custom_dense_academic_004.png",
+      "page": 30,
+      "original_source": "Object Oriented Programming in c++.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_004",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "dense lecture text page (text layer verified)"
+    },
+    {
+      "sample_id": "custom_dense_academic_005",
+      "dataset": "custom",
+      "category": "dense_academic",
+      "category_dir": "11. Dense academic page",
+      "language": [
+        "en"
+      ],
+      "source_type": "born_digital",
+      "file": "11. Dense academic page/custom_dense_academic_005.png",
+      "page": 10,
+      "original_source": "1-MA212-Intro+to+IR+&+Boolean+Retrieval.pdf",
+      "difficulty": "medium",
+      "features": {
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": true
+      },
+      "ground_truth_status": "extracted_unverified",
+      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_005",
+      "provenance_status": "UNKNOWN",
+      "render": {
+        "dpi": 150,
+        "tool": "pdftoppm"
+      },
+      "evidence": "dense lecture text page (text layer verified)"
+    },
+    {
+      "sample_id": "custom_noisy_low_quality_001",
+      "dataset": "custom",
+      "category": "noisy_low_quality",
+      "category_dir": "12. Noisy-low-quality scan",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "12. Noisy-low-quality scan/custom_noisy_low_quality_001.jpg",
+      "page": null,
+      "original_source": "English only.jpg",
+      "difficulty": "very_hard",
+      "features": {
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "blurry photographed handwritten notes (visual inspection)"
+    },
+    {
+      "sample_id": "custom_noisy_low_quality_002",
+      "dataset": "custom",
+      "category": "noisy_low_quality",
+      "category_dir": "12. Noisy-low-quality scan",
+      "language": [
+        "en"
+      ],
+      "source_type": "scanned",
+      "file": "12. Noisy-low-quality scan/custom_noisy_low_quality_002.jpg",
+      "page": null,
+      "original_source": "photo_5_2024-03-18_13-39-46.jpg",
+      "difficulty": "very_hard",
+      "features": {
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "multi_column": false,
+        "mixed_language": false,
+        "dense": false
+      },
+      "ground_truth_status": "pending",
+      "ground_truth_path": null,
+      "provenance_status": "UNKNOWN",
+      "render": null,
+      "evidence": "low-resolution photographed handwritten notes (visual inspection)"
     }
   ]
 }

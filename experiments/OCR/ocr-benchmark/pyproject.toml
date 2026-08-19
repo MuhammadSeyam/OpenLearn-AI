@@ -7,7 +7,9 @@ requires-python = ">=3.12"
 # Metrics libraries (jiwer, rapidfuzz) and OCR engines (paddleocr, tesseract, ...)
 # are added in later tasks, each in its own pinned environment, per
 # experiments/OCR/OCR_BENCHMARKING_HANDBOOK.md Phase 0/1.
-dependencies = []
+dependencies = [
+    "pyarrow>=25.0.1",
+]
 
 [dependency-groups]
 dev = [

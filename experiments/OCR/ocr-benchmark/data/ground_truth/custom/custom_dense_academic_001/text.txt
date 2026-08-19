@@ -1,0 +1,47 @@
+Figure 2: An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities
+between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts
+at the bottom. The GPUs communicate only at certain layers. The network’s input is 150,528-dimensional, and
+the number of neurons in the network’s remaining layers is given by 253,440–186,624–64,896–64,896–43,264–
+4096–4096–1000.
+neurons in a kernel map). The second convolutional layer takes as input the (response-normalized
+and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48.
+The third, fourth, and fifth convolutional layers are connected to one another without any intervening
+pooling or normalization layers. The third convolutional layer has 384 kernels of size 3 × 3 ×
+256 connected to the (normalized, pooled) outputs of the second convolutional layer. The fourth
+convolutional layer has 384 kernels of size 3 × 3 × 192 , and the fifth convolutional layer has 256
+kernels of size 3 × 3 × 192. The fully-connected layers have 4096 neurons each.
+
+4
+
+Reducing Overfitting
+
+Our neural network architecture has 60 million parameters. Although the 1000 classes of ILSVRC
+make each training example impose 10 bits of constraint on the mapping from image to label, this
+turns out to be insufficient to learn so many parameters without considerable overfitting. Below, we
+describe the two primary ways in which we combat overfitting.
+4.1
+
+Data Augmentation
+
+The easiest and most common method to reduce overfitting on image data is to artificially enlarge
+the dataset using label-preserving transformations (e.g., [25, 4, 5]). We employ two distinct forms
+of data augmentation, both of which allow transformed images to be produced from the original
+images with very little computation, so the transformed images do not need to be stored on disk.
+In our implementation, the transformed images are generated in Python code on the CPU while the
+GPU is training on the previous batch of images. So these data augmentation schemes are, in effect,
+computationally free.
+The first form of data augmentation consists of generating image translations and horizontal reflections. We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the
+256×256 images and training our network on these extracted patches4 . This increases the size of our
+training set by a factor of 2048, though the resulting training examples are, of course, highly interdependent. Without this scheme, our network suffers from substantial overfitting, which would have
+forced us to use much smaller networks. At test time, the network makes a prediction by extracting
+five 224 × 224 patches (the four corner patches and the center patch) as well as their horizontal
+reflections (hence ten patches in all), and averaging the predictions made by the network’s softmax
+layer on the ten patches.
+The second form of data augmentation consists of altering the intensities of the RGB channels in
+training images. Specifically, we perform PCA on the set of RGB pixel values throughout the
+ImageNet training set. To each training image, we add multiples of the found principal components,
+4
+
+This is the reason why the input images in Figure 2 are 224 × 224 × 3-dimensional.
+
+5

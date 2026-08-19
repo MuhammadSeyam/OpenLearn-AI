@@ -16,3 +16,7 @@ __pycache__/
 
 # Notebooks
 .ipynb_checkpoints/
+
+
+# Large public datasets — download separately
+data/raw/Public/

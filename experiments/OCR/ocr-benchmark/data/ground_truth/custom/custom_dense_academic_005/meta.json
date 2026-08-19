@@ -1,0 +1,8 @@
+{
+  "sample_id": "custom_dense_academic_005",
+  "status": "extracted_unverified",
+  "source": "pdf_text_layer (pdftotext)",
+  "note": "Extracted from the born-digital PDF text layer. NOT manually verified ground truth; may differ from the rendered page (ligatures, reading order, formulas). Verify before scoring.",
+  "extracted_with": "pdftotext -f 10 -l 10",
+  "created": "2026-08-17"
+}

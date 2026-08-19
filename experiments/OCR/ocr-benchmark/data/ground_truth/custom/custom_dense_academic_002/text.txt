@@ -1,0 +1,71 @@
+Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations
+for different layer types. n is the sequence length, d is the representation dimension, k is the kernel
+size of convolutions and r the size of the neighborhood in restricted self-attention.
+Layer Type
+
+Complexity per Layer
+
+Self-Attention
+Recurrent
+Convolutional
+Self-Attention (restricted)
+
+O(n2 · d)
+O(n · d2 )
+O(k · n · d2 )
+O(r · n · d)
+
+Sequential
+Operations
+O(1)
+O(n)
+O(1)
+O(1)
+
+Maximum Path Length
+O(1)
+O(n)
+O(logk (n))
+O(n/r)
+
+bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel
+as the embeddings, so that the two can be summed. There are many choices of positional encodings,
+learned and fixed [8].
+In this work, we use sine and cosine functions of different frequencies:
+P E(pos,2i) = sin(pos/100002i/dmodel )
+P E(pos,2i+1) = cos(pos/100002i/dmodel )
+where pos is the position and i is the dimension. That is, each dimension of the positional encoding
+corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π. We
+chose this function because we hypothesized it would allow the model to easily learn to attend by
+relative positions, since for any fixed offset k, P Epos+k can be represented as a linear function of
+P Epos .
+We also experimented with using learned positional embeddings [8] instead, and found that the two
+versions produced nearly identical results (see Table 3 row (E)). We chose the sinusoidal version
+because it may allow the model to extrapolate to sequence lengths longer than the ones encountered
+during training.
+
+4
+
+Why Self-Attention
+
+In this section we compare various aspects of self-attention layers to the recurrent and convolutional layers commonly used for mapping one variable-length sequence of symbol representations
+(x1 , ..., xn ) to another sequence of equal length (z1 , ..., zn ), with xi , zi ∈ Rd , such as a hidden
+layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we
+consider three desiderata.
+One is the total computational complexity per layer. Another is the amount of computation that can
+be parallelized, as measured by the minimum number of sequential operations required.
+The third is the path length between long-range dependencies in the network. Learning long-range
+dependencies is a key challenge in many sequence transduction tasks. One key factor affecting the
+ability to learn such dependencies is the length of the paths forward and backward signals have to
+traverse in the network. The shorter these paths between any combination of positions in the input
+and output sequences, the easier it is to learn long-range dependencies [11]. Hence we also compare
+the maximum path length between any two input and output positions in networks composed of the
+different layer types.
+As noted in Table 1, a self-attention layer connects all positions with a constant number of sequentially
+executed operations, whereas a recurrent layer requires O(n) sequential operations. In terms of
+computational complexity, self-attention layers are faster than recurrent layers when the sequence
+length n is smaller than the representation dimensionality d, which is most often the case with
+sentence representations used by state-of-the-art models in machine translations, such as word-piece
+[31] and byte-pair [25] representations. To improve computational performance for tasks involving
+very long sequences, self-attention could be restricted to considering only a neighborhood of size r in
+6
