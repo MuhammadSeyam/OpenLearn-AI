@@ -1,0 +1,27 @@
+# Dataset Config — `custom_v1` (pilot)
+
+dataset:
+  name: custom_v1
+  version: 0.1.0-pilot
+  status: pilot            # 4 documents; NOT the full 20-PDF golden set yet
+  manifest: data/raw/custom/manifest.json
+  split: all documents belong to the single "pilot" split (no train/test
+         distinction — this is an evaluation-only dataset; nothing here may
+         ever be used to tune an engine, an engine is only evaluated against it)
+
+scope:
+  # Current pilot deliberately does NOT yet cover (gap to close when growing
+  # toward the roadmap's 20-PDF golden set):
+  #   - pure-Arabic born-digital documents        (have: scanned only)
+  #   - mixed Arabic/English documents            (have: none — highest priority)
+  #   - documents with tables                     (have: none)
+  #   - documents with formulas                   (have: none)
+  #   - low-quality scans                         (have: one medium scan)
+  #   - exams/assignments, textbook excerpts      (have: none)
+  included_document_types: [slide, scanned_page, lecture_slides_pdf]
+  languages: [en, ar]
+
+paths:
+  raw_root: data/raw/custom
+  ground_truth_root: data/ground_truth/custom   # empty by design until annotation task
+  processed_root: data/processed                # generated; gitignored

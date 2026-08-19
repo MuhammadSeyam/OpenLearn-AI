@@ -4,8 +4,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* =========================================================
+   OPENLEARN AI — DESIGN TOKENS
+   Tailwind CSS 4 + CSS Variables
+   ========================================================= */
+
 @theme inline {
-  /* Colors */
+  /* =======================================================
+     COLORS — CORE
+     ======================================================= */
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -33,14 +41,36 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Charts */
+  /* =======================================================
+     COLORS — SEMANTIC
+     ======================================================= */
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* =======================================================
+     CHARTS
+     ======================================================= */
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  /* Sidebar */
+  /* =======================================================
+     SIDEBAR
+     ======================================================= */
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -50,12 +80,63 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Typography */
+  /* =======================================================
+     TYPOGRAPHY
+     ======================================================= */
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
 
-  /* Border Radius */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+
+  /* =======================================================
+     SPACING
+     ======================================================= */
+
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+
+  /* =======================================================
+     BORDER RADIUS
+     ======================================================= */
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -63,6 +144,28 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* =======================================================
+     SHADOWS
+     ======================================================= */
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* =======================================================
+     RESPONSIVE BREAKPOINTS
+     ======================================================= */
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
 }
 
 /* =========================================================
@@ -70,52 +173,90 @@
    ========================================================= */
 
 :root {
-  /* Main */
+  /* =======================================================
+     CORE
+     ======================================================= */
+
   --background: oklch(0.985 0.003 255);
   --foreground: oklch(0.20 0.025 260);
 
-  /* Surfaces */
+  /* =======================================================
+     SURFACES
+     ======================================================= */
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.20 0.025 260);
 
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.20 0.025 260);
 
-  /* Primary — Indigo */
+  /* =======================================================
+     BRAND
+     ======================================================= */
+
   --primary: oklch(0.55 0.22 264);
   --primary-foreground: oklch(0.985 0 0);
 
-  /* Secondary */
   --secondary: oklch(0.95 0.015 255);
   --secondary-foreground: oklch(0.25 0.035 260);
 
-  /* Muted */
-  --muted: oklch(0.95 0.01 255);
-  --muted-foreground: oklch(0.50 0.035 255);
-
-  /* Accent */
   --accent: oklch(0.94 0.025 260);
   --accent-foreground: oklch(0.30 0.06 260);
 
-  /* Destructive */
-  --destructive: oklch(0.58 0.22 27);
+  /* =======================================================
+     MUTED
+     ======================================================= */
 
-  /* Borders & Inputs */
+  --muted: oklch(0.95 0.01 255);
+  --muted-foreground: oklch(0.50 0.035 255);
+
+  /* =======================================================
+     SEMANTIC STATES
+     ======================================================= */
+
+  --success: oklch(0.62 0.18 155);
+  --success-foreground: oklch(0.98 0.01 155);
+
+  --warning: oklch(0.78 0.17 75);
+  --warning-foreground: oklch(0.25 0.04 75);
+
+  --error: oklch(0.58 0.22 27);
+  --error-foreground: oklch(0.98 0.01 27);
+
+  --info: oklch(0.62 0.18 240);
+  --info-foreground: oklch(0.98 0.01 240);
+
+  /* Keep shadcn destructive compatible */
+  --destructive: var(--error);
+
+  /* =======================================================
+     BORDERS & INPUTS
+     ======================================================= */
+
   --border: oklch(0.90 0.015 255);
   --input: oklch(0.90 0.015 255);
   --ring: oklch(0.55 0.22 264);
 
-  /* Charts */
+  /* =======================================================
+     CHARTS
+     ======================================================= */
+
   --chart-1: oklch(0.55 0.22 264);
   --chart-2: oklch(0.65 0.18 155);
   --chart-3: oklch(0.72 0.16 75);
   --chart-4: oklch(0.62 0.20 320);
   --chart-5: oklch(0.60 0.20 30);
 
-  /* Radius */
+  /* =======================================================
+     BASE RADIUS
+     ======================================================= */
+
   --radius: 0.625rem;
 
-  /* Sidebar */
+  /* =======================================================
+     SIDEBAR
+     ======================================================= */
+
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.20 0.025 260);
 
@@ -134,8 +275,16 @@
    ========================================================= */
 
 .dark {
+  /* =======================================================
+     CORE
+     ======================================================= */
+
   --background: oklch(0.15 0.025 260);
   --foreground: oklch(0.96 0.01 255);
+
+  /* =======================================================
+     SURFACES
+     ======================================================= */
 
   --card: oklch(0.19 0.025 260);
   --card-foreground: oklch(0.96 0.01 255);
@@ -143,38 +292,66 @@
   --popover: oklch(0.19 0.025 260);
   --popover-foreground: oklch(0.96 0.01 255);
 
-  /* Primary */
+  /* =======================================================
+     BRAND
+     ======================================================= */
+
   --primary: oklch(0.65 0.20 264);
   --primary-foreground: oklch(0.15 0.025 260);
 
-  /* Secondary */
   --secondary: oklch(0.25 0.025 260);
   --secondary-foreground: oklch(0.96 0.01 255);
 
-  /* Muted */
-  --muted: oklch(0.25 0.025 260);
-  --muted-foreground: oklch(0.70 0.025 255);
-
-  /* Accent */
   --accent: oklch(0.28 0.04 260);
   --accent-foreground: oklch(0.95 0.015 255);
 
-  /* Destructive */
-  --destructive: oklch(0.65 0.20 27);
+  /* =======================================================
+     MUTED
+     ======================================================= */
 
-  /* Borders & Inputs */
+  --muted: oklch(0.25 0.025 260);
+  --muted-foreground: oklch(0.70 0.025 255);
+
+  /* =======================================================
+     SEMANTIC STATES
+     ======================================================= */
+
+  --success: oklch(0.70 0.18 155);
+  --success-foreground: oklch(0.15 0.025 155);
+
+  --warning: oklch(0.78 0.17 75);
+  --warning-foreground: oklch(0.18 0.025 75);
+
+  --error: oklch(0.65 0.20 27);
+  --error-foreground: oklch(0.15 0.025 27);
+
+  --info: oklch(0.70 0.18 240);
+  --info-foreground: oklch(0.15 0.025 240);
+
+  --destructive: var(--error);
+
+  /* =======================================================
+     BORDERS & INPUTS
+     ======================================================= */
+
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.65 0.20 264);
 
-  /* Charts */
+  /* =======================================================
+     CHARTS
+     ======================================================= */
+
   --chart-1: oklch(0.65 0.20 264);
   --chart-2: oklch(0.70 0.18 155);
   --chart-3: oklch(0.75 0.16 75);
   --chart-4: oklch(0.68 0.20 320);
   --chart-5: oklch(0.68 0.20 30);
 
-  /* Sidebar */
+  /* =======================================================
+     SIDEBAR
+     ======================================================= */
+
   --sidebar: oklch(0.18 0.025 260);
   --sidebar-foreground: oklch(0.96 0.01 255);
 
@@ -197,12 +374,12 @@
     @apply border-border outline-ring/50;
   }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-
   html {
     @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 
   button,

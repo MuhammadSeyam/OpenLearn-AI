@@ -45,7 +45,7 @@ Tools that "chat with your PDF" answer questions but remember nothing between se
 - Generated flashcards, adaptive quizzes, and CAT-style exam simulation
 - Learning analytics: progress, weak areas, readiness
 
-Full detail: [Technical Specification](docs/project/OpenLearn_AI_v4_Technical_Specification.md).
+Full detail: [Technical Specification](docs/design/OpenLearn_AI_v4_Technical_Specification.md).
 
 ## Deployment modes
 
@@ -57,61 +57,63 @@ One codebase, three presets:
 | **Hybrid** | Local core, cloud augmentation where useful | Only for cloud calls | 8 GB RAM                   |
 | **Cloud**  | Entirely managed APIs                       | Required             | 4 GB RAM                   |
 
-Mode-specific guides: [Local](docs/architecture/OfflineMode.md) · [Hybrid](docs/architecture/HybridArchitecture.md) · [Cloud](docs/architecture/CloudMode.md)
+Mode profiles and hardware requirements: [deployment requirements](docs/design/OpenLearn_AI_System_Requirements_and_Deployment_Profiles.md) · user-facing edition: [install guide](docs/design/OpenLearn_AI_User_System_Requirements_Guide.md)
 
 ## Architecture, briefly
 
 Content moves through ingestion → knowledge base → knowledge graph → student model → learner profile → adaptive engine → generation → analytics, with feedback loops that let every study session refine future recommendations. Nothing calls an AI provider directly — everything goes through a provider abstraction layer, so swapping a model or vendor is a config change, not a rewrite.
 
-Diagrams and full rationale: [`docs/architecture/SystemArchitecture.md`](docs/architecture/SystemArchitecture.md) · [`docs/architecture/DataFlow.md`](docs/architecture/DataFlow.md) · [ADRs](docs/architecture/ADR/)
+Diagrams and rationale: [`docs/architecture/SystemArchitecture.md`](docs/architecture/SystemArchitecture.md) · [`docs/architecture/DataFlow.md`](docs/architecture/DataFlow.md) · decisions: [ADRs](docs/adr/)
 
 ## Repository layout
 
 ```
-backend/         FastAPI service, migrations, tests
-frontend/        Next.js app
-services/        ingestion · ocr · embeddings · rag · knowledge-graph ·
-                  student-model · adaptive-engine · generation · analytics
-models/          configs, prompts, local model assets
-infrastructure/  docker, kubernetes, nginx, monitoring
-docs/            project docs, architecture, research
-datasets/        sample data, evaluation sets, benchmarks
-experiments/     notebooks, prototypes
+backend/         FastAPI app (skeleton), tests  — future domain modules:
+                 backend/app/services/{ingestion,ocr,embeddings,rag,...}
+frontend/        Next.js 16 app (scaffold)
+infra/           docker compose dev environment
+docs/            design · architecture · adr · research (+ raw/, archive/)
+planning/        44-week execution plan · roadmaps · sprints · team roles
+experiments/     OCR benchmark + exploratory notebooks (never imported by product code)
+presentations/   demo materials
 ```
+
+Authoritative map of what-each-document-decides: [`docs/README.md`](docs/README.md).
 
 ## Getting started
 
-There is no working `docker-compose up` yet — don't file an issue if one doesn't exist. The fastest way to get oriented right now:
+There is no end-to-end product yet — don't file an issue if a quickstart is missing. The fastest way to get oriented right now:
 
-1. Read [`docs/project/Vision.md`](docs/project/Vision.md) and the [Technical Specification](docs/project/OpenLearn_AI_v4_Technical_Specification.md).
-2. Look at [`experiments/prototypes/`](experiments/prototypes/) for the current interactive prototypes.
-3. Check [Development Status](#development-status) and [`docs/project/Roadmap.md`](docs/project/Roadmap.md) for what's actively being built.
-
-A real quickstart will replace this section once the backend and frontend are runnable — tracked in the roadmap.
+1. Read [`AI_CONTEXT.md`](AI_CONTEXT.md) (current state) and the [Technical Specification](docs/design/OpenLearn_AI_v4_Technical_Specification.md).
+2. For local development: backend (`backend/` + `infra/docker-compose.dev.yml`), frontend (`frontend/`, Node 20), OCR benchmark (`experiments/OCR/ocr-benchmark/`, needs `uv`) — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+3. Check [Development status](#development-status) and the [44-week execution plan](planning/Roadmap/44-WEEK-EXECUTION-PLAN.md) for what's actively being built.
 
 ## Documentation map
 
+Which document decides what: [`docs/README.md`](docs/README.md) (authority hierarchy).
+
 | You want to...                                      | Go to                                                        |
 | --------------------------------------------------- | ------------------------------------------------------------ |
-| Understand the vision and scope                     | [`docs/project/Vision.md`](docs/project/Vision.md), [`docs/project/Scope.md`](docs/project/Scope.md) |
-| Read the full technical design                      | [`docs/project/OpenLearn_AI_v4_Technical_Specification.md`](docs/project/OpenLearn_AI_v4_Technical_Specification.md) |
-| See why a decision was made                         | [`docs/architecture/ADR/`](docs/architecture/ADR/)           |
-| Check hardware/deployment requirements              | [`docs/project/OpenLearn_AI_System_Requirements_and_Deployment_Profiles.md`](docs/project/OpenLearn_AI_System_Requirements_and_Deployment_Profiles.md) |
+| Get oriented in the current repository state        | [`AI_CONTEXT.md`](AI_CONTEXT.md)                             |
+| Read the full technical design                      | [`docs/design/OpenLearn_AI_v4_Technical_Specification.md`](docs/design/OpenLearn_AI_v4_Technical_Specification.md) |
+| See why a decision was made                         | [`docs/adr/`](docs/adr/)                                     |
+| Check hardware/deployment requirements              | [`docs/design/OpenLearn_AI_System_Requirements_and_Deployment_Profiles.md`](docs/design/OpenLearn_AI_System_Requirements_and_Deployment_Profiles.md) |
 | Understand the research basis (BKT, RAG, OCR, etc.) | [`docs/research/`](docs/research/)                           |
-| Track progress                                      | [`docs/project/Roadmap.md`](docs/project/Roadmap.md) *(canonical — the root `ROADMAP.md` is a short pointer to this file)* |
+| Track progress                                      | [`planning/Roadmap/44-WEEK-EXECUTION-PLAN.md`](planning/Roadmap/44-WEEK-EXECUTION-PLAN.md) · sprints in [`planning/`](planning/) |
+| Understand the OCR evaluation methodology           | [`experiments/OCR/OCR_BENCHMARKING_HANDBOOK.md`](experiments/OCR/OCR_BENCHMARKING_HANDBOOK.md) |
 
 ## Development status
 
-Active, pre-alpha. Documentation and architecture are ahead of implementation by design — this is a deliberate spec-first approach, not neglect. Expect frequent breaking changes until v1.0.
+Active, pre-alpha. Documentation and architecture are ahead of implementation by design — this is a deliberate spec-first approach, not neglect. Current engineering focus (Sprint 02): repository foundation cleanup and the OCR benchmark pipeline (ground truth → metrics → one engine → validate harness). Expect frequent breaking changes until v1.0.
 
 ## Contributing
 
 Start here: [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
 Right now, the highest-value contributions are:
-- Implementing a single `services/*` module against its documented interface
-- Reviewing or proposing an [ADR](docs/architecture/ADR/) for an open architectural question
-- Improving OCR/embedding coverage for Arabic in [`docs/research/`](docs/research/)
+- The OCR benchmark pipeline (ground-truth annotation, metrics, engine adapters) in [`experiments/OCR/ocr-benchmark/`](experiments/OCR/ocr-benchmark/)
+- Reviewing or proposing an [ADR](docs/adr/) for an open architectural question (e.g., the deferred vector-store decision)
+- Backend/frontend tasks listed in the current [sprint](planning/Sprint-02.md)
 
 Avoid opening large, unscoped PRs — module boundaries are intentional; check the relevant ADR before restructuring anything.
 

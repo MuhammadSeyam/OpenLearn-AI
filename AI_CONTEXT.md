@@ -56,24 +56,23 @@ ingestion → knowledge base → knowledge graph → student model → learner p
 
 **Pre-alpha. Spec-first by design.** Documentation and planning are deliberately ahead of implementation (README: "this is a deliberate spec-first approach, not neglect"). Expected frequent breaking changes until v1.0.
 
-What exists vs. what is empty:
+What exists vs. what is empty (refreshed 2026-08-16 foundation cleanup — see `docs/repository-foundation-audit.md`):
 
 | Area | Status |
 |---|---|
-| `docs/design/` | Substantive: v4 Technical Specification (1,377 lines), System Requirements (402 lines), User Requirements Guide (202 lines), DeveloperGuide (377 lines) |
-| `planning/Roadmap/` | Substantive: MASTER_ROADMAP.md (2,029 lines), ROADMAP_GUIDE_AR.md (Arabic, 1,982 lines) |
-| `planning/team-roles/` | TEAM_HANDBOOK_v1.1.md (327 lines) |
-| `docs/ai-reports/` | AI-assisted OSS research: perplexity_results.md (4,651 lines), grok_results.md, OpenLearn-AI-OSS-Research-Phase1.md, selected.md, UsefulLinks.md |
-| `docs/research/OCR.md` | Only non-empty research doc (pipeline flowchart) |
-| `backend/` | Only real application code: `app/main.py` (FastAPI `GET /` → `{"Hello": "World"}`). No routers, models, auth, DB, tests, or migrations |
-| `frontend/` | 100% empty (no package.json; Next.js app not created) |
-| `services/` (9 dirs) | 100% empty — intended modules: ingestion, ocr, embeddings, rag, knowledge-graph, student-model, adaptive-engine, generation, analytics |
-| `infrastructure/` | 100% empty (no Dockerfiles, compose, k8s, CI) |
-| `models/`, `datasets/`, `assets/`, `.github/` | 100% empty |
-| `experiments/` | The most complete "code": 2 RTL Arabic HTML prototypes + PaddleOCR GPU notebook + OCR benchmark samples |
-| `presentations/` | One demo slide deck HTML |
+| `docs/design/` | Substantive: v4 Technical Specification (1,377 lines), System Requirements (402 lines), User Requirements Guide (202 lines), DeveloperGuide (updated to match real layout) |
+| `planning/Roadmap/` | Substantive: 44-WEEK-EXECUTION-PLAN.md (schedule authority), MASTER_ROADMAP.md (strategy), ROADMAP_GUIDE_AR.md (companion) |
+| `planning/` sprints | Sprint-01.md (retrospective from git history), Sprint-02.md (live scope) — previously empty |
+| `docs/ai-reports/` | **Moved** to `docs/research/raw/ai-reports/` (non-authoritative raw research) |
+| `docs/research/` | README index + OCR.md flowchart; former empty stubs deleted; raw/ archive |
+| `backend/` | FastAPI skeleton (`app/main.py` hello-world + 1 smoke test); deps curated (fastapi, uvicorn + dev pins) |
+| `frontend/` | Next.js 16 + React 19 + Tailwind 4 + shadcn scaffold; design-system preview page; no RTL/i18n yet |
+| `experiments/` | OCR benchmark (`ocr-benchmark/`: pinned uv project, 4-doc pilot dataset w/ manifest + provenance, package skeleton), PaddleOCR notebook (paths fixed), HTML prototypes |
+| `infra/` | docker-compose.dev.yml (backend + postgres 16), backend Dockerfile |
+| `.github/` | CI workflow (backend lint+pytest; frontend lint+typecheck+build), CODEOWNERS, PR template |
+| `docs/adr/` | ADR-0001..0004 (monolith, doc authority, OCR benchmark, vector-store deferral) |
 
-**No CI, no tests, no lint/format config files exist** (`pyproject.toml`, `ruff.toml`, `.eslintrc`, `package.json`, `.pre-commit-config.yaml` all absent). `.gitignore` contains only `__pycache__/` and `*.pyc`.
+**CI, tests and lint exist and pass** (backend: ruff + pytest, verified in clean venv; frontend: lint/typecheck/build in CI — this workstation has no Node). Empty placeholder files were filled or deleted in the 2026-08-16 cleanup.
 
 ---
 
@@ -99,17 +98,14 @@ What exists vs. what is empty:
 - `scripts/setup_project_structure.sh` — the skeleton generator that created the empty scaffolding.
 - `LICENSE` — AGPL-3.0.
 
-### Empty files (0 bytes) that are heavily referenced — likely the highest-priority gap
-`docs/architecture/{SystemArchitecture,DataFlow,OfflineMode,HybridArchitecture,CloudMode}.md`, `docs/design/{Vision,Scope}.md`, `docs/research/{AdaptiveLearning,CompetitorAnalysis,LiteratureReview,ModelEvaluation,RAG,StudentModel}.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `planning/Sprint-01.md`, `planning/Sprint-02.md`.
+### Empty files & broken references — RESOLVED (2026-08-16 foundation cleanup)
+Formerly-empty files were filled (architecture SystemArchitecture/DataFlow, root CHANGELOG/CONTRIBUTING/CODE_OF_CONDUCT, Sprint-01/02) or deleted (empty research/design stubs, mode docs). README links repaired to real paths; ADRs live at `docs/adr/`. Point-in-time record: `docs/repository-foundation-audit.md`.
 
-### Broken references (README links to files that don't exist)
-- `docs/project/*` (Vision.md, Scope.md, Roadmap.md, Technical Specification, System Requirements) — actual files live in `docs/design/`. `docs/project/` does not exist.
-- Root `ROADMAP.md` — doesn't exist; roadmap is at `planning/Roadmap/MASTER_ROADMAP.md`.
-- `docs/architecture/ADR/` — empty directory (roadmap requires ADR-001..005 by W4 and 1–15 by W18; zero exist).
-
-### Known defects
-- `backend/requirements.txt` is a **UTF-16 LE / CRLF** `pip freeze` dump (from a Windows experiment venv). pip cannot parse it as-is; it includes Windows-only deps (`pywin32`), Jupyter/ML libs, and pins `fastapi==0.138.1`, `pydantic==2.13.4`, `uvicorn==0.49.0`, `opencv-python==4.11.0.86`, `jax/jaxlib==0.7.1`, `sentencepiece`.
-- Untracked `.venv` directories exist under `experiments/OCR/` (PaddlePaddle GPU 3.0.0, PaddleOCR 3.0.3, Python 3.12) — self-ignored via each venv's own `.gitignore`; invisible to git.
+### Known defects — RESOLVED or tracked
+- `backend/requirements.txt` (formerly a UTF-16 pip-freeze with Windows deps; earlier re-encoded, then curated 2026-08-16 to `fastapi==0.138.1` + `uvicorn==0.49.0` only).
+- `requirements-dev.txt` `httpx2` — investigated: **not a typo**; starlette 1.6 TestClient requires the httpx2 package line. Now pinned `httpx2==2.10.0`.
+- OCR notebook absolute `/run/media/...` paths — fixed to repo-relative; notebook outputs retain historical logs.
+- Remaining human decisions: OL-C-004 PDF rights (see benchmark `docs/provenance.md`); vector-store choice (ADR-0004, due W4); roadmap capacity re-baseline.
 
 ---
 
@@ -196,6 +192,16 @@ The "why" is documented in research + ai-reports; formal ADRs are pending (none 
 ---
 
 ## 10. Current Repository Snapshot
+
+> **Refresh note (2026-08-16):** the snapshot below predates the frontend
+> scaffold, CI, and the foundation cleanup; it is retained for history. The
+> tables in §3/§4 above are the current state, and
+> `docs/repository-foundation-audit.md` is the authoritative point-in-time
+> record of the cleanup. Gaps #3 (CI), #4 (broken references), #5 (empty
+> stubs), #6 (requirements corruption), #9 (.gitignore), #12 (sprints) and
+> #13 (empty governance docs) are resolved; #2 (ADRs) is resolved for
+> foundation decisions (0001–0004); the rest remain open and tracked in
+> `planning/Sprint-02.md`.
 
 **State at last commit (`a638548`, 5 Aug 2026; clean working tree; 47 tracked files on `main`):** the project is at the very beginning of its 44-week plan. Everything about the *implementation* surface is still scaffolding created by `scripts/setup_project_structure.sh`; the value in the repo today is the documentation, roadmap, research, and UI prototypes.
 

@@ -1,0 +1,26 @@
+[project]
+name = "ocrbench"
+version = "0.1.0"
+description = "OpenLearn AI OCR benchmark — evaluation harness for Arabic/English educational document OCR (foundation stage: scaffold only, no metrics/adapters implemented yet)."
+requires-python = ">=3.12"
+# Runtime dependencies: intentionally EMPTY at this stage.
+# Metrics libraries (jiwer, rapidfuzz) and OCR engines (paddleocr, tesseract, ...)
+# are added in later tasks, each in its own pinned environment, per
+# experiments/OCR/OCR_BENCHMARKING_HANDBOOK.md Phase 0/1.
+dependencies = []
+
+[dependency-groups]
+dev = [
+    # Test runner for the benchmark package's own unit tests (added in the metrics task).
+    "pytest>=8.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ocrbench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
