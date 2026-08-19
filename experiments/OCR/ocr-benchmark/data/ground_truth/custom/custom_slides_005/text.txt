@@ -1,0 +1,25 @@
+Sequence Models
+
+
+RNN
+
+LSTM
+
+
+Word Embedding
+
+
+Seq2seq
+
+
+Encoder
+
+Context vector 
+
+Decoder 
+
+
+Context Vector Problem (Information bottleneck) 
+
+
+Attention
