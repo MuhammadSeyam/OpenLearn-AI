@@ -1,0 +1,570 @@
+sentence1,sentence2,score
+Transformer architectures rely on self-attention mechanisms to capture long-range dependencies within sequential data.,Self-attention enables Transformer models to learn relationships between distant tokens without recurrent computations.,0.96
+Gradient checkpointing reduces GPU memory consumption during neural network training by recomputing intermediate activations.,Caching every intermediate activation increases memory usage while decreasing recomputation overhead.,0.31
+Approximate nearest neighbor search significantly improves retrieval latency in high-dimensional embedding spaces.,Vector databases commonly employ approximate indexing techniques to accelerate similarity search over embeddings.,0.94
+Normalization layers stabilize optimization by reducing internal covariate shift during deep neural network training.,Batch normalization improves convergence by normalizing feature distributions across mini-batches.,0.91
+Dynamic programming decomposes optimization problems into overlapping subproblems with optimal substructure.,Greedy algorithms always produce globally optimal solutions regardless of problem structure.,0.18
+Distributed consensus algorithms ensure fault-tolerant agreement among replicas despite partial network failures.,Protocols such as Raft and Paxos maintain consistency across replicated distributed systems.,0.95
+Contrastive learning encourages semantically similar samples to occupy nearby regions in the embedding space.,Contrastive objectives maximize the distance between positive pairs while minimizing it for unrelated samples.,0.22
+Retrieval-Augmented Generation enhances factual accuracy by incorporating external knowledge during inference.,Large language models can retrieve relevant documents before generating grounded responses.,0.93
+Compiler optimizations such as loop unrolling aim to reduce execution overhead and improve instruction-level parallelism.,Loop unrolling decreases loop control overhead and may expose additional opportunities for parallel execution.,0.97
+Federated learning enables collaborative model training while preserving data locality across participating clients.,"Instead of sharing raw datasets, federated learning exchanges model updates between distributed devices.",0.98
+A convolutional neural network learns spatial hierarchies by applying shared filters across localized regions of an input image.,CNNs extract increasingly complex visual features through layers of learnable convolutional filters.,0.96
+Overfitting occurs when a model memorizes training examples instead of learning patterns that generalize to unseen data.,Underfitting happens when a model is too simple to capture important relationships in the training dataset.,0.36
+Regularization techniques constrain model complexity to reduce the risk of overfitting.,Methods such as L1 and L2 penalties discourage excessively complex parameter configurations.,0.92
+A binary search tree organizes elements according to an ordering property that enables efficient search operations.,Hash tables provide constant-average-time lookup by mapping keys to positions using a hash function.,0.39
+Backpropagation computes gradients of the loss with respect to neural network parameters using the chain rule.,The chain rule allows errors to be propagated backward through successive layers to calculate parameter gradients.,0.98
+Dropout randomly disables a subset of neurons during training to prevent excessive dependence on individual features.,Randomly removing activations during training can improve the generalization ability of neural networks.,0.94
+A learning rate determines the magnitude of parameter updates performed by an optimization algorithm.,The batch size controls how many training examples contribute to each gradient update.,0.42
+Adam combines adaptive learning rates with momentum-based gradient updates to accelerate neural network optimization.,The Adam optimizer maintains moving estimates of gradients and squared gradients for parameter updates.,0.97
+A recurrent neural network processes sequential information by maintaining a hidden state that carries information across time steps.,RNNs use recurrent connections to propagate information from previous positions through a sequence.,0.97
+Long Short-Term Memory networks address certain limitations of standard recurrent networks by using gated memory cells.,"LSTM architectures employ input, forget, and output gates to regulate information stored in their memory states.",0.96
+Attention mechanisms assign different importance weights to input elements when constructing an output representation.,Attention allows a model to selectively focus on the most relevant parts of an input sequence.,0.95
+Positional encodings provide sequence-order information to Transformer models that process tokens without recurrence.,Transformers require positional representations because self-attention alone does not inherently encode token order.,0.97
+Tokenization converts raw text into smaller units that can be mapped to numerical representations for language models.,A tokenizer decomposes textual input into tokens before the sequence is processed by a neural language model.,0.98
+Word embeddings represent linguistic units as dense vectors whose geometric relationships can encode semantic information.,Embedding models map words or text fragments into continuous vector spaces where related meanings can be represented closely.,0.93
+TF-IDF assigns higher importance to terms that frequently occur in a document but are relatively uncommon across the corpus.,TF-IDF reduces the weight of words that appear across many documents while emphasizing document-specific terms.,0.96
+Principal Component Analysis projects high-dimensional observations onto directions that maximize variance.,PCA can reduce dimensionality by transforming correlated features into a smaller set of orthogonal components.,0.91
+K-means clustering partitions observations into groups by minimizing the distance between samples and their assigned centroids.,The K-means algorithm iteratively assigns points to nearby cluster centers and updates those centers.,0.98
+Hierarchical clustering constructs a nested structure of groups by repeatedly merging or splitting clusters.,"Unlike K-means, hierarchical clustering can represent relationships between clusters as a dendrogram.",0.89
+Precision measures the proportion of retrieved positive predictions that are actually relevant.,Recall measures the proportion of all relevant instances that were successfully retrieved by the system.,0.47
+F1-score combines precision and recall using their harmonic mean.,The F1 metric provides a single score that balances false-positive and false-negative behavior.,0.95
+Cross-validation estimates model generalization by repeatedly training and evaluating on different partitions of the dataset.,K-fold validation divides the data into several subsets and rotates the subset used for evaluation.,0.97
+Data leakage occurs when information unavailable during real-world prediction is unintentionally incorporated into model training.,Leakage can produce artificially high evaluation results because the model indirectly accesses information from the validation or test data.,0.96
+"A confusion matrix summarizes classification predictions by counting true positives, true negatives, false positives, and false negatives.",Classification performance can be analyzed by examining how predicted labels correspond to actual class assignments.,0.91
+Support Vector Machines construct decision boundaries that maximize the margin between different classes.,An SVM identifies a separating hyperplane that attempts to maximize the distance to the nearest training examples.,0.98
+Decision trees recursively partition feature space using conditions selected according to impurity reduction criteria.,Tree-based classifiers split observations into increasingly homogeneous subsets based on feature values.,0.96
+Random forests improve robustness by aggregating predictions from multiple decision trees trained on randomized subsets of data and features.,Random forest models combine many independently constructed trees to reduce variance and improve generalization.,0.98
+Gradient boosting constructs an ensemble sequentially by fitting new models to errors made by previously trained models.,Boosting algorithms iteratively add weak learners that focus on correcting the mistakes of the current ensemble.,0.97
+Principal component analysis is an unsupervised dimensionality reduction method.,Linear regression predicts a continuous target by estimating relationships between dependent and independent variables.,0.14
+A convolution operation applies a learnable kernel across an input to detect localized patterns.,Pooling layers reduce spatial dimensions by aggregating information from neighboring activations.,0.58
+Batch normalization normalizes intermediate activations using statistics computed from training mini-batches.,Layer normalization normalizes activations across the features of an individual training example.,0.61
+Quantization reduces the numerical precision used to represent model parameters and activations.,Model compression can decrease memory requirements and inference costs by representing weights with fewer bits.,0.93
+Knowledge distillation trains a smaller student model to reproduce behavior learned by a larger teacher model.,A compact neural network can learn from the predictions or intermediate representations of a more capable pretrained model.,0.96
+Fine-tuning adapts a pretrained model to a downstream task by continuing optimization on task-specific data.,Transfer learning commonly initializes a model with previously learned parameters before adapting it to a new dataset.,0.94
+Parameter-efficient fine-tuning updates only a small subset of parameters while keeping most pretrained weights fixed.,LoRA reduces the computational cost of adaptation by learning low-rank updates instead of modifying all model parameters.,0.95
+Retrieval-Augmented Generation retrieves external information before passing relevant context to a generative language model.,RAG systems combine information retrieval with language generation to produce responses grounded in retrieved documents.,0.99
+Dense retrieval represents queries and documents as vectors and compares them using a similarity function.,Semantic search retrieves text based on vector representations rather than relying exclusively on exact keyword matches.,0.94
+A reranker evaluates initially retrieved documents using a more computationally expensive relevance model.,Reranking improves search results by reconsidering the ordering of candidates returned by an initial retrieval stage.,0.98
+Cosine similarity measures the angular similarity between two vectors regardless of their individual magnitudes.,Two embeddings can have high cosine similarity when they point in nearly the same direction even if their lengths differ.,0.96
+Euclidean distance measures the straight-line distance between two points in a vector space.,Cosine similarity compares vector orientation rather than the absolute geometric distance between their endpoints.,0.52
+Vector databases are optimized for storing and querying high-dimensional numerical representations.,"Traditional relational databases primarily organize structured records using tables, rows, columns, and relational constraints.",0.34
+Approximate nearest neighbor algorithms trade a small amount of retrieval accuracy for substantially faster similarity search.,ANN indexing methods accelerate vector search by avoiding exhaustive comparison against every stored embedding.,0.97
+"The CAP theorem describes a trade-off involving consistency, availability, and partition tolerance in distributed systems.",Distributed databases must consider how network partitions affect consistency and availability guarantees.,0.94
+Load balancing distributes incoming requests across multiple servers to prevent individual instances from becoming overloaded.,A load balancer can improve scalability and availability by routing traffic among several backend servers.,0.98
+Caching stores frequently accessed data closer to consumers to reduce repeated computation or network access.,A cache can decrease response latency by serving previously retrieved information without contacting the original data source.,0.97
+Docker containers isolate applications and their dependencies using operating-system-level virtualization.,Containerization packages software with its required libraries and runtime environment so it can execute consistently across systems.,0.96
+"Kubernetes automates deployment, scaling, and management of containerized workloads across a cluster.",Container orchestration platforms coordinate the lifecycle and resource allocation of applications running across multiple machines.,0.95
+Apache Spark performs distributed data processing by partitioning computations across multiple nodes.,Spark enables large-scale analytics by executing data transformations in parallel across a cluster.,0.97
+MapReduce divides large-scale computation into mapping and reducing phases that can execute across distributed workers.,The map phase transforms input records while the reduce phase aggregates intermediate results produced by workers.,0.96
+"ACID transactions provide guarantees related to atomicity, consistency, isolation, and durability.",Database transaction mechanisms ensure that groups of operations satisfy predefined correctness and persistence guarantees.,0.94
+Deadlock occurs when multiple processes wait indefinitely for resources held by one another.,A circular dependency among processes competing for locked resources can prevent all of them from making progress.,0.98
+Virtual memory allows processes to use an address space that can exceed the physical memory directly available to the system.,Operating systems use techniques such as paging to map virtual addresses to physical memory locations.,0.95
+"Public-key cryptography uses separate keys for encryption and decryption, unlike symmetric cryptography.",Asymmetric encryption relies on a mathematically related public key and private key for secure communication.,0.97
+Hash functions map arbitrary-length inputs to fixed-size outputs and are commonly used for integrity verification.,Cryptographic hashes produce deterministic fixed-length digests that change significantly when the input is modified.,0.98
+Graph neural networks propagate information between connected nodes to learn representations that incorporate graph structure.,GNNs aggregate features from neighboring vertices to construct representations influenced by local graph topology.,0.97
+Reinforcement learning optimizes an agent's behavior through interactions with an environment and feedback from rewards.,An RL agent learns a policy by selecting actions and receiving numerical feedback from the environment.,0.98
+Q-learning estimates the expected future return of taking an action in a particular state.,Q-learning learns action-value estimates that guide an agent toward decisions with higher long-term rewards.,0.97
+Policy gradient methods optimize a parameterized policy directly rather than learning an explicit action-value function.,Actor-based reinforcement learning approaches adjust policy parameters according to gradients of expected cumulative reward.,0.94
+Generative adversarial networks consist of a generator and discriminator trained through competing objectives.,GAN training involves a generator producing synthetic samples while a discriminator attempts to distinguish them from real data.,0.99
+Variational autoencoders learn probabilistic latent representations by optimizing a reconstruction objective together with a regularization term.,VAEs encode observations into distributions over latent variables and decode samples from those distributions.,0.95
+Autoencoders learn compressed representations by reconstructing their input from a lower-dimensional latent representation.,An encoder maps data into a latent space while a decoder attempts to reproduce the original input.,0.98
+Mean squared error penalizes the squared difference between predicted and observed continuous values.,MSE computes the average of squared prediction errors across numerical targets.,0.99
+Cross-entropy loss measures the discrepancy between predicted probability distributions and target class distributions.,Classification models commonly minimize cross-entropy to assign high probability to the correct class.,0.96
+The softmax function converts a vector of logits into a probability distribution whose components sum to one.,Softmax normalizes class scores into probabilities that can be interpreted as relative confidence across categories.,0.97
+Sigmoid activation maps scalar inputs into values between zero and one.,The sigmoid function is frequently used to produce probabilities for binary classification tasks.,0.93
+ReLU introduces nonlinearity by returning zero for negative inputs while preserving positive values.,Rectified linear units output the input when it is positive and otherwise produce zero.,0.99
+Vanishing gradients can prevent early layers of deep networks from receiving sufficiently strong learning signals.,Very small backpropagated derivatives may cause parameters in lower layers to update extremely slowly.,0.97
+Exploding gradients occur when derivatives grow excessively during backpropagation through deep or recurrent networks.,Gradient clipping is often used to limit unusually large updates caused by unstable gradient magnitudes.,0.67
+Early stopping terminates training when validation performance stops improving for a specified period.,Monitoring validation loss can prevent continued optimization after a model begins to overfit the training data.,0.95
+Data augmentation increases training diversity by applying transformations that preserve the underlying class semantics.,"Image classification models can generalize better when training examples are randomly cropped, flipped, or otherwise transformed.",0.91
+Imbalanced classification datasets contain substantially different numbers of examples across their target classes.,"When one class dominates the training data, accuracy may provide a misleading assessment of classifier performance.",0.74
+One-hot encoding represents a categorical value using a binary vector with a single active position.,Categorical variables can be transformed into vectors where each category corresponds to a distinct indicator dimension.,0.96
+Feature scaling transforms numerical variables so that differences in their original magnitudes have less influence on optimization.,Standardization commonly converts features to approximately zero mean and unit variance.,0.89
+Min-max normalization maps numerical features into a predefined interval such as zero to one.,"Unlike standardization, min-max scaling uses the observed minimum and maximum values to transform a feature range.",0.82
+Linear regression estimates continuous outputs using a weighted combination of input features.,Logistic regression models class probabilities using a linear predictor passed through a nonlinear function.,0.56
+Logistic regression is commonly used for binary classification by modeling the probability of a target class.,A logistic model applies the sigmoid function to a linear combination of input variables.,0.96
+Naive Bayes classifiers assume conditional independence among features given the target class.,The probabilistic model estimates class likelihoods by combining feature probabilities under an independence assumption.,0.96
+Principal component analysis seeks directions that preserve as much variance as possible during dimensionality reduction.,Linear discriminant analysis seeks projections that improve separation between labeled classes.,0.62
+Random forests reduce prediction variance by averaging decisions from many decorrelated decision trees.,Bagging ensembles train multiple models on resampled datasets and aggregate their predictions.,0.91
+"Boosting builds an ensemble incrementally, with later learners focusing on observations that previous learners handled poorly.",Bagging trains base estimators independently and combines them without sequentially correcting previous errors.,0.51
+A* search combines the cost accumulated so far with a heuristic estimate of the remaining path cost.,The A-star algorithm prioritizes nodes according to both their known path cost and estimated distance to the goal.,0.99
+Breadth-first search explores graph vertices level by level using a queue.,Depth-first search explores as far as possible along a branch before backtracking.,0.49
+Dijkstra's algorithm computes shortest paths in graphs with non-negative edge weights.,The algorithm repeatedly selects the currently closest unvisited vertex and relaxes its outgoing edges.,0.97
+Topological sorting produces an ordering of vertices in a directed acyclic graph such that every dependency precedes its dependent node.,A DAG can be ordered so that each directed edge points from an earlier vertex to a later vertex.,0.98
+A stack follows a last-in-first-out access pattern.,A queue removes elements according to the first-in-first-out principle.,0.21
+A heap is a tree-based data structure commonly used to implement priority queues.,Priority queues repeatedly return the element with the highest or lowest priority depending on their ordering rule.,0.89
+Hash collisions occur when different keys produce the same hash table index.,Collision resolution strategies such as chaining and open addressing allow multiple keys to share a hash location.,0.97
+TCP provides reliable ordered delivery of data between communicating endpoints.,"TCP uses acknowledgments, sequence numbers, and retransmissions to provide reliable transport.",0.99
+UDP provides a connectionless transport mechanism with lower protocol overhead than TCP.,"Unlike TCP, UDP does not inherently guarantee reliable ordered delivery of packets.",0.95
+The Domain Name System translates human-readable domain names into network addresses.,DNS allows clients to resolve names such as example.com into corresponding IP addresses.,0.98
+HTTP is an application-layer protocol used for exchanging resources between clients and servers.,Web browsers typically communicate with web servers through HTTP or its encrypted variant HTTPS.,0.95
+"TLS protects network communication by providing encryption, authentication, and integrity guarantees.",HTTPS uses TLS to secure HTTP traffic against interception and unauthorized modification.,0.96
+Public-key encryption allows a sender to encrypt information using a recipient's public key.,Only the corresponding private key should be capable of decrypting data encrypted under the recipient's public key.,0.98
+A digital signature provides evidence that a message was produced by the holder of a particular private key.,Digital signatures can provide authenticity and integrity by allowing recipients to verify signed data using a public key.,0.97
+SQL injection exploits improperly handled user input to manipulate database queries.,Parameterized queries help prevent attackers from altering SQL statements through malicious input.,0.89
+Cross-site scripting allows malicious scripts to execute in the context of a victim's browser.,XSS vulnerabilities can occur when untrusted input is inserted into web pages without appropriate output encoding.,0.97
+Authentication verifies the identity of a user or system.,Authorization determines which resources or operations an authenticated entity is permitted to access.,0.52
+A database index accelerates data retrieval by maintaining an auxiliary structure optimized for searching.,Indexes can improve query performance but introduce additional storage and update overhead.,0.95
+Normalization reduces redundant data and organizes relational tables according to dependency constraints.,Database normalization can minimize update anomalies by decomposing poorly structured relations.,0.98
+A primary key uniquely identifies each record within a relational database table.,Foreign keys establish relationships between records by referencing a key in another table.,0.57
+A database transaction groups multiple operations into a logical unit that should satisfy consistency requirements.,Transactions allow related database modifications to succeed or fail according to defined atomicity guarantees.,0.96
+Garbage collection automatically identifies memory that is no longer reachable by a program.,Automatic memory management can reclaim objects that are no longer referenced by active program execution.,0.98
+A process is an executing program with its own virtual address space and operating-system-managed resources.,Threads within the same process can share memory while executing independently.,0.67
+Multithreading enables a process to execute multiple flows of control concurrently.,Threads can perform different tasks within the same process while sharing its address space.,0.96
+A mutex provides mutual exclusion so that only one thread can access a protected critical section at a time.,Locks prevent concurrent threads from modifying shared resources simultaneously when exclusive access is required.,0.97
+A compiler translates source code written in a high-level programming language into a lower-level representation that can be executed by a computer.,Compilers transform human-readable programs into machine-oriented code through multiple translation stages.,0.96
+An interpreter executes program instructions directly rather than producing a separate native executable beforehand.,Interpreted languages typically evaluate source code or an intermediate representation at runtime.,0.95
+Lexical analysis converts a sequence of source characters into tokens that can be processed by later compiler stages.,"A lexer identifies constructs such as identifiers, operators, literals, and keywords within source code.",0.97
+A parser verifies whether a token sequence conforms to the grammatical rules of a programming language.,Syntax analysis constructs a structural representation of code according to the language grammar.,0.96
+An abstract syntax tree represents the hierarchical structure of a program while omitting unnecessary syntactic details.,ASTs capture relationships between programming constructs in a form that compilers can analyze and transform.,0.97
+Garbage collection can introduce pauses when the runtime identifies and reclaims unreachable objects.,Automatic memory management may temporarily interrupt application execution while reclaiming unused memory.,0.94
+Static typing detects certain type inconsistencies before a program is executed.,A statically typed language performs type checking during compilation or another pre-execution analysis stage.,0.97
+Polymorphism allows different object types to respond to the same interface or operation according to their own implementations.,Object-oriented polymorphism enables a common interface to represent multiple concrete behaviors.,0.98
+Encapsulation restricts direct access to internal object state and exposes controlled interfaces for interacting with it.,Encapsulation hides implementation details behind public methods or interfaces.,0.97
+Inheritance allows a class to derive attributes and behaviors from another class.,Subclassing enables specialized objects to reuse or extend functionality defined by a parent class.,0.98
+The time complexity of binary search is logarithmic because the search interval is approximately halved after each comparison.,Binary search reduces the remaining search space exponentially with every iteration.,0.98
+Merge sort recursively divides an array and then combines sorted subarrays.,The merge-sort algorithm follows a divide-and-conquer strategy and achieves O(n log n) time complexity.,0.96
+Quick sort partitions an array around a selected pivot before recursively sorting the resulting partitions.,The pivot-based partitioning process is the central operation used by quicksort.,0.97
+A minimum spanning tree connects all vertices of a weighted graph while minimizing the total edge weight.,MST algorithms construct a connected acyclic subgraph with the smallest possible aggregate edge cost.,0.98
+Kruskal's algorithm builds a minimum spanning tree by repeatedly selecting the cheapest edge that does not create a cycle.,Kruskal's method typically processes edges in ascending order and uses a disjoint-set structure to detect cycles.,0.97
+Dynamic programming often stores solutions to previously solved subproblems to avoid redundant computation.,Memoization improves recursive algorithms by caching results that would otherwise be recalculated.,0.91
+Greedy algorithms make locally optimal choices with the expectation that these choices lead to a globally optimal solution.,A greedy strategy commits to the best-looking decision at each step without generally reconsidering previous choices.,0.96
+Backtracking explores candidate solutions incrementally and abandons partial solutions that cannot lead to valid results.,Constraint satisfaction problems can be solved by recursively constructing assignments and reversing decisions that violate constraints.,0.93
+Amortized analysis evaluates the average cost of operations over a sequence rather than considering each operation independently.,An operation with occasional expensive executions can still have a low amortized complexity when averaged across many operations.,0.96
+An adjacency matrix represents graph connectivity using a two-dimensional structure indexed by pairs of vertices.,"For a graph with n vertices, an adjacency matrix requires O(n²) storage.",0.92
+CPU caches reduce memory access latency by storing recently or frequently accessed data close to the processor.,Cache hierarchies exploit temporal and spatial locality to improve processor performance.,0.97
+Pipelining increases processor throughput by allowing different instruction stages to operate concurrently.,"Instruction pipelines overlap the execution of multiple instructions across stages such as fetch, decode, and execution.",0.98
+Branch prediction attempts to determine the likely outcome of a conditional instruction before the actual result is known.,Modern processors speculate on control-flow decisions to reduce stalls caused by conditional branches.,0.96
+A context switch occurs when the operating system saves the execution state of one task and restores another.,Switching between processes or threads requires the scheduler to preserve and reload execution contexts.,0.97
+A semaphore coordinates concurrent execution by maintaining a counter that controls access to shared resources.,Semaphores can be used to synchronize threads or limit the number of tasks accessing a resource simultaneously.,0.96
+Race conditions arise when program behavior depends on the timing of concurrent operations accessing shared state.,Unsynchronized threads may produce inconsistent results when they modify common data concurrently.,0.97
+A scheduler determines which runnable process or thread should receive processor time.,Operating-system scheduling policies control how CPU resources are allocated among competing tasks.,0.98
+Paging divides virtual memory into fixed-size pages that can be mapped to physical memory frames.,Virtual memory systems commonly use page tables to translate virtual addresses into physical addresses.,0.96
+A system call provides a controlled interface through which user programs request services from the operating system.,"Applications invoke operating-system functionality through mechanisms such as file, process, and memory system calls.",0.97
+The kernel is the privileged core of an operating system responsible for managing hardware and fundamental system resources.,"Operating-system kernels coordinate resources such as CPU scheduling, memory management, and device access.",0.98
+IPv4 addresses consist of 32 bits and are commonly represented using four decimal octets.,An IPv4 address can be written in dotted-decimal notation such as 192.168.1.10.,0.98
+IPv6 expands the address space to 128 bits to accommodate the growing number of networked devices.,The IPv6 protocol provides a dramatically larger address space than IPv4.,0.98
+NAT allows multiple private hosts to communicate with external networks through a shared public address.,Network address translation modifies address information as packets cross between private and public networks.,0.96
+A router forwards packets between different networks based on destination addressing information.,Routers determine suitable next hops for IP packets using routing tables.,0.98
+A switch forwards Ethernet frames within a local network based on hardware addresses.,Layer-two switches use MAC address information to direct frames toward appropriate ports.,0.98
+Latency represents the time required for data to travel between two points or for an operation to complete.,Network latency is commonly measured as the delay between sending information and receiving the corresponding response.,0.95
+Bandwidth describes the maximum rate at which data can theoretically be transmitted over a communication channel.,A network link with higher bandwidth can carry more bits per second under suitable conditions.,0.97
+Packet loss occurs when transmitted network packets fail to reach their intended destination.,"Congestion, hardware problems, and unreliable communication links can cause packets to be dropped.",0.95
+A firewall filters network traffic according to predefined security rules.,"Firewalls can block unauthorized connections based on properties such as addresses, ports, and protocols.",0.97
+A VPN creates an encrypted communication tunnel between endpoints across an untrusted network.,Virtual private networks can protect traffic from local network observers by encrypting transmitted data.,0.96
+A relational database organizes information into tables connected through defined relationships.,Relational data models represent entities and associations using structured relations.,0.97
+NoSQL databases are designed to support data models that do not necessarily follow the traditional relational table structure.,"Document, key-value, graph, and wide-column databases are common categories of NoSQL systems.",0.91
+Database sharding distributes portions of a dataset across multiple servers.,Horizontal partitioning can improve database scalability by spreading records among independent nodes.,0.95
+Replication maintains multiple copies of data across different storage nodes.,Database replicas can improve availability and provide additional capacity for read operations.,0.95
+A materialized view stores the result of a query physically instead of recomputing it for every request.,Materialized views can accelerate expensive analytical queries at the cost of additional storage and refresh operations.,0.94
+An OLTP system is optimized for frequent transactional operations involving relatively small amounts of data.,"Online transaction processing systems prioritize fast inserts, updates, deletes, and point queries.",0.97
+OLAP systems are designed to support analytical queries over large datasets.,Data warehouses commonly use OLAP workloads to analyze historical information and identify business trends.,0.96
+A data warehouse integrates information from multiple sources for analytical reporting and decision support.,Enterprise warehouses centralize historical data so organizations can perform large-scale analytical queries.,0.97
+"ETL pipelines extract data from source systems, transform it into a suitable representation, and load it into a target system.",Traditional data integration workflows often clean and restructure source records before storing them in analytical platforms.,0.96
+ELT loads raw data into a target platform before applying transformations within that platform.,Modern cloud warehouses often perform transformations after ingestion because they provide scalable compute resources.,0.96
+A data lake stores large volumes of raw or semi-structured information in its original or near-original form.,"Unlike highly curated warehouses, data lakes can retain diverse datasets before their analytical structure is fully defined.",0.96
+Apache Kafka is a distributed event-streaming platform designed for high-throughput data ingestion and processing.,Kafka organizes messages into topics and allows producers and consumers to exchange streams of records.,0.98
+Airflow represents data workflows as directed acyclic graphs of scheduled tasks.,Apache Airflow is commonly used to orchestrate and monitor dependencies between data pipeline operations.,0.98
+A data pipeline can fail because upstream data changes violate assumptions made by downstream transformations.,Schema evolution can break dependent processing jobs when the structure of incoming records changes unexpectedly.,0.91
+Stream processing analyzes records continuously as they arrive rather than waiting for a complete batch.,Real-time analytics systems process events incrementally to reduce the delay between data generation and insight.,0.97
+Cloud computing provides on-demand access to configurable computing resources over a network.,Cloud platforms allow organizations to provision infrastructure and services without directly owning all underlying hardware.,0.96
+Infrastructure as Code defines infrastructure configuration using machine-readable files.,"IaC allows servers, networks, and cloud resources to be provisioned reproducibly through declarative or programmatic definitions.",0.98
+Continuous integration automatically builds and tests software changes as developers integrate code into a shared repository.,CI pipelines help detect integration problems early by validating changes before they reach later deployment stages.,0.96
+Continuous deployment automatically releases validated software changes to production.,A deployment pipeline can publish new application versions without requiring a manual production release step.,0.95
+Blue-green deployment maintains two production environments and switches traffic between them during releases.,Blue-green strategies can reduce deployment downtime by preparing a new environment before directing users to it.,0.97
+Unit tests verify the behavior of small isolated components of a software system.,"A unit test typically checks an individual function, method, or module independently from external dependencies.",0.98
+Integration testing evaluates whether multiple software components interact correctly.,Integration tests can reveal failures that are not visible when each component is tested in isolation.,0.96
+Regression testing ensures that previously working functionality remains correct after software changes.,Automated regression suites help detect unintended side effects introduced by new implementations.,0.97
+An API defines rules through which software components communicate and exchange data.,Application programming interfaces expose operations or resources that can be consumed by other programs.,0.98
+"RESTful APIs commonly represent resources using HTTP methods such as GET, POST, PUT, and DELETE.",REST architectures use standard web mechanisms to manipulate and retrieve representations of resources.,0.96
+A convolutional neural network can preserve local spatial relationships through its receptive fields.,Convolutional layers connect each neuron to a restricted region of the preceding feature map.,0.97
+Object detection identifies both the categories and locations of objects within an image.,Detection models typically predict bounding boxes along with class probabilities.,0.98
+Semantic segmentation assigns a class label to each pixel of an image.,Image segmentation produces dense spatial predictions that identify the category associated with individual pixels.,0.98
+Optical character recognition converts visual representations of text into machine-readable characters.,OCR systems detect and recognize printed or handwritten text from images or scanned documents.,0.98
+Image augmentation can improve computer vision models by exposing them to varied transformations of training examples.,"Techniques such as rotation, cropping, and color perturbation can increase the diversity of visual training data.",0.97
+"Named entity recognition identifies spans of text corresponding to categories such as people, organizations, and locations.",NER models assign semantic entity types to relevant phrases within natural language input.,0.98
+Sentiment analysis determines the emotional or evaluative polarity expressed in a piece of text.,"A sentiment classifier may label a review as positive, negative, or neutral.",0.96
+Machine translation automatically converts text from one natural language into another.,Neural translation systems learn mappings between source-language sequences and target-language sequences.,0.96
+Text summarization produces a shorter representation that preserves important information from a longer document.,Summarization systems identify or generate concise text capturing the main ideas of the source.,0.98
+Question answering systems retrieve or generate responses to questions expressed in natural language.,QA models can identify relevant passages or generate answers based on contextual information.,0.95
+Self-supervised learning creates training signals from the structure or content of unlabeled data.,Pretraining objectives can generate pseudo-labels automatically without requiring manual annotation for every example.,0.95
+Unsupervised learning discovers patterns in data without using explicit target labels during training.,Clustering and dimensionality reduction are common examples of methods that can operate without labeled outcomes.,0.96
+Semi-supervised learning combines a relatively small labeled dataset with a larger collection of unlabeled examples.,Semi-supervised methods attempt to exploit unlabeled data to improve learning when manual annotations are limited.,0.98
+Active learning selects the most informative examples for human annotation instead of labeling the entire dataset.,An active learning system can reduce annotation costs by asking an oracle to label strategically chosen samples.,0.98
+Transfer learning allows knowledge learned from one task or dataset to improve performance on another related task.,A pretrained representation can serve as the starting point for solving a downstream problem with limited data.,0.97
+Model calibration measures whether predicted probabilities correspond to actual event frequencies.,A well-calibrated classifier should produce predictions whose confidence levels reflect empirical correctness rates.,0.98
+ROC curves illustrate the trade-off between true-positive and false-positive rates across classification thresholds.,Changing the decision threshold produces different sensitivity and false-alarm rates that can be visualized with an ROC curve.,0.98
+A precision-recall curve is particularly informative when positive examples are rare.,PR curves show how precision changes as recall varies across different classification thresholds.,0.97
+Model drift occurs when the statistical properties of incoming data change after deployment.,A production model may become less accurate when real-world data distributions differ substantially from those observed during training.,0.96
+Concept drift occurs when the relationship between input features and the target variable changes over time.,A predictive model can degrade when the underlying rule connecting observations to outcomes evolves after deployment.,0.98
+Explainable AI methods attempt to make model predictions more understandable to humans.,Interpretability techniques can reveal which input features contributed to a machine learning prediction.,0.96
+Feature importance estimates quantify how strongly individual input variables influence a model's predictions.,Tree-based models can rank features according to their contribution to reducing impurity during splitting.,0.9
+Adversarial examples are inputs intentionally modified to cause machine learning models to make incorrect predictions.,Small perturbations that are often difficult for humans to notice can cause neural classifiers to produce wrong outputs.,0.98
+Differential privacy limits the influence of individual records on released statistical or machine learning results.,Privacy-preserving algorithms can add carefully controlled noise so that information about any single participant is harder to infer.,0.94
+Federated learning keeps training data on participating devices while coordinating model updates across clients.,Distributed clients can collaboratively optimize a shared model without directly sending their raw datasets to a central server.,0.98
+A microservices architecture decomposes an application into independently deployable services organized around specific capabilities.,"Instead of one large application, microservices separate functionality into smaller services that communicate through defined interfaces.",0.98
+A monolithic application packages most of its functionality into a single deployable unit.,"In a monolith, components are typically released together rather than being independently deployed services.",0.96
+Message queues decouple producers from consumers by allowing messages to be stored until they can be processed.,Asynchronous messaging can prevent a producer from blocking while a downstream service handles previously submitted work.,0.97
+Idempotent operations can be executed multiple times without changing the final result beyond the first successful execution.,Idempotency is useful in distributed systems because retrying the same request does not necessarily create additional side effects.,0.97
+Horizontal scaling increases capacity by adding more instances of a service.,Vertical scaling increases the resources assigned to an existing machine or instance.,0.35
+A compiler converts source code into a representation that can be executed by a target machine.,A database index accelerates searches by maintaining an auxiliary data structure.,0.05
+Gradient descent updates model parameters according to the direction of the loss gradient.,DNS resolves domain names into network addresses.,0.04
+Convolutional layers detect local spatial patterns in images.,A relational database organizes records into tables.,0.06
+TCP provides reliable ordered delivery between network endpoints.,K-means assigns observations to clusters based on distances to centroids.,0.03
+Transformers use attention mechanisms to model relationships between tokens.,A CPU cache stores frequently accessed data near the processor.,0.09
+"Operating systems manage processes, memory, and hardware resources.",Softmax converts logits into normalized class probabilities.,0.05
+SQL joins combine records from multiple relational tables.,Backpropagation computes derivatives for neural network parameters.,0.04
+A hash table provides efficient average-case lookup using a hash function.,A convolutional neural network learns hierarchical visual representations.,0.06
+Kubernetes orchestrates containerized workloads across computing clusters.,TF-IDF assigns weights to terms according to their distribution across documents.,0.05
+PCA reduces dimensionality by projecting data onto principal directions.,A firewall filters network traffic according to security policies.,0.04
+A* search uses heuristic estimates to prioritize nodes during path finding.,Batch normalization standardizes intermediate neural network activations.,0.07
+Docker packages applications and dependencies into portable containers.,Dijkstra's algorithm computes shortest paths using non-negative edge weights.,0.08
+A mutex prevents multiple threads from simultaneously entering a protected critical section.,An embedding model maps text into a continuous vector space.,0.06
+OLAP systems are designed for analytical queries over large datasets.,ReLU outputs zero for negative inputs and preserves positive values.,0.05
+A neural language model predicts or generates sequences of tokens.,A router forwards packets between different computer networks.,0.07
+Object detection predicts object categories and bounding boxes in images.,A transaction groups database operations into a logical unit.,0.05
+Apache Kafka enables distributed event streaming between producers and consumers.,Random forests aggregate predictions from multiple decision trees.,0.08
+A virtual machine emulates or abstracts computer hardware for an operating system.,"Named entity recognition identifies people, locations, and organizations in text.",0.04
+Regularization reduces model complexity to improve generalization.,IPv6 uses 128-bit addresses to provide a larger address space.,0.06
+A queue follows a first-in-first-out access pattern.,A cryptographic hash produces a fixed-length digest from arbitrary input data.,0.05
+Semantic segmentation assigns a category to individual image pixels.,Gradient boosting builds an ensemble by adding learners sequentially.,0.09
+A primary key uniquely identifies records in a relational table.,The sigmoid function maps values into the interval between zero and one.,0.06
+Federated learning trains a shared model across decentralized clients.,Merge sort recursively divides and combines arrays.,0.05
+A VPN encrypts traffic transmitted across an untrusted network.,An autoencoder learns to reconstruct its input from a latent representation.,0.07
+Unit tests verify individual software components in isolation.,The CAP theorem describes trade-offs in distributed systems.,0.08
+An adjacency matrix represents graph connectivity using a two-dimensional array.,Cross-entropy measures the discrepancy between predicted and target distributions.,0.05
+Data augmentation increases training diversity through transformations of existing examples.,A load balancer distributes requests among multiple servers.,0.08
+A garbage collector reclaims memory occupied by unreachable objects.,A convolutional filter detects local patterns within an image.,0.07
+An API defines how software components communicate with one another.,A decision tree recursively partitions data using feature-based conditions.,0.06
+A data warehouse stores integrated historical data for analytical workloads.,An LSTM uses gated memory cells to process sequential information.,0.05
+The operating system scheduler allocates CPU time among runnable tasks.,The softmax function produces a probability distribution from model logits.,0.04
+A database replica maintains another copy of stored information.,A tokenizer splits text into units that can be processed by a language model.,0.05
+Cross-validation evaluates a model using multiple train-validation partitions.,A router determines where network packets should be forwarded.,0.08
+A semaphore can regulate access to a limited shared resource.,An image classifier predicts the category associated with an input image.,0.06
+A foreign key establishes a relationship between records in different database tables.,A Transformer uses self-attention to process sequences.,0.05
+MapReduce divides distributed computation into mapping and reducing stages.,An SVM searches for a decision boundary with a large classification margin.,0.07
+An operating system uses paging to map virtual addresses to physical memory.,Precision measures the fraction of predicted positives that are relevant.,0.06
+A digital signature provides evidence of message authenticity and integrity.,A heap is commonly used to implement priority queues.,0.05
+Continuous integration automatically builds and tests software changes.,PCA identifies directions of maximum variance in numerical data.,0.06
+A message queue allows producers and consumers to operate asynchronously.,A convolutional network extracts visual features through learned filters.,0.09
+The vanishing gradient problem can make optimization difficult in deep networks.,A DNS server resolves hostnames into corresponding IP addresses.,0.04
+Attention mechanisms allow models to assign different importance to input elements.,A binary tree stores elements according to hierarchical relationships.,0.06
+A NoSQL database may use documents instead of normalized relational tables.,Gradient clipping limits unusually large parameter updates.,0.05
+Load balancing distributes incoming traffic across multiple service instances.,Named entity recognition assigns semantic categories to text spans.,0.04
+A compiler performs syntax analysis before generating lower-level code.,An embedding represents semantic information using a dense numerical vector.,0.08
+The precision metric focuses on the correctness of retrieved positive predictions.,A process is an executing instance of a computer program.,0.07
+A microservices architecture divides an application into independently deployable services.,A random forest combines predictions from multiple decision trees.,0.1
+TLS provides encryption and integrity for network communication.,A neural network optimizer adjusts parameters using gradients.,0.07
+A data lake can store raw structured and unstructured information.,The ReLU activation introduces nonlinearity into neural networks.,0.06
+A priority queue removes elements according to their assigned priority.,The HTTP protocol enables communication between web clients and servers.,0.05
+A model's recall measures how many relevant examples were successfully identified.,A database index can accelerate queries by reducing the amount of data scanned.,0.11
+A neural network's learning rate controls the magnitude of optimization updates.,A network switch forwards Ethernet frames according to MAC addresses.,0.05
+An HTTP request may contain headers describing metadata about the communication.,A decision tree selects splitting conditions based on feature values.,0.06
+A virtual address is translated into a physical address by memory management hardware.,A sentiment classifier predicts whether a text expresses positive or negative sentiment.,0.04
+A compiler's lexer identifies tokens such as keywords and identifiers.,A database transaction ensures a collection of operations behaves as a logical unit.,0.06
+An encoder-decoder architecture transforms an input representation into an output sequence.,A firewall blocks or permits network traffic according to configured rules.,0.07
+A model can overfit when it captures noise specific to the training dataset.,A router forwards packets toward their destination using routing information.,0.05
+A cache exploits temporal locality by retaining recently accessed information.,A tokenizer converts text into discrete units for language processing.,0.06
+A hash function produces a deterministic output from an input value.,A Transformer represents relationships between tokens using attention.,0.08
+A REST API commonly uses HTTP verbs to operate on web resources.,A minimum spanning tree minimizes the total weight needed to connect graph vertices.,0.04
+A training dataset contains examples used to optimize machine learning parameters.,A test dataset evaluates a model on examples that were excluded from training.,0.38
+Precision and recall evaluate different aspects of information retrieval performance.,"Precision measures how many retrieved items are relevant, whereas recall measures how many relevant items were retrieved.",0.94
+A stack removes its most recently inserted element first.,A queue removes the element that has been waiting the longest.,0.44
+Symmetric cryptography uses the same secret key for encryption and decryption.,Asymmetric cryptography relies on a pair of mathematically related public and private keys.,0.32
+TCP establishes a connection before reliably transmitting application data.,UDP sends datagrams without providing TCP-style connection establishment or delivery guarantees.,0.31
+A process has its own virtual address space and operating-system resources.,Threads within a process generally share the same memory address space.,0.48
+Normalization can reduce redundancy in relational database schemas.,Denormalization intentionally introduces redundancy to improve read performance in some workloads.,0.39
+Batch processing collects data and processes it in groups.,Stream processing handles events continuously as they become available.,0.36
+Supervised learning uses labeled examples to learn a mapping from inputs to target outputs.,Unsupervised learning attempts to discover structure without explicit target labels.,0.35
+Classification predicts discrete categories for input observations.,Regression predicts numerical values that can vary continuously.,0.37
+Overfitting is associated with low training error but poor performance on unseen data.,Underfitting occurs when a model cannot adequately capture the underlying patterns in the training data.,0.41
+Precision increases when the number of false positive predictions decreases while relevant predictions remain stable.,Recall improves when a classifier identifies a larger fraction of the actual positive instances.,0.46
+High-dimensional embeddings can make exhaustive nearest-neighbor search computationally expensive.,Approximate indexing methods trade some exactness for faster similarity retrieval.,0.52
+A generative model learns a distribution that can be used to produce new samples.,A discriminative model focuses on distinguishing between classes or predicting labels.,0.35
+A tokenizer divides text into tokens before a Transformer processes the sequence.,An embedding model converts text representations into numerical vectors.,0.48
+A retriever selects potentially relevant documents from a large collection.,A reranker reorders retrieved candidates according to a more detailed relevance assessment.,0.51
+A vector database stores numerical representations for efficient similarity search.,A relational database stores structured records organized according to a predefined schema.,0.29
+A model embedding captures information about an input in a dense numerical representation.,A one-hot vector represents a categorical value using mostly zeros and one active position.,0.31
+Training modifies model parameters using examples and an optimization objective.,Inference uses an already trained model to generate predictions for new inputs.,0.43
+A validation set is used during model development to guide decisions such as hyperparameter selection.,A test set should ideally remain untouched until the final evaluation of the trained system.,0.47
+A public key can be distributed openly while the corresponding private key must remain secret.,A symmetric encryption key must generally be shared securely between communicating parties.,0.42
+Authentication determines whether a user is who they claim to be.,Authorization determines which actions an authenticated user is allowed to perform.,0.5
+Encryption transforms readable information into a protected representation using a cryptographic procedure.,Hashing produces a fixed-length digest that is not intended to be reversed into the original message.,0.39
+Horizontal scaling adds more machines or service instances to increase system capacity.,Vertical scaling increases the computational resources available to an existing machine.,0.45
+Latency measures the delay associated with completing or transmitting an operation.,Throughput measures the amount of work or data processed during a given period.,0.4
+Availability describes how reliably a system remains accessible when users request its services.,Consistency concerns whether different users or replicas observe compatible versions of shared data.,0.38
+A message queue stores messages so producers and consumers do not need to operate simultaneously.,A synchronous request requires the caller to wait for the corresponding response.,0.34
+Containers share the host operating system kernel while isolating application processes.,Virtual machines typically provide stronger hardware-level isolation by running separate guest operating systems.,0.44
+Continuous integration validates code changes through automated builds and tests.,Continuous deployment automatically releases validated changes into production environments.,0.53
+Unit testing focuses on isolated components.,Integration testing evaluates interactions between multiple components.,0.52
+A convolutional neural network is particularly effective at extracting local spatial features from images.,A recurrent neural network is designed to maintain information across sequential processing steps.,0.36
+Transformers model token relationships primarily through attention mechanisms.,Traditional recurrent networks process sequences using recurrent hidden states.,0.39
+An LSTM uses gates to regulate information flowing through its memory state.,A convolutional network uses spatial filters to extract localized visual patterns.,0.28
+An autoencoder learns to reconstruct its input through an encoded latent representation.,A classifier learns decision boundaries that separate examples belonging to different categories.,0.34
+A GAN contains a generator that creates synthetic samples and a discriminator that evaluates their realism.,A decision tree predicts outputs by following feature-based branches from the root toward a leaf.,0.05
+Reinforcement learning learns behavior through interaction and reward feedback.,Supervised learning minimizes prediction errors using labeled training examples.,0.39
+Clustering groups observations according to similarities within the feature space.,Classification assigns observations to predefined categories using learned decision rules.,0.45
+PCA transforms correlated variables into orthogonal principal components.,K-means partitions observations by assigning them to nearby centroids.,0.41
+Cosine similarity compares the orientation of two vectors.,Euclidean distance measures the geometric separation between two points.,0.46
+A reranker evaluates candidate documents after an initial retrieval stage.,A language model generates text based on the input context and learned parameters.,0.19
+Deadlock occurs when multiple processes wait indefinitely for resources held by one another.,A compiler converts high-level source code into a lower-level representation.,0.04
+"The four conditions for deadlock include mutual exclusion, hold and wait, no preemption, and circular wait.",A neural network uses weighted connections to transform input features.,0.03
+Process starvation occurs when a task waits for CPU or other resources for an excessively long period.,A hash function maps input data to a fixed-size output.,0.05
+Round-robin scheduling allocates CPU time to processes in rotating time slices.,Gradient descent adjusts parameters to reduce an optimization objective.,0.06
+Priority scheduling selects processes according to their assigned priority levels.,A tokenizer divides natural language into smaller processing units.,0.05
+Virtual memory allows programs to use an address space larger than the available physical memory.,A convolution applies a learned filter across spatial regions of an image.,0.06
+Thrashing occurs when a system spends excessive time moving memory pages rather than executing useful work.,A decision tree selects branches according to feature-based conditions.,0.04
+Memory fragmentation can prevent large allocations even when sufficient total free memory exists.,A transformer uses attention to combine information from different tokens.,0.06
+A system interrupt signals the processor that an event requires attention.,"A relational schema defines tables, attributes, and relationships between data entities.",0.04
+DMA allows certain devices to transfer data to memory without requiring the CPU to handle every byte directly.,Cross-entropy measures differences between predicted and target probability distributions.,0.05
+A compiler optimization can eliminate computations whose results are never used.,A database query retrieves records that satisfy specified conditions.,0.18
+Loop invariant code motion moves computations outside loops when their values remain unchanged.,Caching stores frequently accessed information closer to the component that needs it.,0.22
+Function inlining replaces a function call with the function's body during compilation.,A neural network expands its hidden representation before producing an output.,0.09
+Garbage collection automatically identifies objects that can no longer be reached by a program.,Reference counting tracks how many active references point to an allocated object.,0.62
+Static analysis examines source code without executing the program.,Dynamic analysis observes program behavior while the application is running.,0.42
+A linker combines compiled object files and libraries into an executable program.,A loader places an executable into memory and prepares it for execution.,0.57
+An assembler translates assembly instructions into machine code.,A compiler translates high-level programming constructs into lower-level representations.,0.55
+An interpreter executes instructions incrementally at runtime.,A compiler generally translates an entire program or compilation unit before execution.,0.49
+Recursion solves a problem by defining a function in terms of smaller instances of itself.,Iteration repeatedly executes a block of instructions until a termination condition is reached.,0.51
+A recursive algorithm requires a base case to terminate correctly.,A loop requires a stopping condition to avoid continuing indefinitely.,0.48
+A trie stores strings by organizing characters along paths in a tree-like structure.,A binary search tree organizes keys according to ordering relationships.,0.46
+A B-tree is designed to keep large amounts of sorted data efficiently accessible from secondary storage.,A binary heap maintains an ordering property useful for priority-based retrieval.,0.39
+A Bloom filter provides probabilistic membership testing using a compact bit array.,A hash table stores key-value pairs for efficient lookup.,0.55
+A linked list stores elements in nodes connected through references.,An array stores elements in contiguous indexed memory locations.,0.48
+A doubly linked list maintains references to both the previous and next nodes.,A singly linked list stores a reference to the next node.,0.63
+A circular buffer reuses storage positions as elements are inserted and removed.,A queue processes elements according to their insertion order.,0.54
+A graph may contain cycles and does not necessarily have a hierarchical structure.,A tree is a connected acyclic graph with a hierarchical organization.,0.56
+A directed graph assigns a direction to each edge between vertices.,An undirected graph represents relationships where edges do not have an orientation.,0.61
+Depth-first search explores one branch deeply before considering alternative branches.,Breadth-first search visits vertices according to their distance from the starting point.,0.58
+Topological sorting orders vertices so that dependencies appear before dependent nodes.,Breadth-first traversal explores nodes level by level.,0.32
+A REST API is commonly designed around resources identified by URLs.,GraphQL allows clients to specify the structure of the data they want to retrieve.,0.55
+GraphQL allows clients to request nested fields in a single query.,SQL retrieves structured records from relational databases.,0.43
+WebSockets maintain a persistent communication channel between a client and server.,HTTP traditionally follows a request-response communication model.,0.51
+A CDN caches content at geographically distributed edge locations.,A load balancer distributes requests among available application servers.,0.54
+DNS caching reduces the need to repeatedly query authoritative name servers.,Browser caching reduces repeated downloads of resources already stored locally.,0.67
+ARP maps an IPv4 address to a corresponding MAC address within a local network.,DNS maps domain names to IP addresses.,0.57
+DHCP automatically provides devices with network configuration parameters.,DNS resolves human-readable hostnames into network addresses.,0.52
+A subnet divides an IP network into smaller logical network segments.,A VLAN separates network traffic into logically isolated broadcast domains.,0.58
+NAT modifies network address information as traffic passes between network boundaries.,A proxy server forwards requests on behalf of clients.,0.46
+A reverse proxy receives client requests and forwards them to backend servers.,A load balancer distributes traffic among multiple backend instances.,0.64
+SQL injection occurs when untrusted input changes the structure of a database query.,Cross-site scripting occurs when malicious code is executed in a user's browser.,0.49
+Cross-site request forgery tricks an authenticated browser into performing an unintended action.,Cross-site scripting injects executable content into web pages viewed by users.,0.55
+A denial-of-service attack attempts to make a service unavailable to legitimate users.,A brute-force attack repeatedly tries possible credentials to discover a valid password.,0.28
+Phishing uses deceptive messages to persuade victims to reveal sensitive information.,Social engineering manipulates people into performing actions that compromise security.,0.72
+Multi-factor authentication requires evidence from multiple authentication categories.,Password authentication verifies identity using a secret credential known by the user.,0.56
+A salt is added to password-derived hashes to make precomputed attacks more difficult.,Encryption protects data by transforming plaintext into ciphertext.,0.37
+A certificate binds a public key to an identity through a trusted certification process.,A digital signature can be verified using the public key associated with the signer.,0.64
+Access control lists specify which entities can perform operations on protected resources.,Firewalls specify which network connections should be allowed or blocked.,0.52
+Intrusion detection systems monitor activity for signs of malicious behavior.,Firewalls enforce predefined rules for network traffic.,0.55
+Malware is software designed to perform harmful or unauthorized actions.,A vulnerability is a weakness that can potentially be exploited by an attacker.,0.48
+A data warehouse often uses dimensional models for analytical reporting.,A transactional database is optimized for frequent operational updates.,0.49
+A fact table typically contains measurable business events in a dimensional warehouse.,A dimension table provides descriptive attributes used to analyze those events.,0.71
+A star schema connects a central fact table directly to several dimension tables.,A snowflake schema further normalizes dimension tables into additional related structures.,0.67
+Partitioning divides a large dataset into smaller logical sections.,Sharding distributes partitions across multiple database servers.,0.63
+"A database transaction should satisfy atomicity, consistency, isolation, and durability.",Distributed consensus allows multiple nodes to agree on a shared decision.,0.21
+Eventual consistency allows replicas to temporarily contain different values before converging.,Strong consistency requires reads to reflect an appropriately recent committed state.,0.69
+A primary index is typically associated with the ordering or unique identification of records.,A secondary index provides an additional lookup path over one or more attributes.,0.67
+Database normalization decomposes relations to reduce redundancy and dependency anomalies.,Database indexing creates additional structures to accelerate retrieval.,0.35
+A query optimizer chooses an execution strategy for retrieving requested data.,A compiler optimizer transforms program instructions to improve execution efficiency.,0.46
+A database execution plan describes the operations used to evaluate a query.,A workflow scheduler describes dependencies between computational tasks.,0.27
+A Docker image contains the filesystem and metadata needed to create containers.,A Docker container is a running instance created from an image.,0.79
+Kubernetes manages containerized workloads across a cluster of machines.,Docker packages application dependencies into isolated environments.,0.62
+A Kubernetes pod is the smallest deployable unit in the Kubernetes object model.,A Docker container packages an application together with its runtime dependencies.,0.59
+A container registry stores and distributes container images.,A package repository stores software packages and their metadata.,0.48
+Infrastructure as Code makes infrastructure configuration reproducible through machine-readable definitions.,Version control tracks changes to source code and configuration files.,0.46
+CI pipelines automatically validate changes submitted by developers.,CD pipelines automate later stages of software delivery and deployment.,0.69
+Blue-green deployment switches production traffic between two environments.,Canary deployment gradually exposes a new version to a subset of users.,0.67
+Rolling deployment replaces application instances incrementally.,Blue-green deployment maintains separate old and new environments during a release.,0.63
+Horizontal autoscaling changes the number of running service instances according to demand.,Vertical scaling changes the CPU or memory resources assigned to an instance.,0.45
+A service mesh manages communication between microservices through dedicated infrastructure components.,An API gateway provides a controlled entry point for external clients accessing backend services.,0.58
+Attention weights determine how strongly different input tokens contribute to a representation.,Pooling layers reduce the spatial dimensions of feature maps in convolutional networks.,0.19
+Token embeddings represent discrete vocabulary items using continuous vectors.,Positional encodings provide sequence-order information to Transformer architectures.,0.61
+A language model estimates the probability of token sequences.,A tokenizer converts text into tokens that can be processed by a model.,0.56
+Named entity recognition identifies semantic categories associated with text spans.,Part-of-speech tagging assigns grammatical categories to individual tokens.,0.64
+Stemming removes word endings using heuristic rules.,Lemmatization maps words to linguistically meaningful base forms.,0.68
+TF-IDF emphasizes terms that are frequent in one document but uncommon across the collection.,Word embeddings represent words as dense vectors learned from contextual or distributional information.,0.39
+Cosine similarity is commonly used to compare semantic embedding vectors.,Euclidean distance measures the straight-line distance between numerical points.,0.52
+Retrieval-Augmented Generation retrieves external documents before generating a response.,Fine-tuning updates model parameters using examples specific to a target task.,0.43
+A reranker scores retrieved candidates using a more computationally expensive relevance model.,An embedding retriever represents queries and documents in a shared vector space.,0.68
+Chunking divides long documents into smaller pieces before indexing them for retrieval.,Tokenization converts text into the discrete units consumed by a language model.,0.51
+Object detection predicts both the category and spatial location of objects.,Image classification predicts one or more categories for an entire image.,0.66
+Semantic segmentation assigns labels independently to image pixels.,Instance segmentation distinguishes individual objects even when they belong to the same category.,0.76
+Optical flow estimates apparent motion between consecutive video frames.,Object detection identifies objects and predicts their bounding regions.,0.34
+Image normalization adjusts pixel values to improve numerical stability during model training.,Image augmentation creates varied training examples through transformations.,0.57
+A convolutional kernel learns weights that detect specific local visual patterns.,A pooling operation reduces the spatial resolution of feature maps.,0.53
+Transfer learning starts from parameters learned on a previous dataset or task.,Fine-tuning further optimizes those parameters for a specific downstream objective.,0.72
+Dropout randomly disables a subset of neural network units during training.,Batch normalization rescales and shifts activations using statistics computed during training.,0.45
+Weight decay penalizes large model parameters during optimization.,Early stopping terminates training when validation performance no longer improves.,0.49
+Learning-rate scheduling changes the optimization step size during training.,Gradient clipping limits the magnitude of computed parameter gradients.,0.44
+Adam combines gradient information with adaptive estimates of first and second moments.,Stochastic gradient descent updates parameters using gradients computed from training samples or mini-batches.,0.66
+A validation set helps select hyperparameters without directly training on those examples.,Cross-validation repeatedly partitions available data to estimate generalization performance.,0.61
+A confusion matrix summarizes correct and incorrect predictions across classification classes.,A loss function provides a numerical objective that optimization attempts to minimize.,0.22
+Mean absolute error measures the average absolute difference between predictions and targets.,Mean squared error gives greater weight to large prediction errors by squaring them.,0.73
+Accuracy measures the fraction of predictions that are correct.,F1 score combines precision and recall using their harmonic mean.,0.55
+A calibration curve compares predicted probabilities with observed outcome frequencies.,A ROC curve compares true-positive rates against false-positive rates across thresholds.,0.54
+Data leakage occurs when information unavailable at prediction time influences model training.,Overfitting occurs when a model captures patterns that fail to generalize beyond its training examples.,0.57
+Class imbalance occurs when some target categories contain substantially more observations than others.,Sampling bias occurs when collected data does not adequately represent the target population.,0.58
+Concept drift changes the relationship between features and target outcomes over time.,Data drift changes the distribution of input features observed by a deployed model.,0.76
+Model calibration concerns whether predicted confidence values correspond to actual frequencies.,Model accuracy concerns the fraction of predictions that match the correct labels.,0.43
+An embedding model maps inputs into a numerical representation space.,A clustering algorithm groups representations according to a chosen similarity criterion.,0.49
+A function encapsulates a reusable sequence of operations that can accept inputs and produce outputs.,A variable stores a value that can be referenced during program execution.,0.34
+Recursion allows a function to invoke itself while solving progressively smaller instances of a problem.,A loop repeatedly executes instructions until its termination condition becomes true.,0.43
+An exception represents an abnormal condition that interrupts the normal flow of program execution.,A compiler optimization transforms code to improve performance without changing its intended behavior.,0.07
+Interfaces define operations that implementing classes are expected to provide.,Abstract classes can provide both abstract methods and shared implementation.,0.61
+Dependency injection provides an object with its dependencies instead of requiring it to construct them internally.,Factory methods create objects while hiding the details of their concrete construction.,0.48
+A software module groups related functionality behind a defined interface.,A database schema describes the organization of stored data.,0.14
+Refactoring changes the internal structure of software without intentionally changing its external behavior.,Debugging attempts to identify and correct defects responsible for incorrect program behavior.,0.53
+Version control records changes to files so developers can collaborate and recover previous versions.,A backup system creates copies of data that can be restored after loss or corruption.,0.52
+An immutable object cannot have its state modified after creation.,A constant represents a value that should not be reassigned after initialization.,0.63
+Garbage collection identifies memory that is no longer reachable by the running program.,Manual memory management requires programmers to explicitly allocate and release memory.,0.48
+Binary search requires the input sequence to be ordered before repeatedly dividing the search interval.,Linear search checks elements sequentially until the desired value is found.,0.48
+Heap sort repeatedly extracts elements from a heap to construct a sorted sequence.,Merge sort combines already sorted subarrays to obtain the final ordering.,0.42
+Insertion sort builds a sorted portion by inserting each new element into its appropriate position.,Selection sort repeatedly chooses the smallest remaining element and places it into the sorted portion.,0.64
+Counting sort uses frequencies of integer values instead of directly comparing elements.,Comparison-based sorting algorithms determine ordering by comparing pairs of elements.,0.41
+Floyd-Warshall computes shortest paths between all pairs of vertices using dynamic programming.,Dijkstra's algorithm repeatedly selects the nearest unresolved vertex to compute shortest paths.,0.54
+Bellman-Ford can handle graphs containing negative edge weights.,Dijkstra's algorithm assumes edge weights are non-negative.,0.67
+Union-Find efficiently maintains connected components while edges are added to a graph.,A priority queue retrieves elements according to their assigned priority.,0.19
+Dynamic programming is effective when subproblems overlap and an optimal substructure exists.,Divide and conquer recursively separates a problem into independent or mostly independent subproblems.,0.62
+A greedy algorithm commits to locally attractive decisions without generally exploring all alternatives.,Backtracking systematically explores alternatives and reverses choices that cannot lead to valid solutions.,0.43
+The traveling salesman problem asks for the shortest tour that visits every specified location and returns to the starting point.,Shortest path algorithms generally seek an optimal route between specified source and destination vertices.,0.61
+A stack is useful for representing nested function calls and undo operations.,A queue is commonly used to model waiting lines and breadth-first traversal.,0.64
+A deque supports insertion and removal from both ends.,A priority queue removes elements according to priority rather than insertion order.,0.56
+A balanced binary search tree maintains height constraints to keep search operations efficient.,A hash table provides average constant-time lookup through hashing.,0.37
+An AVL tree automatically performs rotations to maintain balance after updates.,A B-tree is optimized for accessing large datasets stored on secondary storage.,0.49
+A graph adjacency list stores neighboring vertices for each vertex.,An adjacency matrix represents relationships using a two-dimensional table.,0.76
+A trie is especially useful for prefix-based string queries.,A heap is especially useful for repeatedly retrieving minimum or maximum values.,0.24
+A sparse matrix stores primarily nonzero values without allocating space for every possible entry.,A dense matrix explicitly represents most positions in a rectangular numerical structure.,0.71
+A linked list can insert an element efficiently when the appropriate node reference is already available.,An array provides constant-time indexed access under the usual contiguous storage model.,0.47
+A hash collision happens when multiple keys map to the same hash location.,A cache miss occurs when requested information is absent from the cache.,0.26
+A circular linked list connects the final node back to the beginning.,A doubly linked list stores references to both neighboring directions.,0.58
+A process contains execution state and resources managed by the operating system.,A thread represents an execution path within a process.,0.74
+Processes typically have isolated virtual address spaces.,Threads belonging to one process can share its memory space.,0.61
+A system call allows user-level software to request privileged operating-system services.,An API allows software components to communicate through defined operations.,0.51
+Virtual memory separates the addresses used by programs from physical memory locations.,Caching reduces access time by storing frequently needed information closer to the processor.,0.31
+A page fault occurs when a referenced virtual memory page is not currently available in physical memory.,A cache miss occurs when requested information is not present in the cache.,0.49
+The scheduler decides which runnable task should receive processor time.,The memory manager controls allocation and translation of memory resources.,0.57
+Deadlock prevents a group of processes from progressing because each waits for resources held by another.,Starvation occurs when a task is repeatedly denied access to resources.,0.69
+A semaphore can coordinate access to shared resources between concurrent threads.,A mutex provides exclusive ownership of a protected critical section.,0.76
+A context switch saves the state of one execution context and restores another.,A function call transfers control to another section of the same running program.,0.38
+A kernel runs with elevated privileges and manages core operating-system resources.,A user application normally runs with restricted permissions.,0.42
+TCP uses acknowledgments and retransmissions to provide reliable delivery.,UDP provides a lightweight datagram transport without TCP's reliability guarantees.,0.44
+IP is responsible for addressing and routing packets across interconnected networks.,TCP manages reliable transport between application endpoints.,0.64
+Ethernet defines technologies for transmitting frames over local networks.,IP defines addressing and routing across networks.,0.57
+A MAC address identifies a network interface at the data-link layer.,An IP address identifies a network endpoint at the network layer.,0.61
+A router separates broadcast domains and forwards packets between networks.,A switch forwards frames between devices within a local network.,0.67
+DNS resolves names such as example.org into network addresses.,DHCP automatically assigns network configuration parameters to devices.,0.53
+HTTP status codes communicate the result of a web request.,HTTP headers provide metadata associated with requests and responses.,0.67
+HTTPS protects HTTP communication using TLS.,SSH provides secure remote access to networked systems.,0.61
+Packet switching divides data into packets that can be forwarded independently through a network.,Circuit switching establishes a dedicated communication path between endpoints.,0.48
+Network latency represents communication delay.,Network throughput represents the amount of data successfully transferred per unit time.,0.42
+A relational database represents information using rows and columns.,A document database stores records as document-oriented structures.,0.65
+A primary key uniquely identifies a row within a table.,A foreign key references a key in another table.,0.72
+Database normalization reduces redundant representations of the same information.,Database denormalization may duplicate information to reduce query complexity.,0.52
+An index creates an additional structure that can accelerate data retrieval.,A transaction defines a logical group of database operations.,0.31
+ACID properties describe important guarantees associated with reliable transactions.,"CAP describes trade-offs involving consistency, availability, and partition tolerance.",0.49
+Database replication creates additional copies of stored information.,Database partitioning divides information into smaller logical segments.,0.64
+A query optimizer chooses an efficient execution plan.,A query parser checks whether a database query follows the expected syntax.,0.66
+A materialized view stores query results so they can be reused.,A cache stores frequently requested information to reduce repeated computation or retrieval.,0.69
+A database trigger executes automatically when specified database events occur.,A scheduled job executes according to a predefined time or scheduling rule.,0.45
+A stored procedure contains reusable SQL logic that can be invoked by clients.,A database view represents a query-defined virtual table.,0.62
+ETL transforms data before loading it into the destination system.,ELT loads raw data first and performs transformations within the destination platform.,0.79
+Batch pipelines process accumulated records in discrete execution intervals.,Streaming pipelines process incoming events continuously.,0.69
+A data lake can store raw structured and unstructured information.,A data warehouse generally stores curated data optimized for analytics.,0.71
+Apache Spark distributes data processing across multiple compute nodes.,Apache Kafka distributes event streams across brokers.,0.53
+Airflow schedules and orchestrates dependencies between workflow tasks.,Kafka transports streams of records between producers and consumers.,0.36
+Data partitioning divides datasets according to selected keys or ranges.,Data compression reduces the storage required to represent information.,0.33
+Schema evolution describes controlled changes to the structure of stored or transmitted data.,Version control tracks changes to software artifacts over time.,0.36
+Data lineage describes where data originated and how it changed across processing stages.,Data provenance records information about the origin and transformation history of data.,0.91
+A data catalog helps users discover datasets and understand their metadata.,A database index helps queries locate records efficiently.,0.22
+A streaming window groups events according to temporal boundaries for analysis.,A batch job groups records according to a scheduled execution interval.,0.48
+Cloud computing provides on-demand access to scalable computing resources.,Distributed computing divides computational work across multiple machines.,0.68
+A virtual machine provides an isolated environment containing a guest operating system.,A container isolates application processes while sharing the host kernel.,0.71
+Horizontal scaling increases capacity by adding additional service instances.,Vertical scaling increases the resources assigned to an existing instance.,0.56
+A load balancer distributes requests across multiple backend instances.,A scheduler assigns computational tasks to available resources.,0.49
+Service discovery allows distributed components to locate available services.,DNS allows clients to resolve names into network addresses.,0.58
+Consensus algorithms allow distributed nodes to agree on a shared value.,Replication maintains multiple copies of data across different machines.,0.57
+Leader election selects one node to coordinate certain distributed operations.,Load balancing distributes work among available nodes.,0.29
+Fault tolerance allows a system to continue operating despite certain component failures.,High availability aims to minimize the time a service is inaccessible.,0.73
+Eventual consistency permits temporary differences between replicas before they converge.,Replication distributes copies of data across multiple nodes.,0.62
+A distributed system may experience network partitions that prevent some nodes from communicating.,A single-machine application generally does not require network communication between its internal components.,0.31
+Authentication verifies the identity of an entity.,Authorization determines which operations that entity can perform.,0.67
+Encryption protects information by transforming plaintext into ciphertext.,Authentication verifies the identity of a communicating party.,0.28
+Hash functions produce fixed-length representations of input data.,Encryption is designed to allow authorized parties to recover the original plaintext.,0.42
+A brute-force attack systematically attempts many possible passwords.,A dictionary attack tries credentials derived from a predefined collection of likely words.,0.76
+Phishing commonly uses deceptive communication to obtain sensitive information.,Malware is software intentionally designed to perform harmful or unauthorized actions.,0.54
+A firewall controls network traffic according to configured rules.,An antivirus application detects or removes malicious software.,0.51
+A vulnerability is a weakness that can potentially be exploited.,A threat is a potential source of harm to a system.,0.64
+A security patch modifies software to address known vulnerabilities.,A software update may introduce new functionality or improve existing behavior.,0.59
+Least privilege limits users and processes to the permissions they actually require.,Role-based access control assigns permissions according to organizational roles.,0.68
+Zero-trust security assumes that network location alone should not imply trust.,Traditional perimeter security often treats internal network locations as more trusted than external ones.,0.61
+Linear regression predicts continuous numerical outcomes.,Logistic regression commonly predicts probabilities for categorical outcomes.,0.68
+Decision trees recursively partition data according to feature-based conditions.,Random forests combine predictions from multiple decision trees.,0.79
+Bagging trains multiple models using resampled versions of the training dataset.,Boosting builds models sequentially to emphasize examples that previous models handled poorly.,0.72
+Support vector machines seek a decision boundary with a large margin between classes.,Logistic regression estimates class probabilities using a linear decision function.,0.57
+K-means repeatedly updates cluster assignments and centroid positions.,Hierarchical clustering builds a nested structure of groups.,0.66
+Anomaly detection identifies observations that deviate significantly from expected patterns.,Classification assigns observations to known target categories.,0.42
+Feature selection chooses a subset of variables for model training.,Feature extraction transforms existing variables into a different representation.,0.65
+Regularization adds a penalty that discourages overly complex model parameters.,Early stopping limits training based on validation performance.,0.58
+Cross-validation repeatedly trains and evaluates models on different partitions of the dataset.,Bootstrapping creates samples by repeatedly drawing observations with replacement.,0.52
+Hyperparameters are configuration values chosen outside the normal parameter optimization process.,Model parameters are values learned directly from training data.,0.48
+Backpropagation computes gradients of the loss with respect to neural network parameters.,Gradient descent uses gradients to update neural network parameters.,0.77
+Batch normalization normalizes activations using statistics derived from training batches.,Layer normalization normalizes activations across features within individual examples.,0.73
+Dropout randomly removes neural activations during training.,Weight decay discourages large parameter values during optimization.,0.42
+ReLU introduces nonlinear behavior by suppressing negative inputs.,Sigmoid maps scalar inputs into values between zero and one.,0.57
+Softmax converts a vector of logits into normalized class probabilities.,Sigmoid independently maps each input value into a bounded interval.,0.61
+Residual connections allow a network layer to receive information through a shortcut path.,Skip connections can help optimization in very deep neural architectures.,0.88
+An encoder transforms input information into an internal representation.,A decoder transforms an internal representation into an output.,0.65
+An LSTM maintains information through gated recurrent states.,A GRU uses update and reset gates to control recurrent information flow.,0.77
+A Transformer encoder processes input tokens using self-attention and feed-forward layers.,A Transformer decoder can generate output tokens autoregressively.,0.76
+Positional information is necessary because self-attention alone does not inherently encode token order.,Recurrent networks naturally process tokens according to sequential recurrence.,0.44
+Tokenization converts raw text into smaller units suitable for language processing.,Sentence segmentation divides a document into individual sentences.,0.68
+Stopword removal eliminates frequently occurring words that may contribute little to certain retrieval tasks.,Stemming reduces words to shorter forms by removing morphological endings.,0.57
+Word embeddings represent tokens using dense vectors.,TF-IDF represents documents using sparse weighted term features.,0.46
+Semantic similarity estimates how closely two pieces of text are related in meaning.,Lexical similarity measures overlap between the actual words used in two texts.,0.67
+Question answering systems may retrieve relevant passages before producing an answer.,Text classification assigns predefined labels to documents or text segments.,0.35
+Machine translation generates text in a target language based on source-language input.,Text summarization produces a shorter representation of a source document.,0.54
+Named entity recognition identifies spans corresponding to semantic entity types.,Relation extraction identifies semantic relationships between entities in text.,0.72
+"Sentiment analysis determines whether text expresses positive, negative, or neutral attitudes.","Emotion classification attempts to identify categories such as anger, joy, fear, or sadness.",0.71
+Language modeling estimates probabilities over sequences of tokens.,Text generation produces new sequences according to a learned language distribution.,0.79
+Contextual embeddings can assign different vector representations to the same word depending on surrounding text.,Static word embeddings generally assign one learned vector to each vocabulary item.,0.69
+Embedding models transform text into numerical vectors that encode semantic information.,Vector databases store embeddings to support similarity-based retrieval.,0.76
+Dense retrieval represents queries and documents as vectors.,Sparse retrieval can represent documents using term-based weighting schemes.,0.59
+Cosine similarity compares vectors based on their angular orientation.,Dot product similarity measures the sum of pairwise coordinate products.,0.63
+Approximate nearest neighbor algorithms trade exactness for faster vector retrieval.,Exact nearest-neighbor search compares a query against every candidate.,0.68
+Chunking affects retrieval quality because overly large chunks may contain irrelevant information.,Small chunks can improve retrieval precision but may lose important surrounding context.,0.78
+A reranker evaluates retrieved candidates using a more detailed relevance function.,A retriever identifies candidate documents from a larger corpus.,0.82
+Query expansion adds related terms or concepts to improve information retrieval.,Query rewriting changes the formulation of a search request to improve retrieval.,0.79
+Grounded generation produces answers based on retrieved evidence.,Hallucination occurs when a model produces unsupported or fabricated information.,0.46
+Metadata filtering can restrict retrieval to documents satisfying specific attributes.,Semantic similarity ranks documents according to their vector representations.,0.52
+Hybrid retrieval combines lexical matching with semantic vector search.,Ensemble learning combines predictions from multiple machine learning models.,0.35
+Image classification predicts categories for an entire image.,Object detection identifies multiple objects and their locations within an image.,0.76
+Object detection commonly represents predicted object locations using bounding boxes.,Semantic segmentation represents predictions as dense pixel-level labels.,0.71
+OCR converts text appearing in images into machine-readable strings.,Speech recognition converts spoken audio into textual representations.,0.61
+Image denoising attempts to remove unwanted noise while preserving useful visual information.,Image compression reduces the storage or transmission size of visual data.,0.48
+Edge detection identifies locations of rapid intensity changes in an image.,Object detection identifies semantic objects and their spatial locations.,0.39
+Image resizing changes the spatial dimensions of an image.,Image normalization changes the numerical scale of pixel values.,0.47
+Data augmentation can expose a vision model to rotations and other transformed examples.,Transfer learning initializes a model using knowledge learned from another dataset.,0.43
+A feature map records activations produced by convolutional filters.,A bounding box represents the estimated spatial extent of an detected object.,0.32
+Intersection over Union measures overlap between predicted and reference bounding regions.,Accuracy measures the proportion of correct predictions.,0.17
+Non-maximum suppression removes redundant overlapping object detections.,Pooling reduces the spatial resolution of convolutional feature maps.,0.39
+Microservices divide application functionality into independently deployable services.,A monolithic application is typically deployed as a single unit.,0.69
+An API gateway provides a controlled entry point to backend services.,A reverse proxy forwards incoming requests to backend servers.,0.74
+Message brokers facilitate asynchronous communication between distributed components.,REST APIs commonly use synchronous request-response interactions.,0.48
+Circuit breakers prevent repeated requests to an unhealthy downstream service.,Retry mechanisms attempt failed operations again.,0.61
+Idempotent operations can safely be repeated without producing additional unintended effects.,Caching can prevent repeated execution of identical expensive operations.,0.53
+A service registry records the locations of available service instances.,A configuration server centralizes application configuration values.,0.47
+Distributed tracing follows a request across multiple services.,Application logging records events generated by software components.,0.59
+Metrics provide numerical measurements describing system behavior.,Logs provide detailed records of events occurring during execution.,0.62
+Observability combines telemetry signals to help engineers understand internal system behavior.,Monitoring tracks predefined indicators and alerts when thresholds are exceeded.,0.72
+A health check determines whether a service instance is functioning sufficiently to receive traffic.,A unit test checks whether a specific software component behaves according to expectations.,0.31
+Gradient descent minimizes an objective function by iteratively updating model parameters.,Shortest path algorithms minimize accumulated edge costs in graphs.,0.21
+A neural network learns parameters from training examples.,A compiler learns no parameters and instead applies deterministic translation rules.,0.14
+A database query retrieves information according to specified conditions.,A search engine retrieves documents according to relevance estimates.,0.56
+A cache reduces repeated access to slower storage or computation.,A database index reduces the amount of data that must be examined during some queries.,0.61
+A scheduler determines when tasks execute.,A load balancer determines which server handles a request.,0.43
+A tokenizer converts text into discrete units.,A parser converts tokens into a structured representation according to grammar.,0.64
+A compiler parser analyzes whether source tokens follow grammatical rules.,A natural language parser analyzes the syntactic structure of human language.,0.68
+A vector database retrieves items according to numerical similarity.,A relational database retrieves rows according to structured query conditions.,0.48
+A machine learning model predicts outcomes from input features.,A rule-based system determines outcomes using explicitly programmed conditions.,0.57
+An optimizer searches for parameter values that improve an objective.,A scheduler searches for tasks that should receive computational resources.,0.29
