@@ -1,0 +1,23 @@
+General Classification (1)
+
+| General classification (typical use) | Sensor Sensor System | PC or EC | A or P |
+| :--- | :--- | :--- | :--- |
+| Tactile sensors (detection of physical contact or closeness; security switches) | Contact switches, bumpers | EC | P |
+| | Optical barriers | EC | A |
+| | Noncontact proximity sensors | EC | A |
+| Wheel/motor sensors (wheel/motor speed and position) | Brush encoders | PC | P |
+| | Potentiometers | PC | P |
+| | Synchros, resolvers | PC | A |
+| | Optical encoders | PC | A |
+| | Magnetic encoders | PC | A |
+| | Inductive encoders | PC | A |
+| | Capacitive encoders | PC | A |
+| Heading sensors (orientation of the robot in relation to a fixed reference frame) | Compass | EC | P |
+| | Gyroscopes | PC | P |
+| | Inclinometers | EC | A/P |
+
+A, active; P, passive; P/A, passive/active; PC, proprioceptive; EC, exteroceptive.
+
+
+
+

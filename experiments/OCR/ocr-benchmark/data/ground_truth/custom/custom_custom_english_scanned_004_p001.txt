@@ -1,0 +1,28 @@
+WordNet 2.1 Browser
+File History Options Help
+Search Word eat
+Searches for eat: Verb
+
+Redisplay Overview
+Senses:
+Sense 1
+eat -- (take in solid food: "She was eating a banana"; "What did you eat for dinner last night?")
+=> eat -- (eat a meal; take a meal; "We did not eat until 10 P.M. because there were so many phone calls"; "I didn't eat yet, so I gladly accept your invitation")
+=> consume, ingest, take in, take, have -- (serve oneself to, or consume regularly; "Have another bowl of chicken soup!"; "I don't take sugar in my coffee")
+Sense 2
+eat -- (eat a meal; take a meal; "We did not eat until 10 P.M. because there were so many phone calls"; "I didn't eat yet, so I gladly accept your invitation")
+=> consume, ingest, take in, take, have -- (serve oneself to, or consume regularly; "Have another bowl of chicken soup!"; "I don't take sugar in my coffee")
+Sense 3
+feed, eat -- (take in food; used of animals only; "This dog doesn't eat certain kinds of meat"; "What do whales eat?")
+=> consume, ingest, take in, take, have -- (serve oneself to, or consume regularly; "Have another bowl of chicken soup!"; "I don't take sugar in my coffee")
+Sense 4
+consume, eat up, use up, eat, deplete, exhaust, run through, wipe out -- (use up (resources or materials); "this car consumes a lot of gas"; "We exhausted our savings"; "They run through 20 bottles of wine a
+week")
+=> spend, expend, drop -- (pay out; "spend money")
+Sense 5
+eat, eat on -- (worry or cause anxiety in a persistent way; "What's eating you?")
+=> worry, vex -- (disturb the peace of mind of; afflict with mental agitation or distress; "I cannot sleep--my daughter's health is worrying me")
+Sense 6
+corrode, eat, rust -- (cause to deteriorate due to the action of water, air, or an acid; "The acid corroded the metal"; "The steady dripping of water rusted the metal stopper in the sink")
+=> damage -- (inflict damage upon; "The snow damaged the roof"; "She damaged the car when she hit the tree")
+"Synonyms, grouped by similarity" search for verb "eat"

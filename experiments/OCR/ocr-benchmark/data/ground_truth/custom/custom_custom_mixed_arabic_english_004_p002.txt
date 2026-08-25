@@ -1,0 +1,29 @@
+* Job tracker
+* task tracker
+Mapreduce Vs. YARN
+Micro service
+arch
+slot API ↳ Component
+static Container
+
+Scheduler options
+-> FiFo
+-> Capacity Scheduler
+↳ بيقدم اكثر من  Pipeline فى نفس الـ Cluster
+لـ
+50 من Cluster
+ويقدر يعمل execution للـ Tasks بشكل Paraller
+على حسب اهم الـ Task
+
+* Fair use
+يبداء Yarn إنه ينزل
+Resource Consumption بتاع أول Task ل50% ويفضي 50% للsecond Task
+
+
+(Hint)
+ الـ
+Configuration كل Queue داخل Xml
+files.
+
+25
+CS CamScanner

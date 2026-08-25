@@ -1,0 +1,50 @@
+Output
+Probabilities
+
+Softmax
+
+Linear
+
+Add & Norm
+Feed
+Forward
+
+Add & Norm
+Multi-Head
+Attention
+
+Nx
+
+Add & Norm
+Feed
+Forward
+
+Add & Norm
+Multi-Head
+Attention
+
+Nx
+
+Add & Norm
+Masked
+Multi-Head
+Attention
+
+Positional
+Encoding
+
+Positional
+Encoding
+
+Input
+Embedding
+
+Output
+Embedding
+
+Inputs
+
+Outputs
+(shifted right)
+
+Figure 1: The Transformer - model architecture.

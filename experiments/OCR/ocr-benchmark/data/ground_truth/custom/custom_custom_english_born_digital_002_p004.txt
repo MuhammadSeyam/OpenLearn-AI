@@ -1,0 +1,13 @@
+KNN pros and cons
+
+Pros
+1. No Training Period: KNN is called Lazy Learner (Instance based learning).
+2. new data can be added seamlessly which will not impact the accuracy of the algorithm.
+3. KNN is very easy to implement, There are only two parameters required to implement KNN
+i.e. the value of K and the distance function (e.g. Euclidean or Manhattan etc.)
+
+Cons
+1. Does not work well with large dataset:
+2. Does not work well with high dimensions
+3. Need feature scaling: We need to do feature scaling (standardization and normalization)
+4. Sensitive to noisy data, missing values.

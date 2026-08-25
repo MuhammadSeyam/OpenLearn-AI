@@ -1,0 +1,18 @@
+Dr. AHMED HAGAG Process State (2/3)
+
+• Diagram of Process State
+
+new
+admitted
+ready
+running
+interrupt
+scheduler dispatch
+exit
+terminated
+I/O or event wait
+waiting
+I/O or event completion
+
+Operating Systems 13
+

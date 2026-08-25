@@ -1,0 +1,18 @@
+3
+Chap. 4: Register Transfer and Microoperations
+• Register Transfer Language,  Register Transfer
+• Bus and Memory Transfers
+• Arithmetic Microoperations
+• Logic Microoperations,  Shift Microoperations
+• Arithmetic Logic Shift Unit
+Chap. 5: Basic Computer Organization and Design
+• Instruction Codes, Computer Registers
+• Computer Instructions, Timing and Control
+• Instruction Cycle,
+• Memory Reference Instructions
+• Complete Computer Description
+• Input-Output and Interrupt
+• Design of Basic Computer
+• Design of Accumulator Logic
+Computer Organization
+Computer Architecture

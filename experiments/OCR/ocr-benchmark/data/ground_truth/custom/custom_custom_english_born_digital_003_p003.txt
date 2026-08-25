@@ -1,0 +1,13 @@
+2. Why Do We Need Design Patterns?
+
+2.1 The Reality of Software Development
+- Ask students:
+➜ “Why do large software systems become difficult to maintain over time?”
+➜ Common answers:
+• Code becomes complex
+• Changes break existing features
+• Adding new features takes too long
+• New developers struggle to understand the code
+➜ Explain:
+• These problems do not come from syntax or programming languages — they come
+from poor design decisions.

@@ -1,0 +1,11 @@
+Simplest: Bag-of-Words trick
+Most search engines use BOW
+• treat documents and queries as bags of words
+• A "bag" is a set with repetitions
+• match = "degree of overlap" between d, q
+• Retrieval models
+• statistical models (functions): usually use words as features
+• decide which documents most likely to be relevant
+• BOW makes these models tractable (and also effective!)
+
+54

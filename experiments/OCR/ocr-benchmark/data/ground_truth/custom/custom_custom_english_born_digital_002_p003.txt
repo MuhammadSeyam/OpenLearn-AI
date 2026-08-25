@@ -1,0 +1,14 @@
+Pros and Cons
+
+Advantages of Naive Bayes
+1. This algorithm works very fast and can easily predict the class of a test dataset.
+2. You can use it to solve multi-class prediction problems as it’s quite useful with them.
+3. Naive Bayes classifier performs better than other models with less training data if the assumption
+of independence of features holds.
+
+Disadvantages of Naive Bayes
+1. If your test data set has a categorical variable of a category that wasn’t present in the training data
+set, the Naive Bayes model will assign it zero probability and won’t be able to make any predictions
+in this regard.
+2. It assumes that all the features are independent. While it might sound great in theory, in real life,
+you’ll hardly find a set of independent features.

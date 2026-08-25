@@ -1,0 +1,30 @@
+Word2vec objective function gradients
+
+Objective Function
+Maximize $$J'(\theta) = \prod_{t=1}^{T} \prod_{\substack{-m \le j \le m \\ j \ne 0}} p(w'_{t+j} \mid w_t; \theta)$$
+
+Or minimize
+neg. log
+likelihood
+
+[negate to minimize;
+log is monotone]
+
+$$J(\theta) = -\frac{1}{T} \sum_{t=1}^{T} \sum_{\substack{-m \le j \le m \\ j \ne 0}} \log p(w'_{t+j} \mid w_t)$$
+
+Text length
+window size
+
+where
+$$p(o \mid c) = \frac{\exp(u_o^T v_c)}{\sum_{w=1}^{V} \exp(u_w^T v_c)}$$
+
+word IDs
+
+Each word type
+(vocab entry)
+has two word
+representations:
+as center word
+and context word
+
+We now take derivatives to work out minimum

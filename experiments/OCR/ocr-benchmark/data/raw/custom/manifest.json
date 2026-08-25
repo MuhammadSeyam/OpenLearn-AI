@@ -1,1229 +1,2493 @@
 {
   "schema": "openlearn-ocrbench-manifest",
-  "schema_version": 2,
-  "dataset": "custom_v2",
-  "created": "2026-08-17",
-  "sample_unit": "one benchmark sample = one document page or one standalone image",
+  "schema_version": 4,
+  "dataset": "custom",
+  "created": "2026-08-23T22:05:56Z",
+  "sample_unit": "one benchmark sample = one PDF page or one standalone image",
+  "physical_files": 85,
+  "logical_samples": 85,
   "categories": {
-    "english_born_digital": "1. English born-digital",
-    "arabic_born_digital": "2. Arabic born-digital",
-    "english_scanned": "3.English scanned",
-    "arabic_scanned": "4. Arabic scanned",
-    "mixed_arabic_english": "5. Arabic + English mixed",
-    "multi_column": "6. Multi-column",
-    "tables": "7. Tables",
-    "formulas": "8. Formulas",
-    "figures_diagrams": "9. Figures-diagrams",
-    "slides": "10. Slides",
-    "dense_academic": "11. Dense academic page",
-    "noisy_low_quality": "12. Noisy-low-quality scan"
-  },
-  "null_semantics": {
-    "ground_truth_status=pending": "no ground truth exists yet; manual annotation required (annotation-guidelines.md)",
-    "ground_truth_status=extracted_unverified": "text extracted from the PDF text layer as a starting point; NOT verified GT",
-    "provenance_status=UNKNOWN": "rights unknown; internal research use only (docs/provenance.md)"
-  },
-  "known_gaps": {
-    "arabic_born_digital": "no Arabic born-digital source material exists in Source/ (all Arabic files are scans/photos) — HUMAN ACTION REQUIRED",
-    "mixed_arabic_english": "only 1 verified mixed source; roadmap marks mixed Ar/En as highest priority — more sources needed",
-    "tables": "3 verified samples (target 5)",
-    "noisy_low_quality": "2 verified samples (target 5)"
+    "english_born_digital": {
+      "label": "english_born_digital"
+    },
+    "arabic_born_digital": {
+      "label": "arabic_born_digital"
+    },
+    "english_scanned": {
+      "label": "english_scanned"
+    },
+    "arabic_scanned": {
+      "label": "arabic_scanned"
+    },
+    "arabic_english_mixed": {
+      "label": "arabic_english_mixed"
+    },
+    "multi_column": {
+      "label": "multi_column"
+    },
+    "tables": {
+      "label": "tables"
+    },
+    "formulas": {
+      "label": "formulas"
+    },
+    "figures_diagrams": {
+      "label": "figures_diagrams"
+    },
+    "slides": {
+      "label": "slides"
+    },
+    "dense_academic": {
+      "label": "dense_academic"
+    },
+    "noisy_low_quality": {
+      "label": "noisy_low_quality"
+    }
   },
   "documents": [
     {
-      "sample_id": "custom_english_born_digital_001",
-      "dataset": "custom",
-      "category": "english_born_digital",
-      "category_dir": "1. English born-digital",
+      "sample_id": "Custom_English_scanned_002",
+      "path": "3.English scanned/Custom_English_scanned_002.jpg",
+      "source_type": "image",
+      "page": null,
       "language": [
         "en"
       ],
-      "source_type": "born_digital",
-      "file": "1. English born-digital/custom_english_born_digital_001.png",
-      "page": 3,
-      "original_source": "CA lect1.pdf",
-      "difficulty": "easy",
+      "categories": [
+        "english_scanned",
+        "formulas",
+        "noisy_low_quality"
+      ],
       "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
         "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_001",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "born-digital lecture, text layer verified"
-    },
-    {
-      "sample_id": "custom_english_born_digital_002",
-      "dataset": "custom",
-      "category": "english_born_digital",
-      "category_dir": "1. English born-digital",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "1. English born-digital/custom_english_born_digital_002.png",
-      "page": 5,
-      "original_source": "Data+Structre+lect1.pdf",
-      "difficulty": "easy",
-      "features": {
         "table": false,
-        "formula": false,
+        "formula": true,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": true
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_002",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "born-digital lecture, text layer verified"
-    },
-    {
-      "sample_id": "custom_english_born_digital_003",
-      "dataset": "custom",
-      "category": "english_born_digital",
-      "category_dir": "1. English born-digital",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "1. English born-digital/custom_english_born_digital_003.png",
-      "page": 10,
-      "original_source": "AI_OS_Ch03.pdf",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "born-digital lecture, text layer verified"
-    },
-    {
-      "sample_id": "custom_english_born_digital_004",
-      "dataset": "custom",
-      "category": "english_born_digital",
-      "category_dir": "1. English born-digital",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "1. English born-digital/custom_english_born_digital_004.png",
-      "page": 20,
-      "original_source": "Object Oriented Programming in c++.pdf",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_004",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "born-digital lecture, text layer verified"
-    },
-    {
-      "sample_id": "custom_english_born_digital_005",
-      "dataset": "custom",
-      "category": "english_born_digital",
-      "category_dir": "1. English born-digital",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "1. English born-digital/custom_english_born_digital_005.png",
-      "page": 5,
-      "original_source": "1-MA212-Intro+to+IR+&+Boolean+Retrieval.pdf",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_english_born_digital_005",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "born-digital lecture, text layer verified"
-    },
-    {
-      "sample_id": "custom_english_scanned_001",
-      "dataset": "custom",
-      "category": "english_scanned",
-      "category_dir": "3.English scanned",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "3.English scanned/custom_english_scanned_001.png",
-      "page": 2,
-      "original_source": "Vlec5.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "no text layer on any tested page (scanned)"
-    },
-    {
-      "sample_id": "custom_english_scanned_002",
-      "dataset": "custom",
-      "category": "english_scanned",
-      "category_dir": "3.English scanned",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "3.English scanned/custom_english_scanned_002.png",
-      "page": 3,
-      "original_source": "Vlec6.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "no text layer on any tested page (scanned)"
-    },
-    {
-      "sample_id": "custom_english_scanned_003",
-      "dataset": "custom",
-      "category": "english_scanned",
-      "category_dir": "3.English scanned",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "3.English scanned/custom_english_scanned_003.png",
-      "page": 2,
-      "original_source": "Learning Long Term Dependencies with Gradient Descent is Difficult.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "no text layer; two-column scanned paper"
-    },
-    {
-      "sample_id": "custom_english_scanned_004",
-      "dataset": "custom",
-      "category": "english_scanned",
-      "category_dir": "3.English scanned",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "3.English scanned/custom_english_scanned_004.png",
-      "page": 5,
-      "original_source": "lec+9+CP.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "no text layer on any tested page (scanned)"
-    },
-    {
-      "sample_id": "custom_english_scanned_005",
-      "dataset": "custom",
-      "category": "english_scanned",
-      "category_dir": "3.English scanned",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "3.English scanned/custom_english_scanned_005.png",
-      "page": 3,
-      "original_source": "Data-Link-Layer-Copy.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "near-zero text layer (scanned copy)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_arabic_scanned_001",
-      "dataset": "custom",
-      "category": "arabic_scanned",
-      "category_dir": "4. Arabic scanned",
+      "path": "4. Arabic scanned/custom_arabic_scanned_001.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "4. Arabic scanned/custom_arabic_scanned_001.png",
-      "page": null,
-      "original_source": "ar.png",
-      "difficulty": "very_hard",
+      "categories": [
+        "arabic_scanned"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "scanned Arabic textbook page, diacritics, RTL (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_arabic_scanned_002",
-      "dataset": "custom",
-      "category": "arabic_scanned",
-      "category_dir": "4. Arabic scanned",
+      "path": "4. Arabic scanned/custom_arabic_scanned_002.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "4. Arabic scanned/custom_arabic_scanned_002.png",
-      "page": 5,
-      "original_source": "الليالي البيضاء.pdf",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_scanned",
+        "noisy_low_quality"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": true
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "scanned Arabic novel; no text layer (verified p3-90)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_arabic_scanned_003",
-      "dataset": "custom",
-      "category": "arabic_scanned",
-      "category_dir": "4. Arabic scanned",
+      "path": "4. Arabic scanned/custom_arabic_scanned_003.jpg",
+      "source_type": "image",
+      "page": null,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "4. Arabic scanned/custom_arabic_scanned_003.png",
-      "page": 15,
-      "original_source": "الليالي البيضاء.pdf",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_scanned",
+        "noisy_low_quality"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": true
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "scanned Arabic novel; no text layer"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_arabic_scanned_004",
-      "dataset": "custom",
-      "category": "arabic_scanned",
-      "category_dir": "4. Arabic scanned",
+      "path": "4. Arabic scanned/custom_arabic_scanned_004.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "4. Arabic scanned/custom_arabic_scanned_004.png",
-      "page": 40,
-      "original_source": "الليالي البيضاء.pdf",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_scanned"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": true
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "scanned Arabic novel; no text layer"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_arabic_scanned_005",
-      "dataset": "custom",
-      "category": "arabic_scanned",
-      "category_dir": "4. Arabic scanned",
+      "path": "4. Arabic scanned/custom_arabic_scanned_005.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "4. Arabic scanned/custom_arabic_scanned_005.png",
-      "page": 80,
-      "original_source": "الليالي البيضاء.pdf",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_scanned",
+        "figures_diagrams"
+      ],
       "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_arabic_scanned_006",
+      "path": "4. Arabic scanned/custom_arabic_scanned_006.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_scanned"
+      ],
+      "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": true
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "scanned Arabic novel; no text layer"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_mixed_arabic_english_001",
-      "dataset": "custom",
-      "category": "mixed_arabic_english",
-      "category_dir": "5. Arabic + English mixed",
+      "sample_id": "custom_custom_arabic_born_digital_001_p001",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_001_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_001_p002",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_001_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_001_p003",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_001_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_002_p001",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_002_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_002_p002",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_002_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
         "ar",
         "en"
       ],
-      "source_type": "scanned",
-      "file": "5. Arabic + English mixed/custom_mixed_arabic_english_001.jpg",
-      "page": null,
-      "original_source": "Arabic English.jpg",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_born_digital",
+        "arabic_english_mixed"
+      ],
       "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
         "multi_column": false,
-        "mixed_language": true,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "handwritten mixed Arabic/English with formulas (visual inspection)"
-    },
-    {
-      "sample_id": "custom_multi_column_001",
-      "dataset": "custom",
-      "category": "multi_column",
-      "category_dir": "6. Multi-column",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "6. Multi-column/custom_multi_column_001.png",
-      "page": 2,
-      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
-      "difficulty": "medium",
-      "features": {
         "table": false,
         "formula": false,
         "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_001",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "two-column academic paper (text layer verified)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_multi_column_002",
-      "dataset": "custom",
-      "category": "multi_column",
-      "category_dir": "6. Multi-column",
+      "sample_id": "custom_custom_arabic_born_digital_002_p004",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_002_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
+        "ar",
         "en"
       ],
-      "source_type": "born_digital",
-      "file": "6. Multi-column/custom_multi_column_002.png",
-      "page": 2,
-      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_002",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "two-column academic paper (text layer verified)"
-    },
-    {
-      "sample_id": "custom_multi_column_003",
-      "dataset": "custom",
-      "category": "multi_column",
-      "category_dir": "6. Multi-column",
-      "language": [
-        "en"
+      "categories": [
+        "arabic_born_digital",
+        "arabic_english_mixed"
       ],
-      "source_type": "born_digital",
-      "file": "6. Multi-column/custom_multi_column_003.png",
-      "page": 2,
-      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
-      "difficulty": "medium",
       "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_multi_column_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "two-column academic paper (text layer verified)"
-    },
-    {
-      "sample_id": "custom_multi_column_004",
-      "dataset": "custom",
-      "category": "multi_column",
-      "category_dir": "6. Multi-column",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "6. Multi-column/custom_multi_column_004.png",
-      "page": 4,
-      "original_source": "Learning Long Term Dependencies with Gradient Descent is Difficult.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "two-column scanned paper page (no text layer)"
-    },
-    {
-      "sample_id": "custom_tables_001",
-      "dataset": "custom",
-      "category": "tables",
-      "category_dir": "7. Tables",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "7. Tables/custom_tables_001.png",
-      "page": 5,
-      "original_source": "lec1,2 statistics.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": true,
-        "formula": true,
-        "figure": false,
         "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_tables_001",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "6x4 data table + statistics symbols (visual inspection of rendered page)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_tables_002",
-      "dataset": "custom",
-      "category": "tables",
-      "category_dir": "7. Tables",
+      "sample_id": "custom_custom_arabic_born_digital_003_p002",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_003_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
         "ar"
       ],
-      "source_type": "scanned",
-      "file": "7. Tables/custom_tables_002.jpg",
-      "page": null,
-      "original_source": "470180880_1078242510765782_4224372347391521822_n.jpg",
-      "difficulty": "hard",
+      "categories": [
+        "arabic_born_digital"
+      ],
       "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_003_p004",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_003_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_003_p007",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_003_p007.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_004_p004",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_004_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_arabic_born_digital_004_p005",
+      "path": "2. Arabic born-digital/custom_custom_arabic_born_digital_004_p005.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_001_p001",
+      "path": "1. English born-digital/custom_custom_english_born_digital_001_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_001_p002",
+      "path": "1. English born-digital/custom_custom_english_born_digital_001_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_001_p003",
+      "path": "1. English born-digital/custom_custom_english_born_digital_001_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_001_p004",
+      "path": "1. English born-digital/custom_custom_english_born_digital_001_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_001_p005",
+      "path": "1. English born-digital/custom_custom_english_born_digital_001_p005.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_002_p001",
+      "path": "1. English born-digital/custom_custom_english_born_digital_002_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_002_p002",
+      "path": "1. English born-digital/custom_custom_english_born_digital_002_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_002_p003",
+      "path": "1. English born-digital/custom_custom_english_born_digital_002_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_002_p004",
+      "path": "1. English born-digital/custom_custom_english_born_digital_002_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_002_p005",
+      "path": "1. English born-digital/custom_custom_english_born_digital_002_p005.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_003_p001",
+      "path": "1. English born-digital/custom_custom_english_born_digital_003_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_003_p002",
+      "path": "1. English born-digital/custom_custom_english_born_digital_003_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_003_p003",
+      "path": "1. English born-digital/custom_custom_english_born_digital_003_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_004_p001",
+      "path": "1. English born-digital/custom_custom_english_born_digital_004_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_004_p002",
+      "path": "1. English born-digital/custom_custom_english_born_digital_004_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_004_p003",
+      "path": "1. English born-digital/custom_custom_english_born_digital_004_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_005_p001",
+      "path": "1. English born-digital/custom_custom_english_born_digital_005_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_005_p002",
+      "path": "1. English born-digital/custom_custom_english_born_digital_005_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "dense_academic",
+        "formulas"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_born_digital_005_p003",
+      "path": "1. English born-digital/custom_custom_english_born_digital_005_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_born_digital",
+        "tables",
+        "figures_diagrams",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": true,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_001_p001",
+      "path": "3.English scanned/custom_custom_english_scanned_001_p001.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "formulas",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_001_p002",
+      "path": "3.English scanned/custom_custom_english_scanned_001_p002.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "formulas",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_001_p003",
+      "path": "3.English scanned/custom_custom_english_scanned_001_p003.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_003_p001",
+      "path": "3.English scanned/custom_custom_english_scanned_003_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_003_p002",
+      "path": "3.English scanned/custom_custom_english_scanned_003_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_003_p003",
+      "path": "3.English scanned/custom_custom_english_scanned_003_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_003_p007",
+      "path": "3.English scanned/custom_custom_english_scanned_003_p007.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_004_p001",
+      "path": "3.English scanned/custom_custom_english_scanned_004_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_english_scanned_004_p002",
+      "path": "3.English scanned/custom_custom_english_scanned_004_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_figures_diagrams_004_p001",
+      "path": "9. Figures-diagrams/custom_custom_figures_diagrams_004_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "figures_diagrams",
+        "slides"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_figures_diagrams_004_p002",
+      "path": "9. Figures-diagrams/custom_custom_figures_diagrams_004_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "figures_diagrams"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_figures_diagrams_004_p003",
+      "path": "9. Figures-diagrams/custom_custom_figures_diagrams_004_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "figures_diagrams"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_formulas_004_p001",
+      "path": "8. Formulas/custom_custom_formulas_004_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "formulas"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_formulas_004_p002",
+      "path": "8. Formulas/custom_custom_formulas_004_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "formulas"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_formulas_004_p003",
+      "path": "8. Formulas/custom_custom_formulas_004_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "formulas"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_formulas_004_p004",
+      "path": "8. Formulas/custom_custom_formulas_004_p004.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "formulas"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_002_p001",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_002_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_english_mixed",
+        "multi_column",
+        "arabic_scanned",
+        "english_scanned",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_002_p002",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_002_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_english_mixed",
+        "multi_column",
+        "arabic_scanned",
+        "english_scanned",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_002_p003",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_002_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "multi_column"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_004_p001",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_004_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_004_p002",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_004_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_mixed_arabic_english_004_p003",
+      "path": "5. Arabic + English mixed/custom_custom_mixed_arabic_english_004_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_multi_column_001_p001",
+      "path": "6. Multi-column/custom_custom_multi_column_001_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "multi_column"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_multi_column_002_p001",
+      "path": "6. Multi-column/custom_custom_multi_column_002_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "arabic_scanned",
+        "arabic_english_mixed",
+        "slides",
+        "multi_column",
+        "figures_diagrams"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_multi_column_002_p002",
+      "path": "6. Multi-column/custom_custom_multi_column_002_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "arabic_scanned",
+        "arabic_english_mixed",
+        "slides",
+        "tables",
+        "multi_column"
+      ],
+      "features": {
+        "multi_column": true,
         "table": true,
         "formula": false,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "photographed Arabic schedule table, low contrast/skew (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_tables_003",
-      "dataset": "custom",
-      "category": "tables",
-      "category_dir": "7. Tables",
+      "sample_id": "custom_custom_multi_column_005_p001",
+      "path": "6. Multi-column/custom_custom_multi_column_005_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "multi_column",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_multi_column_005_p002",
+      "path": "6. Multi-column/custom_custom_multi_column_005_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
+      "language": [
+        "ar"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "multi_column",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_custom_tables_005_p001",
+      "path": "7. Tables/custom_custom_tables_005_p001.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
         "en"
       ],
-      "source_type": "born_digital",
-      "file": "7. Tables/custom_tables_003.png",
-      "page": 3,
-      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
-      "difficulty": "hard",
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
+      ],
       "features": {
+        "multi_column": false,
         "table": true,
-        "formula": true,
+        "formula": false,
         "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_tables_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "Table 1 + display equations + two-column (visual inspection)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_formulas_001",
-      "dataset": "custom",
-      "category": "formulas",
-      "category_dir": "8. Formulas",
+      "sample_id": "custom_custom_tables_005_p002",
+      "path": "7. Tables/custom_custom_tables_005_p002.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
         "en"
       ],
-      "source_type": "scanned",
-      "file": "8. Formulas/custom_formulas_001.png",
-      "page": null,
-      "original_source": "Screenshot from 2026-08-17 14-40-44.png",
-      "difficulty": "hard",
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
+      ],
       "features": {
-        "table": false,
-        "formula": true,
-        "figure": false,
         "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "handwritten derivation with multiple expressions (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_formulas_002",
-      "dataset": "custom",
-      "category": "formulas",
-      "category_dir": "8. Formulas",
+      "sample_id": "custom_custom_tables_005_p003",
+      "path": "7. Tables/custom_custom_tables_005_p003.pdf",
+      "source_type": "pdf",
+      "page": 1,
       "language": [
         "en"
       ],
-      "source_type": "born_digital",
-      "file": "8. Formulas/custom_formulas_002.png",
-      "page": 4,
-      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
-      "difficulty": "hard",
-      "features": {
-        "table": false,
-        "formula": true,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_formulas_002",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "16 math tokens in text layer (verified)"
-    },
-    {
-      "sample_id": "custom_formulas_003",
-      "dataset": "custom",
-      "category": "formulas",
-      "category_dir": "8. Formulas",
-      "language": [
-        "en"
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
       ],
-      "source_type": "born_digital",
-      "file": "8. Formulas/custom_formulas_003.png",
-      "page": 3,
-      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
-      "difficulty": "hard",
       "features": {
-        "table": false,
-        "formula": true,
+        "multi_column": false,
+        "table": true,
+        "formula": false,
         "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_formulas_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "BN paper equation page (equations 3-7 region)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_figures_diagrams_001",
-      "dataset": "custom",
-      "category": "figures_diagrams",
-      "category_dir": "9. Figures-diagrams",
+      "path": "9. Figures-diagrams/custom_figures_diagrams_001.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "en"
       ],
-      "source_type": "scanned",
-      "file": "9. Figures-diagrams/custom_figures_diagrams_001.png",
-      "page": null,
-      "original_source": "2.png",
-      "difficulty": "medium",
+      "categories": [
+        "english_scanned",
+        "figures_diagrams",
+        "slides"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": true,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "labeled neuron diagram slide (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_figures_diagrams_002",
-      "dataset": "custom",
-      "category": "figures_diagrams",
-      "category_dir": "9. Figures-diagrams",
+      "path": "9. Figures-diagrams/custom_figures_diagrams_002.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "en"
       ],
-      "source_type": "scanned",
-      "file": "9. Figures-diagrams/custom_figures_diagrams_002.png",
-      "page": null,
-      "original_source": "5690_create-star-schema-data-model-using-microsoft-toolset.028.png",
-      "difficulty": "medium",
+      "categories": [
+        "english_scanned",
+        "figures_diagrams"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": true,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "star-schema diagram (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
       "sample_id": "custom_figures_diagrams_003",
-      "dataset": "custom",
-      "category": "figures_diagrams",
-      "category_dir": "9. Figures-diagrams",
+      "path": "9. Figures-diagrams/custom_figures_diagrams_003.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "en"
       ],
-      "source_type": "born_digital",
-      "file": "9. Figures-diagrams/custom_figures_diagrams_003.png",
-      "page": 4,
-      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
-      "difficulty": "medium",
+      "categories": [
+        "english_scanned",
+        "figures_diagrams"
+      ],
       "features": {
+        "multi_column": false,
         "table": false,
         "formula": false,
         "figure": true,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": false
       },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_figures_diagrams_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
+      "evaluation": {
+        "core": false,
+        "extended": true
       },
-      "evidence": "transformer architecture figure dominates page (visual inspection)"
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_slides_001",
-      "dataset": "custom",
-      "category": "slides",
-      "category_dir": "10. Slides",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "10. Slides/custom_slides_001.png",
+      "sample_id": "custom_figures_diagrams_004",
+      "path": "9. Figures-diagrams/custom_figures_diagrams_004.png",
+      "source_type": "image",
       "page": null,
-      "original_source": "1.png",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "born-digital bullet slide (visual inspection)"
-    },
-    {
-      "sample_id": "custom_slides_002",
-      "dataset": "custom",
-      "category": "slides",
-      "category_dir": "10. Slides",
       "language": [
+        "ar",
         "en"
       ],
-      "source_type": "scanned",
-      "file": "10. Slides/custom_slides_002.png",
+      "categories": [
+        "arabic_english_mixed",
+        "english_scanned",
+        "figures_diagrams"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_figures_diagrams_005",
+      "path": "9. Figures-diagrams/custom_figures_diagrams_005.png",
+      "source_type": "image",
       "page": null,
-      "original_source": "Screenshot from 2026-08-17 14-39-17.png",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "handwritten-style slide (visual inspection)"
-    },
-    {
-      "sample_id": "custom_slides_003",
-      "dataset": "custom",
-      "category": "slides",
-      "category_dir": "10. Slides",
       "language": [
         "en"
       ],
-      "source_type": "scanned",
-      "file": "10. Slides/custom_slides_003.png",
+      "categories": [
+        "english_scanned",
+        "figures_diagrams"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": false,
+        "figure": true,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_formulas_001",
+      "path": "8. Formulas/custom_formulas_001.png",
+      "source_type": "image",
       "page": null,
-      "original_source": "Screenshot from 2026-08-17 14-39-28.png",
-      "difficulty": "easy",
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "formulas",
+        "noisy_low_quality"
+      ],
       "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
         "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "handwritten-style slide (visual inspection)"
-    },
-    {
-      "sample_id": "custom_slides_004",
-      "dataset": "custom",
-      "category": "slides",
-      "category_dir": "10. Slides",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "10. Slides/custom_slides_004.png",
-      "page": null,
-      "original_source": "Screenshot from 2026-08-17 14-39-40.png",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "handwritten-style slide (visual inspection)"
-    },
-    {
-      "sample_id": "custom_slides_005",
-      "dataset": "custom",
-      "category": "slides",
-      "category_dir": "10. Slides",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "10. Slides/custom_slides_005.png",
-      "page": 3,
-      "original_source": "Transformers 1.pdf",
-      "difficulty": "easy",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_slides_005",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "lecture slide export (text layer verified)"
-    },
-    {
-      "sample_id": "custom_dense_academic_001",
-      "dataset": "custom",
-      "category": "dense_academic",
-      "category_dir": "11. Dense academic page",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "11. Dense academic page/custom_dense_academic_001.png",
-      "page": 5,
-      "original_source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_001",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "dense two-column paper body (text layer verified)"
-    },
-    {
-      "sample_id": "custom_dense_academic_002",
-      "dataset": "custom",
-      "category": "dense_academic",
-      "category_dir": "11. Dense academic page",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "11. Dense academic page/custom_dense_academic_002.png",
-      "page": 6,
-      "original_source": "NIPS-2017-attention-is-all-you-need-Paper.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_002",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "dense two-column paper body (text layer verified)"
-    },
-    {
-      "sample_id": "custom_dense_academic_003",
-      "dataset": "custom",
-      "category": "dense_academic",
-      "category_dir": "11. Dense academic page",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "11. Dense academic page/custom_dense_academic_003.png",
-      "page": 4,
-      "original_source": "Batch Normalization Accelerating Deep Network Training b.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": true,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_003",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "dense two-column paper body (text layer verified)"
-    },
-    {
-      "sample_id": "custom_dense_academic_004",
-      "dataset": "custom",
-      "category": "dense_academic",
-      "category_dir": "11. Dense academic page",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "11. Dense academic page/custom_dense_academic_004.png",
-      "page": 30,
-      "original_source": "Object Oriented Programming in c++.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_004",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "dense lecture text page (text layer verified)"
-    },
-    {
-      "sample_id": "custom_dense_academic_005",
-      "dataset": "custom",
-      "category": "dense_academic",
-      "category_dir": "11. Dense academic page",
-      "language": [
-        "en"
-      ],
-      "source_type": "born_digital",
-      "file": "11. Dense academic page/custom_dense_academic_005.png",
-      "page": 10,
-      "original_source": "1-MA212-Intro+to+IR+&+Boolean+Retrieval.pdf",
-      "difficulty": "medium",
-      "features": {
-        "table": false,
-        "formula": false,
-        "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": true
-      },
-      "ground_truth_status": "extracted_unverified",
-      "ground_truth_path": "../../ground_truth/custom/custom_dense_academic_005",
-      "provenance_status": "UNKNOWN",
-      "render": {
-        "dpi": 150,
-        "tool": "pdftoppm"
-      },
-      "evidence": "dense lecture text page (text layer verified)"
-    },
-    {
-      "sample_id": "custom_noisy_low_quality_001",
-      "dataset": "custom",
-      "category": "noisy_low_quality",
-      "category_dir": "12. Noisy-low-quality scan",
-      "language": [
-        "en"
-      ],
-      "source_type": "scanned",
-      "file": "12. Noisy-low-quality scan/custom_noisy_low_quality_001.jpg",
-      "page": null,
-      "original_source": "English only.jpg",
-      "difficulty": "very_hard",
-      "features": {
         "table": false,
         "formula": true,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": false,
+        "noisy": true
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "blurry photographed handwritten notes (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     },
     {
-      "sample_id": "custom_noisy_low_quality_002",
-      "dataset": "custom",
-      "category": "noisy_low_quality",
-      "category_dir": "12. Noisy-low-quality scan",
+      "sample_id": "custom_formulas_002",
+      "path": "8. Formulas/custom_formulas_002.png",
+      "source_type": "image",
+      "page": null,
       "language": [
         "en"
       ],
-      "source_type": "scanned",
-      "file": "12. Noisy-low-quality scan/custom_noisy_low_quality_002.jpg",
-      "page": null,
-      "original_source": "photo_5_2024-03-18_13-39-46.jpg",
-      "difficulty": "very_hard",
+      "categories": [
+        "english_scanned",
+        "multi_column",
+        "formulas",
+        "dense_academic"
+      ],
       "features": {
+        "multi_column": true,
         "table": false,
         "formula": true,
         "figure": false,
-        "multi_column": false,
-        "mixed_language": false,
-        "dense": false
+        "dense": true,
+        "noisy": false
       },
-      "ground_truth_status": "pending",
-      "ground_truth_path": null,
-      "provenance_status": "UNKNOWN",
-      "render": null,
-      "evidence": "low-resolution photographed handwritten notes (visual inspection)"
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_mixed_arabic_english_001",
+      "path": "5. Arabic + English mixed/custom_mixed_arabic_english_001.jpg",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "formulas",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_mixed_arabic_english_003",
+      "path": "5. Arabic + English mixed/custom_mixed_arabic_english_003.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_scanned",
+        "english_scanned",
+        "arabic_english_mixed",
+        "multi_column",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_multi_column_003",
+      "path": "6. Multi-column/custom_multi_column_003.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "multi_column",
+        "formulas",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": true,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_multi_column_004",
+      "path": "6. Multi-column/custom_multi_column_004.pdf",
+      "source_type": "pdf",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "multi_column",
+        "formulas",
+        "figures_diagrams",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": true,
+        "table": false,
+        "formula": true,
+        "figure": true,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_001",
+      "path": "7. Tables/custom_tables_001.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "tables",
+        "noisy_low_quality"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_002",
+      "path": "7. Tables/custom_tables_002.jpg",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "ar",
+        "en"
+      ],
+      "categories": [
+        "arabic_english_mixed",
+        "tables",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_003",
+      "path": "7. Tables/custom_tables_003.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_004",
+      "path": "7. Tables/custom_tables_004.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_006",
+      "path": "7. Tables/custom_tables_006.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "tables",
+        "formulas",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": true,
+        "figure": false,
+        "dense": true,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_007",
+      "path": "7. Tables/custom_tables_007.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": false,
+        "noisy": false
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
+    },
+    {
+      "sample_id": "custom_tables_008",
+      "path": "7. Tables/custom_tables_008.png",
+      "source_type": "image",
+      "page": null,
+      "language": [
+        "en"
+      ],
+      "categories": [
+        "english_scanned",
+        "slides",
+        "tables",
+        "noisy_low_quality",
+        "dense_academic"
+      ],
+      "features": {
+        "multi_column": false,
+        "table": true,
+        "formula": false,
+        "figure": false,
+        "dense": true,
+        "noisy": true
+      },
+      "evaluation": {
+        "core": false,
+        "extended": true
+      },
+      "ground_truth": {
+        "status": "verified"
+      }
     }
   ]
 }

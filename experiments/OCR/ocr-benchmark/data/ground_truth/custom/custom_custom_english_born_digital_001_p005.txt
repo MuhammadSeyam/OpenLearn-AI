@@ -1,0 +1,15 @@
+Information Need/Query/Relevance
+
+▪ Information need
+  • Topic about which the user desires to know more
+  • In the user’s mind!
+
+▪ Query
+  • What the user conveys to the computer
+  • Considered one representation of the information need
+
+▪ Relevance
+  • Document having a value with respect to the information need
+  • i.e., a document is relevant if it satisfies the information need
+
+40

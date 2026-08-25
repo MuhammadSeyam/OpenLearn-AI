@@ -1,0 +1,90 @@
+Kafrelsheikh University
+Faculty of Artificial Intelligence
+
+قسم شئون التعليم والطلاب
+
+جـامعة كفر الشيخ
+كلية الذكاء الإصطناعي
+
+جدول امتحانات نهاية الفصل الدراسي الاول (للمستوي الاول والثاني والثالث والرابع لبرنامج الذكاء الاصطناعي )
+للعام الجامعي 2024/2025م
+
+| المستوي الرابع (فترة مسائية)
+(12.30م – 2.30م )
+الاثنين -الخميس | المستوي الثالث (فترة مسائي)
+(12.30م – 2.30م )
+الاحد -الاربعاء | المستوي الثاني (فترة صباحية)
+(10.00ص-12.00ص)
+الاثنين -الخميس | المستوي الاول (فترة صباحية)
+(10.00ص-12.00ص )
+الاحد -الاربعاء | التاريخ واليوم |
+|---|---|---|---|---|
+| ـــــ | ـــــ | ـــــ | احتمالات وإحصاء 1
+Probability & Statistics 1 | الاربعاء
+2024/12/25 |
+| ـــــ | الرؤية الحسابية
+Computational Vision | ـــــ | أساسيات الحاسب
+Computer Fundamentals | الاحد
+2024/12/29 |
+| انترنت الأشياء
+Internet of Things | ـــــ | مقدمة في تعلم الالة
+Introduction to Machine Learning | ـــــ | الاثنين
+2024/12/30 |
+| ـــــ | اساسيات التعلم العميق في الرؤية بالحاسب
+Fundamental of Deep Learning
+for computer vision | ـــــ | مقدمة في الجبر الخطي
+Introduction to Linear
+Algebra | الاربعاء
+2025/1/1 |
+| التنقيب في البيانات وتحليل البيانات الضخمة
+Data Mining and Big Data Analysis | ـــــ | مقدمة في الرؤية بالحاسب والربوتات
+Introduction to Vision and Robotics | ـــــ | الخميس
+2025/1/2 |
+| ـــــ | تعلم الالي المتقدم
+Advanced Machine Learning | ـــــ | اللغة الانجليزية
+English Language | الاحد
+2025/1/5 |
+| ـــ | ـــ | ـ | ـــ | الاثنين
+2025/1/6 |
+| ـــ | ـ | ـ | ـــ | الاربعاء
+2025/1/8 |
+| التعرف على الأنماط
+والرؤية الاصطناعية
+Artificial Vision and Pattern Recognition | ـــــ | بنية الحاسب
+Computer Architecture | ـــــ | الخميس
+2025/1/9 |
+| ـــــ | تطوير البرمجيات للأجهزة المحمولة
+Software Development for Mobile
+Devices | ـــــ | البرمجة الهيكلية
+Structured Programming | الاحد
+2025/1/12 |
+| تقنية الحوسبة داخل هاتفك الذكي
+the computing technology inside your
+smartphone | ـــــ | شبكات الحاسب
+Computer network | ـــــ | الاثنين
+2025/1/13 |
+| ـــــ | معالجة اللغات الطبيعية المتقدم
+Advanced Natural Language
+Processing | ـــــ | رياضيات1
+Mathematics 1 | الاربعاء
+2025/1/15 |
+| المنطق والوكلاء
+Reasoning and agents | ـ | الكتابة العلمية
+Scientific Writing | ـ | الخميس
+2025/1/16 |
+| ـــ | ـــ | ـ | ـــ | الاحد
+2025/1/19 |
+| ـ نظم دعم القرار الذكي
+Intelligent Decision Support Systems | ـــ | استرجاع المعلومات والبحث في الويب
+Information Retrieval and web search | ـ | الاثنين
+2025/1/20 |
+| ـ | الذكاء الحسابي المتقدم
+Advanced Computational
+Intelligence | ـ | دوائر كهربية
+Electric Circuits | الاربعاء
+2025/1/22 |
+| ـ | البرمجة الشينية
+Object Oriented Programming | ـ | 0رياضيات
+Mathematics (0) | الخميس
+2025/1/23 |
+

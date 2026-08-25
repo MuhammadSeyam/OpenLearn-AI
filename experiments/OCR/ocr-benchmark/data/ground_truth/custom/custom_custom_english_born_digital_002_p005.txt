@@ -1,0 +1,15 @@
+Decision Tree pros and cros
+
+Advantages:
+1.Compared to other algorithms decision trees requires less effort for data preparation during pre-processing.
+2.A decision tree does not require normalization of data.
+3.A decision tree does not require scaling of data as well.
+4.Missing values in the data also do NOT affect the process of building a decision tree to any considerable extent.
+5.A Decision tree model is very intuitive and easy to explain to technical teams as well as stakeholders.
+
+Disadvantage:
+6.A small change in the data can cause a large change in the structure of the decision tree causing instability.
+7.For a Decision tree sometimes calculation can go far more complex compared to other algorithms.
+3.Decision tree often involves higher time to train the model.
+4.Decision tree training is relatively expensive as the complexity and time has taken are more.
+5.The Decision Tree algorithm is inadequate for applying regression and predicting continuous values.

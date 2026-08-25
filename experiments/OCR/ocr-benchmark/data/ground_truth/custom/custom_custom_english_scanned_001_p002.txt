@@ -1,0 +1,23 @@
+ex: Consider the random experiment of
+waiting of calls at certain switched
+board, Define R.v.x to be interarrived
+time between calls, y to be number of
+arriving calls in a certain day, Determine
+range of x and y
+
+x -> [0, ∞[         y -> {0,1,2,3,....}
+____________________
+
+* any R.V has -> expectation, varience, Standard ->
+              -> PMF = PDF, CDF
+                        |    |
+                  discrete   continous
+
+* PMF (PDF):_   value
+          F(x) = P(X=x)     the Prob that random
+                  |         variable X take the value x
+               variable
+
+* PMF must satisfy :-
+1- F(x) ≥ 0
+2- Σ F(x) = 1

@@ -1,0 +1,20 @@
+
+lec 1
+
+Discrete random variables :-
+
+ex: a coin is tossed twice, define the R.v.x
+
+to be the number of appearing heads in the
+
+two tosses, determine the Range of x.
+
+s = {(HH), (H, T), (TH), TT} -> X: num of heads
+                             -> Range = {0, 1, 2}
+
+-> A Random variable :-
+is a function that associated a real number
+with each element in a sample space.
+
+-> if the range of R.v is countable set (finite or
+infinite) then R.v is said to be discrete R.v
