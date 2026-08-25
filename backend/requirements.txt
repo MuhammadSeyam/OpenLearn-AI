@@ -4,3 +4,12 @@
 fastapi==0.138.1
 uvicorn==0.49.0
 pydantic-settings==2.15.0
+# Database
+sqlalchemy==2.0.43
+psycopg[binary]==3.2.9
+
+# Database migrations
+alembic==1.16.5
+
+
+asyncpg==0.30.0
