@@ -1,0 +1,17 @@
+Grid Computing Vs Cloud Computing
+
+| Aspect | Grid Computing | Cloud Computing |
+| :--- | :--- | :--- |
+| Focus | Collaboration, resource sharing | Conveniene, on-demand services |
+| Scalability | Requires manual intervention | Elastic, dynamic resource scaling |
+| Resource Ownership | Contributing entities | Cloud service providers |
+| Cost Model | Complex negotiations | Pay-as-you-go, consumption-based |
+| Use Cases | Scientific research, complex tasks | Broad range of applications |
+| Resource Utilization | High-performance computing | Resource optimization |
+| Resource Provisioning | Manual allocation | Automated provisioning |
+| Middleware Role | Resource management | Communication and integration |
+| Data Management | Shared data, distributed datasets | Data storage and management |
+| Collaboration | Cooperative problem-solving | Accessible collaboration platforms |
+| Performance Acceleration | Parallel processing | Resource-efficient computation |
+| Application Diversity | Niche scientific, data-intensive tasks | Versatile services and workloads |
+| Agility | Moderate | High |

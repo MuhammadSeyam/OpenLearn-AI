@@ -1,0 +1,16 @@
+2
+Chap. 1: Digital Logic Circuits
+• Logic Gates, Boolean Algebra
+• Map Simplification, Combinational Circuits
+• Filp-Flops, Sequential Circuits
+Chap. 2: Digital Components
+• Integrated Circuits,  Decoders, Multiplexers
+• Registers, Shift Registers, Binary Counters
+• Memory Unit
+Chap. 3: Data Representation
+• Data Types,  Complements
+• Fixed Point Representation
+• Floating Point Representation
+• Other Binary Codes,  Error Detection Codes
+Computer Organization
+Computer Architecture

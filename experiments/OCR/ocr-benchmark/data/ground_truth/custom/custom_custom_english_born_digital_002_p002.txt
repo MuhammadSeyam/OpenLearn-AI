@@ -1,0 +1,12 @@
+Pros and cons
+
+Advantages of k-means
+1. Relatively simple to implement.
+2. Scales to large data sets.
+3. Guarantees convergence.
+4. Easily adapts to new examples.
+
+Disadvantages of k-means
+1. Choosing \(k\) manually.
+2. Being dependent on initial values.
+3. Scaling with number of dimensions.

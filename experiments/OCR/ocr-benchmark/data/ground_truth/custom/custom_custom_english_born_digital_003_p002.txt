@@ -1,0 +1,8 @@
+1. Lecture Objectives
+- By the end of this lecture, students will be able to:
+➜ Clearly define what a software design pattern is
+➜ Explain why design patterns exist
+➜ Distinguish between design patterns, algorithms, and frameworks
+➜ Understand the origin and philosophy of patterns
+➜ Identify design problems that patterns aim to solve
+➜ Recognize benefits and dangers of using patterns

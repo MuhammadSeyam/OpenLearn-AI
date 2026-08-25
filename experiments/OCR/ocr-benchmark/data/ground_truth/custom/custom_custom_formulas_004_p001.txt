@@ -1,0 +1,12 @@
+$$\text{Likelihood} = L(\theta) = \prod_{t=1}^{T} \prod_{\substack{-m \le j \le m \\ j \ne 0}} P(w_{t+j} \mid w_t; \theta)$$
+
+$\theta$ is all variables
+to be optimized
+
+sometimes called a cost or loss function
+
+The objective function $J(\theta)$ is the (average) negative log likelihood:
+
+$$J(\theta) = -\frac{1}{T} \log L(\theta) = -\frac{1}{T} \sum_{t=1}^{T} \sum_{\substack{-m \le j \le m \\ j \ne 0}} \log P(w_{t+j} \mid w_t; \theta)$$
+
+Minimizing objective function $\Leftrightarrow$ Maximizing predictive accuracy

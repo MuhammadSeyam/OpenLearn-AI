@@ -1,0 +1,23 @@
+Parameters (Constants)
+
+1 Population mean (M)
+
+2 Population variance (σ²)
+
+3 Population of standard deviation (σ)
+
+Statistics of sample
+
+1 Sample mean (X̄) = ΣX / n
+random variable
+sample size
+
+2 Sample variance (S²)
+
+3 Sample standard deviation (S)
+
+S² = (Xi - X̄)² / n - 1
+
+1 Condition of sample Choice :-
+
+Ex :- If we want to measure IQ For 700,000 students in Egypt. n = 100

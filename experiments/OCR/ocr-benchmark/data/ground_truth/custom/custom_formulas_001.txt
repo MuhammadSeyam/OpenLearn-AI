@@ -1,0 +1,13 @@
+$$L^*(\mu, \sigma^2) = \text{Const} - \frac{n}{2} \ln \sigma^2 - \frac{\sum (x_i - \mu)^2}{2} \cdot \frac{1}{\sigma^2}$$
+
+$$\frac{\partial L^*}{\partial \sigma^2} = 0$$
+
+$$-\frac{n}{2} \left( \frac{1}{\hat{\sigma}^2} \right) - \frac{\sum (x_i - \hat{\mu})^2}{2} \left( -\frac{1}{(\hat{\sigma}^2)^2} \right) = 0$$
+
+$$\frac{\sum (x_i - \hat{\mu})^2}{2 \hat{\sigma}^2 \hat{\sigma}^2} = \frac{n}{2 \hat{\sigma}^2}$$
+
+$$\hat{\sigma}^2 = \frac{\sum (x_i - \hat{\mu})^2}{n}$$
+
+$$\hat{\sigma}^2 = \frac{\sum (x_i - \bar{x})^2}{n}$$
+
+< 42/44 >

@@ -1,0 +1,1612 @@
+# custom_manifest_metadata.yaml
+#
+# Manually-maintained semantic metadata for the custom OCR benchmark
+# manifest (data/raw/custom/manifest.json).
+#
+# This file is the ONLY place semantic labels are assigned. The builder
+# (scripts/build_custom_manifest.py) never infers language, categories,
+# features, evaluation tier, or ground-truth status from folder names or
+# file names -- it only reads what's written here, keyed by sample_id.
+#
+# Entries are looked up by sample_id. If a sample_id has no entry here
+# (or a field is omitted), the manifest will contain null / an
+# "unassigned" default for that field rather than a guessed value. See
+# the exact defaults below.
+#
+# Run `python3 scripts/build_custom_manifest.py` after editing this file
+# to regenerate data/raw/custom/manifest.json. Run
+# `python3 scripts/audit_custom_manifest.py` afterward to check
+# completeness and catch mistakes (invalid category names, malformed
+# language values, etc).
+#
+# ---------------------------------------------------------------------
+# SCHEMA PER ENTRY (all fields optional; omit what you haven't decided)
+# ---------------------------------------------------------------------
+#
+# <sample_id>:
+#   language: null | en | ar | [ar, en]
+#   categories:
+#     - <one or more of the canonical category keys, see below>
+#   features:
+#     multi_column: null | true | false
+#     table:        null | true | false
+#     formula:      null | true | false
+#     figure:       null | true | false
+#     dense:        null | true | false
+#     noisy:        null | true | false
+#   evaluation:
+#     core: true | false        # default if omitted: false
+#     extended: true | false    # default if omitted: true
+#   ground_truth:
+#     status: pending | partial | verified   # default if omitted: pending
+#
+# CANONICAL CATEGORY KEYS (multi-label -- a sample may have several):
+#   english_born_digital
+#   arabic_born_digital
+#   english_scanned
+#   arabic_scanned
+#   arabic_english_mixed
+#   multi_column
+#   tables
+#   formulas
+#   figures_diagrams
+#   slides
+#   dense_academic
+#   noisy_low_quality
+#
+# ---------------------------------------------------------------------
+# EXAMPLE (uncomment and adapt; check manifest.json / the audit report
+# for the real generated sample_ids in your dataset)
+# ---------------------------------------------------------------------
+#
+# custom_custom_english_born_digital_001_p001:
+#   language:
+#   categories:
+#     - english_born_digital
+#   features:
+#     multi_column: false
+#     table: false
+#     formula: false
+#     figure: false
+#     dense: false
+#     noisy: false
+#   evaluation:
+#     core: true
+#     extended: true
+#   ground_truth:
+#     status: pending
+#
+# ---------------------------------------------------------------------
+# CHANGE LOG
+# ---------------------------------------------------------------------
+# Phase 2: canonical identity contract applied (sample_id = exact raw
+#   filename stem); 29 digital/scanned category fixes (ID token rule is
+#   authoritative); 6 feature->category additions (feature is
+#   authoritative); 18 features blocks repaired from list to mapping.
+# Phase 3: ground_truth.status set to "verified" for all 85 samples --
+#   the 85 GT text files have been manually reviewed and their content
+#   is accepted as correct. "verified" means content review; structural
+#   checks (exists / non-empty / UTF-8 / identity match) are enforced
+#   separately by scripts/audit_custom_manifest.py.
+# ---------------------------------------------------------------------
+
+
+custom_custom_english_born_digital_001_p001:
+  language: 
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_001_p002:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_001_p003:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_001_p004:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_001_p005:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_002_p001:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_002_p002:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_002_p003:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_002_p004:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_002_p005:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_003_p001:
+  language:
+    - en
+  categories:
+    - english_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_003_p002:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_003_p003:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_english_born_digital_004_p001:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_004_p002:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_004_p003:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_005_p001:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - dense_academic
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_005_p002:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - dense_academic
+    - formulas
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_born_digital_005_p003:
+  language:
+    - en
+  categories:
+    - english_born_digital
+    - tables
+    - figures_diagrams
+    - dense_academic
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: true
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_001_p001:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_001_p002:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_001_p003:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_002_p001:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_002_p002:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_born_digital
+    - arabic_english_mixed
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_002_p004:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_born_digital
+    - arabic_english_mixed
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_003_p002:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_003_p004:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_003_p007:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_004_p004:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_arabic_born_digital_004_p005:
+  language:
+    - ar
+  categories:
+    - arabic_born_digital
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_001_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - formulas
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_001_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - formulas
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_001_p003:
+  language:
+    - en
+  categories:
+    - english_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_003_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_003_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_003_p003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_003_p007:
+  language:
+    - en
+  categories:
+    - english_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_004_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_english_scanned_004_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+Custom_English_scanned_002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - formulas
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_001:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_002:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_003:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_004:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_005:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_arabic_scanned_006:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_002_p001:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_english_mixed
+    - multi_column
+    - arabic_scanned
+    - english_scanned
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_002_p002:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_english_mixed
+    - multi_column
+    - arabic_scanned
+    - english_scanned
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_002_p003:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - multi_column
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_004_p001:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_004_p002:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_mixed_arabic_english_004_p003:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_mixed_arabic_english_001:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - formulas
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_mixed_arabic_english_003:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_scanned
+    - english_scanned
+    - arabic_english_mixed
+    - multi_column
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_multi_column_001_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - multi_column
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_multi_column_002_p001:
+  language:
+    - ar
+    - en
+  categories:
+    - english_scanned
+    - arabic_scanned
+    - arabic_english_mixed
+    - slides
+    - multi_column
+    - figures_diagrams
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_multi_column_002_p002:
+  language:
+    - ar
+    - en
+  categories:
+    - english_scanned
+    - arabic_scanned
+    - arabic_english_mixed
+    - slides
+    - tables
+    - multi_column
+  features:
+    multi_column: true
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_multi_column_005_p001:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+    - multi_column
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_multi_column_005_p002:
+  language:
+    - ar
+  categories:
+    - arabic_scanned
+    - multi_column
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_multi_column_003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - multi_column
+    - formulas
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: true
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_multi_column_004:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - multi_column
+    - formulas
+    - figures_diagrams
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: true
+    figure: true
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_tables_005_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_tables_005_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_tables_005_p003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - tables
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_tables_002:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_english_mixed
+    - tables
+    - dense_academic
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_004:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_006:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - tables
+    - formulas
+    - dense_academic
+  features:
+    multi_column: false
+    table: true
+    formula: true
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_007:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_tables_008:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - tables
+    - noisy_low_quality
+    - dense_academic
+  features:
+    multi_column: false
+    table: true
+    formula: false
+    figure: false
+    dense: true
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_custom_formulas_004_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - formulas
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_formulas_004_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - formulas
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_formulas_004_p003:
+  language:
+    - en
+  categories:
+    - english_scanned 
+    - slides
+    - formulas
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_formulas_004_p004:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - formulas
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_formulas_001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - formulas
+    - noisy_low_quality
+  features:
+    multi_column: false
+    table: false
+    formula: true
+    figure: false
+    dense: false
+    noisy: true
+
+  ground_truth:
+    status: verified
+
+custom_formulas_002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - multi_column
+    - formulas
+    - dense_academic
+  features:
+    multi_column: true
+    table: false
+    formula: true
+    figure: false
+    dense: true
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+
+custom_custom_figures_diagrams_004_p001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - figures_diagrams
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_figures_diagrams_004_p002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_custom_figures_diagrams_004_p003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - slides
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_figures_diagrams_001:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - figures_diagrams
+    - slides
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_figures_diagrams_002:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_figures_diagrams_003:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_figures_diagrams_004:
+  language:
+    - ar
+    - en
+  categories:
+    - arabic_english_mixed
+    - english_scanned
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+custom_figures_diagrams_005:
+  language:
+    - en
+  categories:
+    - english_scanned
+    - figures_diagrams
+  features:
+    multi_column: false
+    table: false
+    formula: false
+    figure: true
+    dense: false
+    noisy: false
+
+  ground_truth:
+    status: verified
+
+

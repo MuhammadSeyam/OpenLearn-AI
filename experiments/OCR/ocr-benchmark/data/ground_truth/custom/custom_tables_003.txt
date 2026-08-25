@@ -1,0 +1,12 @@
+| Gradient Descent | Stochastic Gradient Descent |
+| :--- | :--- |
+| Computes gradient using the whole Training sample | Computes gradient using a single Training sample |
+| Slow and computationally expensive algorithm | Faster and less computationally expensive than Batch GD |
+| Not suggested for huge training samples. | Can be used for large training samples. |
+| Deterministic in nature. | Stochastic in nature. |
+| Gives optimal solution given sufficient time to converge. | Gives good solution but not optimal. |
+| No random shuffling of points are required. | The data sample should be in a random order, and this is why we want to shuffle the training set for every epoch. |
+| Can’t escape shallow local minima easily. | SGD can escape shallow local minima more easily. |
+| Convergence is slow. | Reaches the convergence much faster. |
+
+Unlike **deterministic** models that produce the same exact results for a particular set of inputs, **stochastic** models are the opposite; the model presents data and predicts outcomes that account for certain levels of unpredictability or randomness.	

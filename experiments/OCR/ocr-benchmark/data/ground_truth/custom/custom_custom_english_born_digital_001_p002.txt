@@ -1,0 +1,10 @@
+Queries
+ Free text to express user's information need
+Same information need can be described by different queries
+• Are chatting Apps secure?[cite: 1]
+• Live chat protection
+• Breaches in online chat
+Same query can represent different information needs
+• Apple
+• Jaguar
+37

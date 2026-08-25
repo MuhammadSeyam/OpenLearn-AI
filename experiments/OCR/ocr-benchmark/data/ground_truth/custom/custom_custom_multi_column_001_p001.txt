@@ -1,0 +1,10 @@
+Markov ▯ Kalman Filter Localization
+
+• Markov localization
+- localization starting from any unknown position
+- recovers from ambiguous situation.
+- However, to update the probability of all positions within the whole state space at any time requires a discrete representation of the space (grid). The required memory and calculation power can thus become very important if a fine grid is used.
+
+• Kalman filter localization
+- tracks the robot and is inherently very precise and efficient.
+- However, if the uncertainty of the robot becomes to large (e.g. collision with an object) the Kalman filter will fail and the position is definitively lost.

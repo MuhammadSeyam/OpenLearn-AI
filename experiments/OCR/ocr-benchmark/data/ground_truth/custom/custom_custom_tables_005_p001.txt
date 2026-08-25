@@ -1,0 +1,14 @@
+6. Truth Table
+
+• Following is the summarized table for Propositional Logic Connectives:
+
+| Connective symbols | Word | Technical term | Example |
+| :--- | :--- | :--- | :--- |
+| ∧ | AND | Conjunction | A ∧ B |
+| ∨ | OR | Disjunction | A ∨ B |
+| → | Implies | Implication | A → B |
+| ⇔ | If and only if | Biconditional | A ⇔ B |
+| ¬ or ~ | Not | Negation | ¬ A or ¬ B |
+
+• Truth Table: In propositional logic, we need to know the truth values of propositions in all possible scenarios.
+• We can combine all the possible combination with logical connectives, and the representation of these combinations in a tabular format is called Truth table.

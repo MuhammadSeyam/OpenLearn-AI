@@ -1,0 +1,13 @@
+Word2vec: objective function
+
+• We want to minimize the objective function:
+
+$$J(\theta) = -\frac{1}{T} \sum_{t=1}^{T} \sum_{\substack{-m \le j \le m \\ j \ne 0}} \log P(w_{t+j} \mid w_t; \theta)$$
+
+• Question: How to calculate $P(w_{t+j} \mid w_t; \theta)$ ?
+• Answer: We will use two vectors per word $w$:
+  • $v$- when $w$ is a center word
+  • $u$- when $w$ is a context word
+• • Then for a center word $c$ and a context word $o$:
+
+$$P(o \mid c) = \frac{\exp(u_o^T v_c)}{\sum_{w \in V} \exp(u_w^T v_c)}$$
