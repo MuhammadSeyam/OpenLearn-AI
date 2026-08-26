@@ -58,6 +58,30 @@ GPU-first policy: if any check fails, stop. Never fall back to CPU silently.
 Inside the benchmark run itself, `run_text.py` re-verifies CUDA and aborts
 otherwise (`_require_gpu`), and asserts the adapter's accelerator is `cuda`.
 
+### 5.1 PaddleOCR-VL specifics (T4)
+
+- Stack (pinned, ad-hoc in `.venv`): `paddlepaddle-gpu==3.2.2` (Baidu cu126
+  index) + `paddleocr[doc-parser]>=3.7,<3.8`. Torch is installed first from
+  the pytorch cu126 index so the whole stack shares the **cu12** wheel family.
+- **NCCL collision caveat**: `nvidia-nccl-cu12` (paddle) and a cu13 torch would
+  clobber each other's `nvidia/nccl/lib/libnccl.so.2` (last install wins). The
+  notebook keeps everything on cu12 and includes an import guard that repairs
+  torch's NCCL once if a collision is ever detected; both imports are then
+  re-verified. Never mix cu12-paddle with a cu13-torch install order.
+- **Precision on T4**: Turing has no native BF16, so paddlex selects fp32 for
+  the 0.9 B VL weights (~3.6 GB) — fits comfortably in 15.6 GB. Expect slower
+  decoding than bf16-on-Ampere; measure per-page wall time during the pilot
+  before authorizing formal runs.
+- **Persistent model cache (source-verified)**: paddlex reads
+  `PADDLE_PDX_CACHE_HOME` (`paddlex/utils/cache.py:29`) and stores models under
+  `<cache>/official_models` (`official_models.py:880`). The notebook sets it to
+  `Drive/ocrbench/models/paddlex_cache`, so the ~1.8 GB PaddleOCR-VL-1.6
+  weights download once and persist across sessions. Set the variable before
+  the first paddle import.
+- **One-image probe gate**: the notebook runs exactly one real Misraj page
+  through the adapter before any pilot and dumps the payload structure — the
+  extraction contract is anchored to observed reality, not assumptions.
+
 ## 6. Python / uv setup
 
 Colab host images do not guarantee Python ≥ 3.12 (`requires-python` in

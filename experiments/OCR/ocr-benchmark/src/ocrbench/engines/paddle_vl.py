@@ -32,6 +32,7 @@ class PaddleVLEngine:
     def __init__(self, device: str = "gpu:0") -> None:
         self.name: str = "paddle_vl"
         self.model_version: str = "not-loaded"
+        self.accelerator_device: str = "not-loaded"
         self.device: str = device
         self._pipeline: object | None = None
 
@@ -40,7 +41,20 @@ class PaddleVLEngine:
         if self._pipeline is not None:
             return
 
+        import paddle  # lazy heavy import
+
         from paddleocr import PaddleOCRVL  # lazy heavy import
+
+        # GPU-first contract: the runner asserts accelerator_device == "cuda".
+        # A CPU-only paddle build or absent device fails loudly here instead of
+        # silently degrading benchmark execution.
+        if not (paddle.device.is_compiled_with_cuda() and paddle.device.cuda.device_count() > 0):
+            raise RuntimeError(
+                "paddle_vl: Paddle CUDA runtime unavailable — "
+                f"compiled_with_cuda={paddle.device.is_compiled_with_cuda()}, "
+                f"device_count={paddle.device.cuda.device_count()}"
+            )
+        self.accelerator_device = "cuda"
 
         self._pipeline = PaddleOCRVL(device=self.device)
         version = DEFAULT_PIPELINE_VERSION

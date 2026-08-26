@@ -32,10 +32,23 @@ from pathlib import Path
 import yaml
 
 from ocrbench.datasets.misraj import load_misraj
-from ocrbench.engines.docling import SUPPORTED_SUFFIXES, DoclingEngine
+from ocrbench.engines.docling import DoclingEngine
+from ocrbench.engines.docling import SUPPORTED_SUFFIXES as _DOCLING_SUFFIXES
+from ocrbench.engines.paddle_vl import PaddleVLEngine
+from ocrbench.engines.paddle_vl import SUPPORTED_SUFFIXES as _PADDLE_SUFFIXES
 from ocrbench.metrics.normalize import NORMALIZATION_NOTES, NORMALIZATION_VERSION, normalize_text
 from ocrbench.metrics.text import cer, macro_cer, macro_wer, micro_cer, micro_wer, wer
 from ocrbench.types import Prediction
+
+# Plain engine mapping (architecture §11: a dict, not a registry framework).
+ENGINES = {
+    "docling": DoclingEngine,
+    "paddle_vl": PaddleVLEngine,
+}
+ENGINE_INPUT_FORMATS = {
+    "docling": _DOCLING_SUFFIXES,
+    "paddle_vl": _PADDLE_SUFFIXES,
+}
 
 
 def _scores(reference: str, hypothesis: str) -> dict:
@@ -96,7 +109,7 @@ def _require_gpu(gpu: dict) -> None:
         )
 
 
-def _run_with_retry(engine: DoclingEngine, image_path: Path) -> tuple[Prediction, float, int]:
+def _run_with_retry(engine, image_path: Path) -> tuple[Prediction, float, int]:
     """Attempt 1 → optional single retry → final result. Returns (pred, s, retries)."""
     start = time.perf_counter()
     pred = engine.run(image_path)
@@ -110,7 +123,7 @@ def _run_with_retry(engine: DoclingEngine, image_path: Path) -> tuple[Prediction
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Misraj × engine text pilot")
     parser.add_argument("--limit", type=int, default=20)
-    parser.add_argument("--engine", default="docling", choices=["docling"])
+    parser.add_argument("--engine", default="docling", choices=sorted(ENGINES))
     args = parser.parse_args(argv)
 
     gpu = _gpu_info()
@@ -127,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"[run] loading {args.engine} (GPU)...")
     t0 = time.perf_counter()
-    engine = DoclingEngine()
+    engine = ENGINES[args.engine]()
     engine.load()
     load_time_s = time.perf_counter() - t0
     assert engine.accelerator_device == "cuda", "GPU-first policy violated"
@@ -230,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
             "name": args.engine,
             "model_version": engine.model_version,
             "accelerator_device": engine.accelerator_device,
-            "input_formats_accepted": sorted(SUPPORTED_SUFFIXES),
+            "input_formats_accepted": sorted(ENGINE_INPUT_FORMATS[args.engine]),
         },
         "gpu": gpu,
         "runner": {
