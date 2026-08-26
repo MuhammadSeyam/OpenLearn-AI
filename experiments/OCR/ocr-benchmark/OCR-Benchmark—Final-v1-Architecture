@@ -1,0 +1,1924 @@
+# OCR Benchmark — Final v1 Architecture & Implementation Structure
+
+**Status:** Approved implementation structure
+**Scope:** OCR benchmarking only
+**Primary objective:** Produce reproducible, methodology-compliant evidence for selecting OCR/document-understanding engines.
+**Current priority:** Misraj → text-accuracy vertical slice → first engine → formal 400-page run.
+
+---
+
+## 1. Architectural Principle
+
+The benchmark is intentionally a **small pipeline of functions, dataclasses, and one engine boundary**.
+
+```text
+Dataset Loader
+      │
+      ▼
+    Sample
+      │
+      ▼
+    Engine
+      │
+      ▼
+  Prediction
+      │
+      ▼
+   Evaluator
+      │
+      ▼
+    Results
+```
+
+The benchmark is **not** a general OCR framework and must not anticipate the future OpenLearn AI ingestion/document schema.
+
+### Core principles
+
+* Three known datasets → three explicit loader functions.
+* One minimal `Sample` dataclass.
+* One `Engine` protocol.
+* One `Prediction` dataclass.
+* Pure metric functions.
+* Centralized normalization.
+* Sequential execution.
+* Flat-file results.
+* Raw engine outputs preserved.
+* Timestamped runs; never overwrite previous evidence.
+* Heavy engine dependencies loaded lazily.
+* No plugin framework.
+* No dependency injection.
+* No generic dataset/evaluator abstractions.
+* No database/dashboard/experiment tracker.
+* No composite benchmark score.
+
+---
+
+# 2. Final Repository Structure
+
+```text
+experiments/OCR/ocr-benchmark/
+│
+├── data/
+│   ├── raw/
+│   │   ├── ...                    # Original/raw sources where still present
+│   │
+│   ├── processed/
+│   │   ├── misraj/
+│   │   │   └── ...                # 400-page Misraj dataset
+│   │   │
+│   │   ├── bce/
+│   │   │   └── ...                # Final 199-page BCE subset
+│   │   │
+│   │   └── custom/
+│   │       └── ...                # Final 85-sample Custom dataset
+│   │
+│   ├── ground_truth/
+│   │   ├── custom/
+│   │   └── ...
+│   │
+│   └── cache/
+│       └── misraj_pages/           # Regenerable Misraj PNG cache
+│
+├── configs/
+│   ├── datasets/
+│   │   └── custom_v1.yaml
+│   └── custom_manifest_metadata.yaml
+│
+├── docs/
+│   ├── OCR_BENCHMARKING_HANDBOOK.md
+│   ├── pre-run-decisions.md
+│   ├── provenance.md
+│   └── annotation-guidelines.md
+│
+├── reports/
+│   ├── dataset-characterization/
+│   │   ├── misraj/
+│   │   │   └── MISRAJ_CHARACTERIZATION.md
+│   │   ├── bce/
+│   │   │   └── BCE_CHARACTERIZATION.md
+│   │   └── custom/
+│   │       └── CUSTOM_CHARACTERIZATION.md
+│   │
+│   └── ...
+│
+├── results/
+│   ├── screening/
+│   │   ├── docling.md
+│   │   ├── paddle_vl.md
+│   │   ├── mineru.md
+│   │   ├── baseer.md
+│   │   ├── qwen25_vl.md
+│   │   └── qwen3_vl.md
+│   │
+│   ├── formal/
+│   │   ├── misraj/
+│   │   │   └── <engine>/
+│   │   │       └── <YYYYMMDD-HHMMSS>/
+│   │   │           ├── raw_outputs/
+│   │   │           ├── metrics.json
+│   │   │           ├── config.yaml
+│   │   │           └── run_log.md
+│   │   │
+│   │   ├── bce/
+│   │   │   └── <engine>/
+│   │   │       └── <timestamp>/
+│   │   │
+│   │   └── custom/
+│   │       └── <engine>/
+│   │           └── <timestamp>/
+│   │
+│   └── qualitative/
+│       └── ...
+│
+├── scripts/
+│   ├── audit_custom_manifest.py
+│   ├── build_custom_manifest.py
+│   └── ...
+│
+├── src/
+│   └── ocrbench/
+│       ├── __init__.py
+│       ├── paths.py
+│       ├── types.py
+│       │
+│       ├── datasets/
+│       │   ├── __init__.py
+│       │   ├── misraj.py
+│       │   ├── bce.py
+│       │   └── custom.py
+│       │
+│       ├── engines/
+│       │   ├── __init__.py
+│       │   ├── base.py
+│       │   ├── docling.py
+│       │   ├── paddle_vl.py
+│       │   ├── mineru.py
+│       │   ├── baseer.py
+│       │   └── qwen_vl.py
+│       │
+│       ├── metrics/
+│       │   ├── __init__.py
+│       │   ├── normalize.py
+│       │   ├── text.py
+│       │   └── layout.py
+│       │
+│       ├── results_io.py
+│       │
+│       └── run/
+│           ├── __init__.py
+│           ├── smoke.py
+│           ├── run_text.py
+│           └── run_layout.py
+│
+└── tests/
+    ├── test_normalize.py
+    └── test_text_metrics.py
+```
+
+---
+
+# 3. Package Responsibilities
+
+## `paths.py`
+
+Central source of truth for filesystem locations.
+
+It contains constants/path helpers only.
+
+Example responsibilities:
+
+```python
+PROJECT_ROOT
+DATA_ROOT
+PROCESSED_ROOT
+GROUND_TRUTH_ROOT
+CACHE_ROOT
+RESULTS_ROOT
+```
+
+Important:
+
+* Paths reflect the **actual current repository state**.
+* Runtime code does not depend on stale YAML paths.
+* No configuration framework is introduced.
+* Results always resolve relative to `RESULTS_ROOT`.
+
+---
+
+# 4. Core Types
+
+## `types.py`
+
+Contains only the minimal shared dataclasses.
+
+### `Sample`
+
+```python
+@dataclass
+class Sample:
+    sample_id: str
+    image_path: Path
+
+    reference_text: str | None = None
+    gt_xml_path: Path | None = None
+
+    categories: list[str] = field(default_factory=list)
+    metadata: dict = field(default_factory=dict)
+```
+
+### Semantics
+
+| Field            | Purpose                                                      |
+| ---------------- | ------------------------------------------------------------ |
+| `sample_id`      | Stable benchmark identity                                    |
+| `image_path`     | Image presented to an engine                                 |
+| `reference_text` | Misraj/Custom text GT                                        |
+| `gt_xml_path`    | BCE PAGE-XML GT                                              |
+| `categories`     | Custom multi-label strata                                    |
+| `metadata`       | Dataset-specific information without creating another schema |
+
+The runner should generally only require:
+
+```text
+sample_id
+image_path
+```
+
+The evaluator consumes the appropriate GT.
+
+---
+
+## `Prediction`
+
+```python
+@dataclass
+class Prediction:
+    sample_id: str
+
+    ok: bool
+
+    text: str | None
+    raw_output: str
+
+    regions: list[Region] | None = None
+    reading_order: list[str] | None = None
+
+    error: str | None = None
+    elapsed_s: float = 0.0
+```
+
+### Rules
+
+#### `raw_output`
+
+Mandatory.
+
+It must contain the engine's output **verbatim**, before benchmark normalization.
+
+Examples:
+
+* Markdown
+* JSON
+* plain text
+* HTML
+* engine-specific structured output
+
+Never overwrite it with normalized text.
+
+#### `text`
+
+The adapter's **mechanical plain-text representation**.
+
+It is not benchmark normalization.
+
+The evaluator later applies the common normalization to both:
+
+```text
+reference
+hypothesis
+```
+
+#### `regions`
+
+Only populated when the engine naturally emits region information.
+
+Never fabricate regions.
+
+#### `reading_order`
+
+Only populated when the engine naturally provides region order.
+
+#### `ok`
+
+Indicates whether the engine successfully produced a usable prediction.
+
+#### `error`
+
+Contains failure information without crashing the whole run.
+
+---
+
+## `Region`
+
+```python
+@dataclass
+class Region:
+    box: tuple[float, float, float, float]
+    type: str
+    region_id: str | None = None
+    text: str | None = None
+```
+
+Used primarily for BCE.
+
+No attempt should be made to turn every engine into a layout engine.
+
+---
+
+# 5. Dataset Loaders
+
+There is **no generic DatasetAdapter interface**.
+
+There are three explicit loaders:
+
+```text
+load_misraj()
+load_bce()
+load_custom()
+```
+
+Each returns:
+
+```python
+list[Sample]
+```
+
+or an equivalent iterable if streaming becomes necessary later.
+
+For v1, a list is sufficient.
+
+---
+
+# 6. Misraj Loader
+
+## `datasets/misraj.py`
+
+### Input
+
+Misraj parquet files.
+
+### Required behavior
+
+* Read both parquet files.
+* Validate expected columns.
+* Extract:
+
+  * `uuid`
+  * `markdown`
+  * embedded image bytes
+* Materialize each image into:
+
+```text
+data/cache/misraj_pages/<uuid>.png
+```
+
+or the repository's chosen cache root.
+
+### Important
+
+The cache is **not part of the raw dataset**.
+
+Never write materialized PNGs back into the original parquet dataset.
+
+### Output
+
+```text
+400 Sample objects
+```
+
+Each sample:
+
+```text
+sample_id
+image_path
+reference_text
+```
+
+### Validation
+
+The loader must verify:
+
+```text
+400 samples
+1:1 image ↔ GT
+no empty GT
+images materialized successfully
+stable sample IDs
+```
+
+---
+
+# 7. BCE Loader
+
+## `datasets/bce.py`
+
+BCE is special because the final benchmark target is **the surviving 199-sample processed subset**.
+
+The original ~1,996-file raw collection is no longer the implementation target.
+
+### Critical rule
+
+Never infer image/XML pairing from filenames alone.
+
+Use:
+
+```text
+manifest.json
+```
+
+because a substantial number of the surviving mappings use normalized stems.
+
+### Output
+
+```text
+199 Sample objects
+```
+
+Each sample contains:
+
+```text
+sample_id
+image_path
+gt_xml_path
+metadata
+```
+
+### No text GT
+
+BCE must not enter the CER/WER evaluator.
+
+Its role is:
+
+```text
+layout / region / reading-order evaluation
+```
+
+---
+
+# 8. Custom Loader
+
+## `datasets/custom.py`
+
+### Target
+
+The finalized:
+
+```text
+85 samples
+```
+
+### Required inputs
+
+* Custom manifest.
+* Ground-truth `.txt` files.
+* Raw files.
+* Metadata/category labels.
+
+### Output
+
+Each sample contains:
+
+```text
+sample_id
+image_path
+reference_text
+categories
+metadata
+```
+
+### PDF handling
+
+Custom contains PDFs.
+
+PDF rendering is **not part of the first Misraj slice**.
+
+It belongs to the Custom implementation phase.
+
+When implemented:
+
+```text
+PDF
+ ↓
+document/page rendering
+ ↓
+engine-compatible raster
+```
+
+The transformation must be explicitly recorded in the run configuration.
+
+### Special case
+
+`custom_multi_column_004.pdf` is document-level and multi-page.
+
+The policy should be explicitly documented before formal Custom evaluation.
+
+---
+
+# 9. Engine Boundary
+
+## `engines/base.py`
+
+This is the **only major abstraction that genuinely earns its existence**.
+
+Use a structural protocol.
+
+```python
+class Engine(Protocol):
+    name: str
+    model_version: str
+
+    def load(self) -> None:
+        ...
+
+    def run(self, image_path: Path) -> Prediction:
+        ...
+```
+
+### Why `load()` exists
+
+Loading and inference have different timing semantics.
+
+The benchmark records:
+
+```text
+model load time
+warm-up
+per-sample inference time
+```
+
+The first request is excluded from inference timing as specified by methodology.
+
+---
+
+# 10. Engine Adapter Responsibilities
+
+An engine adapter does exactly this:
+
+```text
+Input image
+    ↓
+engine invocation
+    ↓
+raw engine output
+    ↓
+mechanical extraction
+    ↓
+Prediction
+```
+
+It does **not**:
+
+* normalize benchmark text
+* calculate CER/WER
+* retry failed requests
+* decide benchmark validity
+* write results
+* modify datasets
+
+---
+
+# 11. Engine Registry
+
+A full plugin system is forbidden.
+
+A simple mapping is enough:
+
+```python
+ENGINES = {
+    "docling": "ocrbench.engines.docling",
+    "paddle_vl": "ocrbench.engines.paddle_vl",
+    "mineru": "ocrbench.engines.mineru",
+    "baseer": "ocrbench.engines.baseer",
+    "qwen25_vl": "ocrbench.engines.qwen_vl",
+    "qwen3_vl": "ocrbench.engines.qwen_vl",
+}
+```
+
+Lazy imports ensure that requesting one engine does not require every engine dependency.
+
+---
+
+# 12. Engine Candidates
+
+The initial candidates are:
+
+```text
+Docling
+PaddleOCR-VL
+MinerU
+Baseer
+Qwen2.5-VL
+Qwen3-VL
+```
+
+Qwen models share one adapter:
+
+```text
+qwen_vl.py
+```
+
+with a model ID parameter.
+
+There is no need for:
+
+```text
+qwen25.py
+qwen3.py
+```
+
+unless their invocation requirements eventually become materially different.
+
+---
+
+# 13. Dependency Isolation
+
+The core package should remain lightweight.
+
+Core dependencies should be limited to what the benchmark itself requires, such as:
+
+```text
+pyarrow
+Pillow
+PyYAML
+editdistance
+```
+
+Heavy engine dependencies are imported lazily.
+
+Where practical:
+
+```text
+environment
+    ↓
+ocrbench core
+    +
+engine-specific dependencies
+```
+
+A separate virtual environment per engine is acceptable.
+
+No Docker orchestration is required for v1.
+
+---
+
+# 14. Text Normalization
+
+## `metrics/normalize.py`
+
+This is one of the **most important correctness components**.
+
+Normalization must be centralized.
+
+The same function must be applied to:
+
+```text
+reference
+hypothesis
+```
+
+### Required order
+
+```text
+Unicode NFC
+    ↓
+whitespace collapse
+    ↓
+remove tashkeel
+    ↓
+Alef/Hamza folding
+    ↓
+remove benchmark-irrelevant markup
+    ↓
+casefold Latin
+```
+
+### Explicitly forbidden
+
+Do **not** silently normalize:
+
+```text
+❌ digits
+❌ punctuation
+❌ Teh Marbuta
+❌ arbitrary Arabic characters
+❌ semantic content
+```
+
+### Misraj markup
+
+The normalization policy must explicitly define treatment of:
+
+```text
+<img>image here</img>
+<page_number>...</page_number>
+<table>...</table>
+```
+
+Recommended policy:
+
+* Remove figure placeholders where the engine cannot reasonably reproduce them.
+* Preserve meaningful inner textual content where applicable.
+* Strip structural markup that is not itself part of text scoring.
+* Document every transformation.
+
+---
+
+# 15. Text Metrics
+
+## `metrics/text.py`
+
+Pure functions.
+
+No evaluator class hierarchy.
+
+### Required metrics
+
+Per sample:
+
+```text
+CER raw
+WER raw
+CER normalized
+WER normalized
+```
+
+Aggregate:
+
+```text
+Micro CER
+Micro WER
+Macro CER
+Macro WER
+```
+
+---
+
+# 16. Micro vs Macro
+
+### Micro
+
+Pool edit operations and reference lengths:
+
+```text
+micro CER =
+sum(edit_distance_i)
+-------------------
+sum(reference_length_i)
+```
+
+This is the **primary aggregate**.
+
+### Macro
+
+Calculate per-page scores first:
+
+```text
+macro CER = mean(CER_i)
+```
+
+This is secondary.
+
+### Why both?
+
+Micro reflects corpus-level recognition accuracy.
+
+Macro prevents long documents from completely dominating the benchmark.
+
+---
+
+# 17. Failure Policy
+
+A failed page is not silently removed.
+
+For benchmark scoring:
+
+```text
+failed page
+    ↓
+CER = 1.0
+WER = 1.0
+```
+
+The failure must also be separately reported.
+
+Example:
+
+```json
+{
+  "failed_samples": 3,
+  "failure_rate": 0.0075
+}
+```
+
+### Operational threshold
+
+Before the first formal run, document a fixed failure-rate threshold.
+
+Recommended initial rule:
+
+```text
+failure_rate > 20%
+→ run invalid for quantitative comparison
+→ investigate/re-run
+```
+
+This is an operational validity threshold, not a scientific constant.
+
+---
+
+# 18. Empty References
+
+Empty references are excluded according to the handbook's explicit rule.
+
+The evaluator must report:
+
+```text
+empty_reference_count
+```
+
+and must not silently remove them.
+
+Misraj's six near-empty pages are **not empty references**, so they remain in the benchmark unless the methodology is explicitly changed.
+
+---
+
+# 19. BCE Layout Metrics
+
+## `metrics/layout.py`
+
+Phase 3.
+
+BCE does not use CER/WER.
+
+Initial metrics:
+
+```text
+region count agreement
+region type agreement
+reading-order agreement
+```
+
+Reading order may use:
+
+```text
+Kendall tau
+```
+
+on appropriately matched regions.
+
+### Pages without ReadingOrder
+
+The one BCE page without `<ReadingOrder>` is excluded **only from reading-order scoring** and reported explicitly.
+
+---
+
+# 20. Layout N/A Policy
+
+If an engine emits no regions:
+
+```text
+N/A
+```
+
+Not:
+
+```text
+0
+```
+
+and not:
+
+```text
+missing
+```
+
+The report should explicitly say:
+
+```text
+Region evaluation: N/A — engine does not emit region structure.
+```
+
+This distinction is important evidence when deciding whether an engine is suitable for layout/document-understanding tasks.
+
+---
+
+# 21. Custom Evaluation
+
+Custom uses the same text evaluator as Misraj:
+
+```text
+CER
+WER
+```
+
+but results must additionally be stratified.
+
+### Main dimensions
+
+```text
+language:
+    en
+    ar
+    mixed
+
+feature flags:
+    noisy_low_quality
+    formula
+    dense
+    multi_column
+    figure
+    table
+```
+
+### Important
+
+Do not artificially balance the dataset.
+
+Use all:
+
+```text
+85 / 85
+```
+
+because Custom is already deliberately curated.
+
+---
+
+# 22. Formula Handling
+
+Formula-aware metrics are **deferred**.
+
+For v1:
+
+* Preserve formula output in raw outputs.
+* Use existing text scoring where methodology permits.
+* Do not invent a special math metric without a defined methodology.
+
+The nine LaTeX-GT samples remain valuable evidence even before a dedicated formula metric exists.
+
+---
+
+# 23. Runner
+
+## `run/run_text.py`
+
+The runner owns benchmark execution policy.
+
+Responsibilities:
+
+```text
+load dataset
+    ↓
+load engine
+    ↓
+time load
+    ↓
+warm-up
+    ↓
+iterate samples
+    ↓
+run engine
+    ↓
+retry once if transient
+    ↓
+save raw output immediately
+    ↓
+record timing/failure
+    ↓
+evaluate metrics
+    ↓
+write results
+```
+
+---
+
+# 24. Retry Policy
+
+Retry is intentionally simple.
+
+```text
+attempt 1
+   ↓
+failure?
+   ↓
+attempt 2
+   ↓
+final result
+```
+
+No:
+
+```text
+retry framework
+backoff framework
+queue
+async scheduler
+```
+
+Retry is benchmark policy and belongs in the runner.
+
+---
+
+# 25. Warm-up
+
+For each engine:
+
+```text
+load()
+   ↓
+warm-up inference
+   ↓
+formal samples
+```
+
+The warm-up request is excluded from formal inference timing.
+
+Model loading is timed separately.
+
+---
+
+# 26. Smoke Screening
+
+## `run/smoke.py`
+
+The first gate for every engine.
+
+Use a tiny fixed Custom set, e.g.:
+
+```text
+simple English
+simple Arabic
+mixed Arabic/English
+```
+
+The smoke test answers:
+
+```text
+Does it run?
+Does it produce output?
+Is output parseable?
+Does the environment work?
+```
+
+Human screening additionally records:
+
+```text
+license
+weights availability
+language support
+GPU requirements
+deployment constraints
+known limitations
+```
+
+The result goes to:
+
+```text
+results/screening/<engine>.md
+```
+
+---
+
+# 27. Standard VLM Prompt
+
+Before evaluating VLM engines, define a fixed prompt.
+
+Example conceptually:
+
+```text
+Extract the text from the provided document image.
+Preserve the document's reading order.
+Output only the recognized document content.
+Do not explain your answer.
+```
+
+The exact prompt must be:
+
+* fixed
+* versioned/documented
+* identical across runs for the same engine/model family
+* stored in `config.yaml`
+
+This does **not** block the Docling/Misraj slice.
+
+---
+
+# 28. Results Storage
+
+The methodology-mandated result structure is:
+
+```text
+results/formal/
+└── <dataset>/
+    └── <engine>/
+        └── <YYYYMMDD-HHMMSS>/
+            ├── raw_outputs/
+            ├── metrics.json
+            ├── config.yaml
+            └── run_log.md
+```
+
+Example:
+
+```text
+results/formal/misraj/docling/20260825-184500/
+├── raw_outputs/
+│   ├── <sample_id>.txt
+│   ├── <sample_id>.txt
+│   └── ...
+├── metrics.json
+├── config.yaml
+└── run_log.md
+```
+
+---
+
+# 29. Raw Output Policy
+
+Raw outputs are written **during execution**, not only after completion.
+
+This guarantees that:
+
+```text
+process crash
+GPU OOM
+system shutdown
+```
+
+does not destroy all evidence.
+
+A partial run remains inspectable.
+
+---
+
+# 30. `metrics.json`
+
+Must contain at minimum:
+
+```text
+run identity
+dataset
+engine
+model version
+sample counts
+failure counts
+timing summary
+per-page metrics
+micro metrics
+macro metrics
+normalization version/policy
+```
+
+Conceptually:
+
+```json
+{
+  "dataset": "misraj",
+  "engine": "docling",
+  "sample_count": 400,
+  "failed_samples": 2,
+  "failure_rate": 0.005,
+  "micro": {
+    "cer_raw": 0.0,
+    "cer_normalized": 0.0,
+    "wer_raw": 0.0,
+    "wer_normalized": 0.0
+  },
+  "macro": {
+    "cer_raw": 0.0,
+    "cer_normalized": 0.0,
+    "wer_raw": 0.0,
+    "wer_normalized": 0.0
+  },
+  "per_sample": []
+}
+```
+
+Actual values are generated by the runner.
+
+---
+
+# 31. `config.yaml`
+
+Generated automatically from the actual run.
+
+It should capture:
+
+```text
+dataset
+dataset snapshot/version
+engine
+model version
+engine parameters
+prompt if applicable
+normalization version
+CLI arguments
+input transformation
+environment information
+timestamp
+```
+
+No manually maintained experiment YAML is required.
+
+---
+
+# 32. `run_log.md`
+
+Contains human-readable execution evidence:
+
+```text
+run metadata
+load time
+warm-up
+sample count
+successes
+failures
+retry events
+timing summary
+environment
+notes
+```
+
+---
+
+# 33. No Results Database
+
+Do not build:
+
+```text
+SQLite
+PostgreSQL
+MLflow
+Weights & Biases
+experiment tracker
+dashboard
+HTML viewer
+```
+
+For v1:
+
+```text
+ls
+grep
+jq
+Python
+```
+
+are sufficient.
+
+---
+
+# 34. Tests
+
+Keep tests deliberately small.
+
+```text
+tests/
+├── test_normalize.py
+└── test_text_metrics.py
+```
+
+## `test_normalize.py`
+
+Golden cases for:
+
+```text
+NFC
+whitespace
+tashkeel
+alef/hamza
+Markdown
+HTML
+Latin casefolding
+digits preservation
+punctuation preservation
+Teh Marbuta preservation
+```
+
+## `test_text_metrics.py`
+
+Verify:
+
+```text
+perfect match
+single substitution
+insertion
+deletion
+micro aggregation
+macro aggregation
+failure = 1.0
+empty-reference exclusion
+```
+
+No large fixture framework is needed.
+
+---
+
+# 35. Pre-run Decisions
+
+## `docs/pre-run-decisions.md`
+
+Must record decisions that affect scientific validity before formal runs.
+
+At minimum:
+
+### Failure threshold
+
+```text
+>20% → invalid quantitative run
+```
+
+### Normalization
+
+Exact §6.2 behavior.
+
+### Failure scoring
+
+```text
+failed sample → CER/WER = 1.0
+```
+
+### BCE scope
+
+```text
+199 surviving manifest-defined samples
+```
+
+### Custom scope
+
+```text
+85 verified samples
+```
+
+### BCE N/A policy
+
+Engines without region output:
+
+```text
+N/A
+```
+
+### Misraj tiny pages
+
+Remain included unless explicitly changed.
+
+### VLM prompt
+
+Fixed and recorded before VLM formal evaluation.
+
+---
+
+# 36. Dataset Status
+
+## Misraj
+
+```text
+400 pages
+```
+
+Role:
+
+```text
+PRIMARY TEXT ACCURACY
+```
+
+Metrics:
+
+```text
+CER
+WER
+raw + normalized
+micro + macro
+```
+
+---
+
+## BCE
+
+```text
+199 pages
+```
+
+Role:
+
+```text
+LAYOUT / DOCUMENT STRUCTURE
+```
+
+Pairing:
+
+```text
+manifest.json
+```
+
+Not:
+
+```text
+filename matching
+```
+
+---
+
+## Custom
+
+```text
+85 samples
+```
+
+Role:
+
+```text
+ROBUSTNESS / SPECIAL CONTENT
+```
+
+Characteristics:
+
+```text
+English
+Arabic
+mixed
+noise
+formulas
+tables
+figures
+dense pages
+multi-column
+born-digital slides
+```
+
+Use full dataset.
+
+---
+
+# 37. Formal Execution Order
+
+## Phase 0 — Foundation
+
+Build:
+
+```text
+paths.py
+types.py
+
+datasets/misraj.py
+datasets/bce.py
+datasets/custom.py
+
+docs/pre-run-decisions.md
+```
+
+Verify:
+
+```text
+Misraj = 400
+BCE = 199
+Custom = 85
+```
+
+No engine work should begin until loader counts are correct.
+
+---
+
+# 38. Phase 1 — First Engine
+
+Build:
+
+```text
+engines/base.py
+engines/docling.py
+engines/__init__.py
+run/smoke.py
+```
+
+Then:
+
+```text
+Docling screening
+```
+
+Output:
+
+```text
+results/screening/docling.md
+```
+
+---
+
+# 39. Phase 2 — Misraj Formal Slice
+
+Build:
+
+```text
+metrics/normalize.py
+metrics/text.py
+results_io.py
+run/run_text.py
+
+tests/test_normalize.py
+tests/test_text_metrics.py
+```
+
+First:
+
+```text
+Docling × Misraj × 20
+```
+
+Inspect manually.
+
+Only after the pilot is verified:
+
+```text
+Docling × Misraj × 400
+```
+
+---
+
+# 40. First Vertical Slice
+
+The first complete benchmark experiment is:
+
+```text
+                 MISRAJ
+                    │
+                 400 pages
+                    │
+                    ▼
+                 Docling
+                    │
+                    ▼
+               Prediction
+                    │
+                    ▼
+              Normalization
+                    │
+                    ▼
+              CER / WER
+                    │
+          ┌─────────┴─────────┐
+          ▼                   ▼
+        Micro               Macro
+          │                   │
+          └─────────┬─────────┘
+                    ▼
+                Results
+```
+
+Required outputs:
+
+```text
+400 raw outputs
+metrics.json
+config.yaml
+run_log.md
+```
+
+---
+
+# 41. Phase 3 — BCE
+
+After Misraj:
+
+```text
+metrics/layout.py
+run/run_layout.py
+```
+
+Then:
+
+```text
+Docling × BCE × 199
+```
+
+Only layout-capable engines receive quantitative layout evaluation.
+
+---
+
+# 42. Phase 4 — Custom
+
+Before formal run:
+
+```text
+Custom content-convention validation
+```
+
+Then:
+
+```text
+Custom PDF rendering
+        ↓
+engine-compatible input
+        ↓
+85 samples
+        ↓
+CER/WER
+        ↓
+per-stratum reporting
+```
+
+Do not create an arbitrary balanced subset.
+
+---
+
+# 43. Phase 5 — Additional Engines
+
+For every remaining engine:
+
+```text
+Screen
+  ↓
+MISRAJ pilot
+  ↓
+MISRAJ formal
+```
+
+The architecture should require almost no new benchmark code.
+
+Only the adapter changes.
+
+```text
+Docling
+PaddleOCR-VL
+MinerU
+Baseer
+Qwen2.5-VL
+Qwen3-VL
+```
+
+---
+
+# 44. Phase 6 — Qualitative Evaluation
+
+Qualitative evaluation remains separate from quantitative metrics.
+
+Define fixed samples for:
+
+```text
+tables
+formulas
+figures
+dense layouts
+mixed-language
+other agreed dimensions
+```
+
+Generate anonymized/shuffled output bundles.
+
+Human reviewers score against a predefined rubric.
+
+Output:
+
+```text
+ratings.csv
+report.md
+```
+
+No `UniversalEvaluator`.
+
+---
+
+# 45. Phase 7 — Final Reporting
+
+Final reporting compares:
+
+```text
+text accuracy
+layout capability
+robustness
+qualitative quality
+operational behavior
+deployment constraints
+```
+
+Do **not** create a composite score.
+
+The final decision is a documented trade-off.
+
+---
+
+# 46. Explicitly Deferred
+
+The following are intentionally postponed:
+
+```text
+BCE layout implementation
+Custom PDF rendering
+Formula-specific metrics
+Qualitative tooling
+Final aggregation
+Deployment analysis
+Advanced VRAM/RAM instrumentation
+Parallel execution
+Docker automation
+```
+
+They are not architectural debt; they are deliberate sequencing decisions.
+
+---
+
+# 47. Explicitly Forbidden for v1
+
+Do not build:
+
+```text
+❌ DatasetAdapter ABC
+❌ BaseDataset
+❌ UnifiedDocumentSchema
+❌ UniversalEvaluator
+❌ BaseEvaluator hierarchy
+❌ Plugin system
+❌ Dynamic capability negotiation
+❌ Dependency injection
+❌ Configuration framework
+❌ Experiment database
+❌ MLflow
+❌ W&B
+❌ Dashboard
+❌ Async runner
+❌ Multiprocessing
+❌ Generic retry framework
+❌ Per-engine Docker orchestration
+❌ Quality gate/routing system
+❌ RAG integration
+❌ Vector DB integration
+❌ Document Inspector framework
+```
+
+---
+
+# 48. Methodology Corrections to Record
+
+Before or alongside implementation, document these known reality mismatches:
+
+### Data locations
+
+The handbook references historical:
+
+```text
+data/raw/
+```
+
+while the implementation currently relies on:
+
+```text
+data/processed/
+```
+
+Record the actual current state.
+
+### BCE
+
+Historical:
+
+```text
+~1,996 raw files
+```
+
+Current benchmark:
+
+```text
+199 surviving manifest-defined samples
+```
+
+The missing raw pages are not reconstructed during this implementation.
+
+### Custom
+
+Historical references to a small pilot are stale.
+
+Current benchmark:
+
+```text
+85 finalized samples
+85/85 verified GT
+```
+
+### Custom gate
+
+Confirm/open the remaining content-convention validation gate before formal Custom evaluation.
+
+---
+
+# 49. Scientific Validity Rules
+
+The implementation must guarantee:
+
+1. Same normalization for reference and hypothesis.
+2. Raw engine output always preserved.
+3. Dataset GT never modified.
+4. BCE pairing comes from manifest.
+5. Failed samples are explicitly counted.
+6. Failed samples receive CER/WER = 1.0 where applicable.
+7. Empty references follow the handbook exclusion rule.
+8. Micro-average is primary.
+9. Macro-average is secondary.
+10. BCE is never evaluated using CER/WER.
+11. Engines without layout output receive N/A, not zero.
+12. Every formal run is timestamped.
+13. Every formal run preserves its own configuration.
+14. Formal runs never overwrite previous evidence.
+15. Engine prompts/configuration are recorded.
+16. Dataset snapshots/versions are recorded.
+17. No engine output is used to create or modify GT.
+
+---
+
+# 50. Final Definition of Done — Today
+
+The implementation work for today is complete when:
+
+```text
+[ ] paths.py exists and resolves actual dataset locations
+[ ] Sample and Prediction dataclasses exist
+[ ] Misraj loader returns 400
+[ ] BCE loader returns 199
+[ ] Custom loader returns 85
+[ ] Misraj cache materialization works
+[ ] BCE manifest pairing works
+[ ] Custom manifest/GT mapping works
+[ ] failure threshold documented
+[ ] Engine protocol exists
+[ ] Docling adapter works
+[ ] Docling screening completed
+[ ] normalization.py implemented and tested
+[ ] text metrics implemented
+[ ] 20-page Misraj pilot succeeds
+[ ] pilot output manually verified
+[ ] full 400-page Misraj run succeeds
+[ ] raw outputs preserved
+[ ] metrics.json generated
+[ ] config.yaml generated
+[ ] run_log.md generated
+[ ] re-running creates a new timestamped directory
+```
+
+---
+
+# 51. Final Target State
+
+At the end of the implementation sequence, the benchmark should conceptually look like this:
+
+```text
+                    ┌──────────────┐
+                    │   MISRAJ     │
+                    │    400       │
+                    └──────┬───────┘
+                           │
+                     Text Evaluator
+                           │
+              CER / WER / Micro / Macro
+                           │
+                           │
+┌──────────────┐     ┌─────▼──────┐     ┌──────────────┐
+│     BCE      │────►│   Engine   │◄────│    Custom    │
+│     199      │     │  Boundary  │     │      85      │
+└──────┬───────┘     └─────┬──────┘     └──────┬───────┘
+       │                   │                   │
+ Layout Evaluator          │             Text Evaluator
+       │                   │                   │
+ Region / RO               │             CER / WER
+       │                   │                   │
+       └───────────────────┼───────────────────┘
+                           │
+                           ▼
+                    Timestamped Results
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+         raw_outputs   metrics.json  config.yaml
+                                         │
+                                         ▼
+                                     run_log.md
+```
+
+## The central rule
+
+> **Build only what is required to turn the three characterized datasets into reproducible evidence across the candidate engines. Nothing more.**
+
+The first implementation target is therefore unambiguous:
+
+```text
+Docling × Misraj × 400
+        ↓
+CER/WER
+        ↓
+raw + normalized
+        ↓
+micro + macro
+        ↓
+per-page raw outputs
+        ↓
+complete timestamped result
+```
+
+Once this slice works, **the architecture has proven itself**. Everything after it should primarily be adding an engine or adding the evaluator appropriate to the dataset—not redesigning the benchmark.

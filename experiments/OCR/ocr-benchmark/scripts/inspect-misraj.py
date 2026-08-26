@@ -1,8 +1,13 @@
 from pathlib import Path
+
 import pyarrow.parquet as pq
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _bench_paths import project_root  # noqa: E402
 
-DATA_DIR = Path("data/raw/misraj/data")
+
+DATA_DIR = project_root() / "data" / "processed" / "misraj" / "data"
 
 
 for parquet_file in sorted(DATA_DIR.glob("*.parquet")):

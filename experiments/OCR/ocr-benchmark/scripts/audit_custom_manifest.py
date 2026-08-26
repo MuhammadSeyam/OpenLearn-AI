@@ -38,6 +38,10 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _bench_paths import resolve_path  # noqa: E402
 
 try:
     import yaml
@@ -121,11 +125,15 @@ def section(title):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--manifest", default="data/raw/custom/manifest.json")
-    ap.add_argument("--dataset-root", default="data/raw/custom")
+    ap.add_argument("--manifest", default="data/processed/custom/manifest.json")
+    ap.add_argument("--dataset-root", default="data/processed/custom")
     ap.add_argument("--metadata", default="configs/custom_manifest_metadata.yaml")
     ap.add_argument("--ground-truth", default="data/ground_truth/custom")
     args = ap.parse_args()
+    args.manifest = resolve_path(args.manifest)
+    args.dataset_root = resolve_path(args.dataset_root)
+    args.metadata = resolve_path(args.metadata)
+    args.ground_truth = resolve_path(args.ground_truth)
 
     problems = []  # (severity, message)
 

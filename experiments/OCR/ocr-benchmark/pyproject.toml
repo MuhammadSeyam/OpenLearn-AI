@@ -8,6 +8,7 @@ requires-python = ">=3.12"
 # are added in later tasks, each in its own pinned environment, per
 # experiments/OCR/OCR_BENCHMARKING_HANDBOOK.md Phase 0/1.
 dependencies = [
+    "editdistance>=0.8.1",
     "pillow>=12.3.0",
     "pyarrow>=25.0.1",
     "pyyaml>=6.0.3",

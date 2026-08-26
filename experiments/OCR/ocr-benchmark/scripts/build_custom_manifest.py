@@ -3,7 +3,7 @@
 build_custom_manifest.py
 
 Builds a deterministic, multi-label manifest for the finalized custom OCR
-benchmark dataset located at data/raw/custom/.
+benchmark dataset located at data/processed/custom/.
 
 CANONICAL IDENTITY CONTRACT (Phase 2 decision - FINAL)
 ------------------------------------------------------
@@ -42,9 +42,12 @@ DESIGN
 USAGE
 -----
     python3 scripts/build_custom_manifest.py \
-        --dataset-root data/raw/custom \
+        --dataset-root data/processed/custom \
         --metadata configs/custom_manifest_metadata.yaml \
-        --output data/raw/custom/manifest.json
+        --output data/processed/custom/manifest.json
+
+Relative CLI paths are interpreted against the benchmark project root
+(ocr-benchmark/), regardless of the current working directory.
 """
 
 import argparse
@@ -55,6 +58,10 @@ import subprocess
 import sys
 import tempfile
 from datetime import datetime, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _bench_paths import resolve_path  # noqa: E402
 
 try:
     import yaml
@@ -271,7 +278,7 @@ def build_documents(dataset_root, metadata):
                 raise BuildError(
                     f"Multi-page PDF '{rel_path}' ({n_pages} pages) is not declared "
                     f"document-level. Split it into one-page PDFs first "
-                    f"(data/raw/custom/script.py) or add its stem to "
+                    f"(data/processed/custom/script.py) or add its stem to "
                     f"DOCUMENT_LEVEL_PDFS in scripts/build_custom_manifest.py."
                 )
 
@@ -343,9 +350,9 @@ def atomic_write_json(path, data):
 
 def main():
     parser = argparse.ArgumentParser(description="Build the custom OCR benchmark manifest.")
-    parser.add_argument("--dataset-root", default="data/raw/custom")
+    parser.add_argument("--dataset-root", default="data/processed/custom")
     parser.add_argument("--metadata", default="configs/custom_manifest_metadata.yaml")
-    parser.add_argument("--output", default="data/raw/custom/manifest.json")
+    parser.add_argument("--output", default="data/processed/custom/manifest.json")
     parser.add_argument(
         "--freeze-created",
         action="store_true",
@@ -353,6 +360,9 @@ def main():
         help="Preserve the existing 'created' timestamp across rebuilds (default: on).",
     )
     args = parser.parse_args()
+    args.dataset_root = resolve_path(args.dataset_root)
+    args.metadata = resolve_path(args.metadata)
+    args.output = resolve_path(args.output)
 
     if not os.path.isdir(args.dataset_root):
         raise BuildError(f"Dataset root not found: {args.dataset_root}")

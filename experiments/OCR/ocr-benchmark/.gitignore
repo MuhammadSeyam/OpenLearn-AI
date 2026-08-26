@@ -3,6 +3,8 @@ results/
 reports/
 data/processed/*
 !data/processed/.gitkeep
+data/cache/
+dist/
 
 # Python
 .venv/
