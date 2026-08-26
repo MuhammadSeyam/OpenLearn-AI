@@ -185,3 +185,142 @@ class TestTextExtractionPrecedence:
         assert not pred.ok
         assert pred.raw_output == "" and pred.text is None
         assert "boom" in (pred.error or "")
+
+
+def _block(content, order, block_id, bbox=None, label="text"):
+    return {
+        "block_label": label,
+        "block_content": content,
+        "block_bbox": bbox or [1, 2, 3, 4],
+        "block_id": block_id,
+        "block_order": order,
+    }
+
+
+class TestRealParsingResList:
+    """Contract anchored to the OBSERVED PaddleOCR-VL-1.6 T4 payload:
+    PaddleOCRVLResult -> .json -> {"res": {...}} -> parsing_res_list."""
+
+    def test_ordered_by_block_order_not_position(self):
+        blocks = [
+            _block("first", order=2, block_id=0),
+            _block("second", order=1, block_id=1),
+        ]
+        assert PaddleVLEngine._ordered_block_texts(blocks) == ["second", "first"]
+
+    def test_none_order_appended_after_ordered_blocks(self):
+        blocks = [
+            _block("page number", order=None, block_id=13),
+            _block("body", order=1, block_id=0),
+        ]
+        assert PaddleVLEngine._ordered_block_texts(blocks) == ["body", "page number"]
+
+    def test_unordered_tie_broken_by_block_id(self):
+        blocks = [
+            _block("b-late", order=None, block_id=9),
+            _block("a-early", order=None, block_id=2),
+        ]
+        assert PaddleVLEngine._ordered_block_texts(blocks) == ["a-early", "b-late"]
+
+    def test_empty_or_non_string_content_skipped(self):
+        blocks = [
+            _block("", order=1, block_id=0),
+            _block(None, order=2, block_id=1),
+            _block("kept", order=3, block_id=2),
+            "garbage-non-dict-entry",
+        ]
+        assert PaddleVLEngine._ordered_block_texts(blocks) == ["kept"]
+
+    def test_full_nested_real_shape_via_run(self, tmp_path):
+        engine = PaddleVLEngine()
+        payload = {
+            "res": {
+                "input_path": "whatever.png",
+                "width": 1682,
+                "height": 1331,
+                "parsing_res_list": [
+                    _block("أول", order=1, block_id=0,
+                           bbox=[109, 85, 1558, 183]),
+                    _block("ثانياً", order=2, block_id=1,
+                           bbox=[100, 200, 1500, 300], label="doc_title"),
+                ],
+                "layout_det_res": {"boxes": [{"label": "text", "score": 0.9}]},
+            }
+        }
+        engine._pipeline = StubPipeline(FakeResult(payload))
+        image = tmp_path / "page.png"
+        image.write_bytes(b"\x89PNG fake")
+        pred = engine.run(image)
+
+        assert isinstance(pred, Prediction) and pred.ok
+        assert pred.sample_id == "page"
+        assert pred.text == "أول\nثانياً"          # exact emission, no normalization
+        assert len(pred.raw_output.encode()) > 0
+        restored = json.loads(pred.raw_output)
+        assert restored == [payload]               # lossless raw preservation
+        assert restored[0]["res"]["layout_det_res"] == payload["res"]["layout_det_res"]
+        # regions from parsing_res_list: block_bbox + label preserved
+        assert pred.regions is not None and len(pred.regions) == 2
+        assert pred.regions[0].box == (109.0, 85.0, 1558.0, 183.0)
+        assert pred.regions[0].type == "text" and pred.regions[0].text == "أول"
+        assert pred.regions[1].type == "doc_title"
+
+    def test_markdown_wins_over_parsing_res_list(self, tmp_path):
+        engine = PaddleVLEngine()
+        engine._pipeline = StubPipeline(FakeResult({
+            "res": {
+                "markdown": {"texts": "markdown text"},
+                "parsing_res_list": [_block("parsed text", order=1, block_id=0)],
+            }
+        }))
+        image = tmp_path / "page.png"
+        image.write_bytes(b"\x89PNG fake")
+        assert engine.run(image).text == "markdown text"
+
+    def test_rec_texts_wins_over_parsing_res_list(self, tmp_path):
+        engine = PaddleVLEngine()
+        engine._pipeline = StubPipeline(FakeResult({
+            "res": {
+                "rec_texts": ["ocr text"],
+                "parsing_res_list": [_block("parsed text", order=1, block_id=0)],
+            }
+        }))
+        image = tmp_path / "page.png"
+        image.write_bytes(b"\x89PNG fake")
+        assert engine.run(image).text == "ocr text"
+
+    def test_recognized_but_empty_parsing_list_is_blank_success(self, tmp_path):
+        engine = PaddleVLEngine()
+        engine._pipeline = StubPipeline(FakeResult({"res": {"parsing_res_list": []}}))
+        image = tmp_path / "page.png"
+        image.write_bytes(b"\x89PNG fake")
+        pred = engine.run(image)
+        assert pred.ok and pred.text == ""
+        assert pred.regions == []                  # recognized layout output, genuinely empty
+
+    def test_unsupported_shape_without_any_known_field_fails_loudly(self, tmp_path):
+        engine = PaddleVLEngine()
+        engine._pipeline = StubPipeline(FakeResult({"res": {"some_unknown_key": 1}}))
+        image = tmp_path / "page.png"
+        image.write_bytes(b"\x89PNG fake")
+        pred = engine.run(image)
+        assert not pred.ok
+        assert "unrecognized result shape" in (pred.error or "")
+
+    def test_malformed_blocks_skipped_defensively_in_regions(self):
+        payload = {
+            "res": {
+                "parsing_res_list": [
+                    "garbage",
+                    {"block_label": "text", "block_bbox": [1, 2, 3]},   # short bbox
+                    {"block_label": "text", "block_bbox": [1, "x", 3, 4],
+                     "block_content": "non-numeric"},                   # bad coords
+                    {"block_label": "text", "block_bbox": [1, 2, 3, 4]},# no content
+                    _block("valid", order=1, block_id=7, bbox=[5, 6, 7, 8]),
+                ]
+            }
+        }
+        regions = PaddleVLEngine._extract_regions(payload)
+        assert regions is not None and len(regions) == 1
+        assert regions[0].box == (5.0, 6.0, 7.0, 8.0)
+        assert regions[0].text == "valid"

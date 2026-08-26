@@ -5,10 +5,13 @@ Heavy imports happen only inside load()/run(); importing this module does
 not require Paddle to be initialized.
 
 Raw-output policy: every prediction object's structured ``json`` payload is
-collected and serialized verbatim to one JSON array — recognized text,
-layout blocks, confidences, everything the engine emitted. Mechanical text
-extraction probes the documented paddlex result shapes and raises loudly if
-none matches; it never fabricates content.
+collected and serialized verbatim to one JSON array — parsing_res_list,
+layout_det_res, model_settings, page dimensions: everything the engine
+emitted, losslessly. Mechanical text extraction follows the OBSERVED T4
+contract (PaddleOCRVLResult → .json → res → parsing_res_list →
+block_content/block_bbox/block_label/block_order) with markdown/rec_texts
+kept as higher-precedence legacy shapes, and raises loudly if none matches;
+it never fabricates content.
 
 Known constraint (screening 2026-08-25): native in-process loading of the
 0.9B VL weights requires more VRAM than a 4 GB card provides
@@ -117,9 +120,24 @@ class PaddleVLEngine:
 
     @staticmethod
     def _extract_text(payloads: list[dict]) -> str | None:
-        """Mechanical plain-text extraction; probes documented result shapes."""
+        """Mechanical plain-text extraction against the observed PaddleOCR-VL
+        contract, in fixed precedence order:
+
+        A. ``res.markdown.texts`` (str)            — if a future version emits it
+        B. ``res.rec_texts`` (list)                — OCR-style results
+        C. ``res.parsing_res_list`` (list)         — OBSERVED T4 payload:
+              block_content joined in reading order; numeric ``block_order``
+              first (ascending), then blocks with ``block_order=None`` (e.g.
+              page numbers) deterministically by ``block_id``. Contents are
+              preserved exactly as emitted — normalization is the metric layer's job.
+
+        A recognized-but-empty structure yields "" (ok=True). A payload with
+        none of these fields is an incompatible shape and fails loudly.
+        """
         for payload in payloads:
             res = payload.get("res", payload)
+            if not isinstance(res, dict):
+                continue
             markdown = res.get("markdown")
             if isinstance(markdown, dict) and isinstance(markdown.get("texts"), str):
                 return markdown["texts"]
@@ -128,17 +146,81 @@ class PaddleVLEngine:
             rec_texts = res.get("rec_texts")
             if isinstance(rec_texts, list):
                 return "\n".join(str(t) for t in rec_texts)
+            blocks = res.get("parsing_res_list")
+            if isinstance(blocks, list):
+                return "\n".join(PaddleVLEngine._ordered_block_texts(blocks))
         if payloads:
             raise RuntimeError(
-                "paddle_vl: unrecognized result shape — no markdown/rec_texts "
-                "field found; incompatible installed PaddleOCR version"
+                "paddle_vl: unrecognized result shape — no markdown.texts / "
+                "rec_texts / parsing_res_list found; incompatible installed "
+                "PaddleOCR version"
             )
         return ""
 
     @staticmethod
+    def _ordered_block_texts(blocks: list) -> list[str]:
+        """block_content values in deterministic reading order from parsing_res_list."""
+        entries = []
+        for index, block in enumerate(blocks):
+            if not isinstance(block, dict):
+                continue
+            content = block.get("block_content")
+            if not isinstance(content, str) or not content:
+                continue
+            order = block.get("block_order")
+            block_id = block.get("block_id")
+            has_order = isinstance(order, (int, float)) and not isinstance(order, bool)
+            id_key = block_id if isinstance(block_id, (int, float)) and not isinstance(block_id, bool) else 10**9
+            # ordered blocks first by block_order, unordered after by block_id;
+            # original index keeps the sort total and stable for degenerate ties
+            key = (0 if has_order else 1,
+                   order if has_order else 0,
+                   id_key,
+                   index)
+            entries.append((key, content))
+        entries.sort(key=lambda entry: entry[0])
+        return [content for _, content in entries]
+
+    @staticmethod
     def _extract_regions(payload: dict) -> list | None:
-        """Region boxes only when the engine naturally emits them."""
+        """Regions only when the engine naturally emits them.
+
+        Primary source is the observed ``parsing_res_list`` (block_bbox /
+        block_label / block_content); the legacy rec_polys/rec_texts pair
+        remains as a fallback for OCR-style results. Polygon points exist in
+        the payload but the project Region schema has no polygon field, so
+        they are intentionally not represented.
+        """
         res = payload.get("res", payload)
+        if not isinstance(res, dict):
+            return None
+
+        blocks = res.get("parsing_res_list")
+        if isinstance(blocks, list):
+            from ocrbench.types import Region
+
+            regions = []
+            for block in blocks:
+                if not isinstance(block, dict):
+                    continue
+                bbox = block.get("block_bbox")
+                content = block.get("block_content")
+                if not isinstance(bbox, list) or len(bbox) != 4:
+                    continue
+                if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in bbox):
+                    continue
+                if not isinstance(content, str) or not content:
+                    continue
+                regions.append(
+                    Region(
+                        box=(float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])),
+                        type=str(block.get("block_label", "text")),
+                        text=content,
+                    )
+                )
+            # recognized layout output → return even when empty ([] ≠ N/A)
+            return regions
+
         polys = res.get("rec_polys")
         texts = res.get("rec_texts")
         if not polys or texts is None or len(polys) != len(texts):
