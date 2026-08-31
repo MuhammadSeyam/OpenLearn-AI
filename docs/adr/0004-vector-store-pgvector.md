@@ -1,8 +1,8 @@
 # ADR-0004: Vector store default — pgvector
 
 - **Status:** Accepted (2026-08-31)
-- **Deciders:** @MuhammadSeyam (project lead), @0Abanoub (Backend & Platform
-  lead), and @MuhammadSeyam (AI/ML lead)
+- **Deciders:** @MuhammadSeyam (project lead and AI/ML lead), @0Abanoub
+  (Backend & Platform lead)
 
 ## Context
 

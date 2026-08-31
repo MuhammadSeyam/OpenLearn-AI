@@ -11,3 +11,6 @@ implementation begins.
 | ADR-0003 | [OCR benchmark location and sequencing](./0003-ocr-benchmark-location.md) | Accepted | 2026-08-16 |
 | ADR-0004 | [pgvector as the vector-store default](./0004-vector-store-pgvector.md) | Accepted | 2026-08-31 |
 | ADR-0005 | [LiteLLM as the LLM gateway](./0005-llm-gateway-litellm.md) | Accepted | 2026-08-31 |
+
+The earlier deferral that preceded ADR-0004 is retained as historical context:
+[`0004-vector-store-deferred.md`](./0004-vector-store-deferred.md) (Superseded).
