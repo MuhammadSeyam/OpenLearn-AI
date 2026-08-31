@@ -1,13 +1,24 @@
 <div align="center">
 
-# OpenLearn  AI
+<br>
+
+<img src="docs/assets/OpenLearn-AI-logo.png" alt="OpenLearn AI" height="140">
+
+<br>
+<br>
 
 **Open-source adaptive learning, without the vendor lock-in.**
+
+<br>
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Contributing](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
+<br>
+
 [Docs](docs/) · [Architecture](docs/architecture/SystemArchitecture.md) · [Roadmap](planning/Roadmap/MASTER_ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+
+<br>
 
 </div>
 
