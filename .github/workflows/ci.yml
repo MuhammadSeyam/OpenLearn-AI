@@ -85,3 +85,24 @@ jobs:
       - name: Skip notice
         if: steps.check_frontend.outputs.exists == 'false'
         run: echo "No frontend/ folder yet — skipping frontend checks (Pod C hasn't scaffolded it)."
+
+  eval:
+    name: Run Eval Harness
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Run Dummy Eval
+        run: python -m app.eval run dummy --dataset tests/data/dummy.json
