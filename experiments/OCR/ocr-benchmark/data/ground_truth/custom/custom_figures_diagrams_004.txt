@@ -1,0 +1,11 @@
+انا احب التعلم العميق <END>
+SOFTMAX
+
+T₁ T₂ T₃ T₄ Context Vector TN TN+1 TN+2 TN+3 TN+4
+LSTM LSTM LSTM LSTM (hₜ, cₜ) LSTM LSTM LSTM LSTM LSTM
+
+EMBEDDING EMBEDDING
+
+I love deep learning <START> انا احب التعلم العميق
+
+Encoder Decoder

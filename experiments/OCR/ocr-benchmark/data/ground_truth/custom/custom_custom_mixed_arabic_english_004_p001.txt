@@ -1,0 +1,56 @@
+Yarn -> Resource Manager
+
+When the hadoop is installed, we have a set of files:
+
+Resource manager <---
+Name Node
+Data Node
+Secondary node
+↳ name
+jps
+Node Manger <---
+
+YARN -> N
+Yet
+Another
+Resource
+
+-> Hadoop
+Cluster
+
+اى app مش بتكلم Hdfs بشكل مباشر ، ولكن يوجد layer بينهم لتسهيل
+• Data accessing
+• Allocation
+• Deallocation
+
+التحديد
+بيتم من خلال
+Container
+
+عن طريق
+API
+
+الـ operations
+دى كان مسؤول
+عنها MapReduce
+فى Hadoop v1
+بداياً من Hadoop v2 ظهر الـ YARN
+
+* كل Node عندها Node manager بكل الـ
+                                                                    Running
+
+Resource هي واحده بس على مستوى الـ Cluster هو single عشان
+mange
+↓
+لو محتاجه مثلاً 
+اكثر من Container على اكثر من Node
+هو بيقدر يسفر الموضوع دة
+
+Node Manger initiat the execution.
+allocate Resource for each task
+يتحدد الـ Resources من خلال Container [crossed out]
+Report back to Resource Manger
+track tasks
+Keep History of app
+
+CS CamScanner

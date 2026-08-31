@@ -1,0 +1,33 @@
+Dr. AHMED HAGAG CPU Switch From Process to Process
+
+process P₀
+operating system
+process P₁
+
+executing
+interrupt or system call
+
+save state into PCB₀
+•
+•
+•
+reload state from PCB₁
+
+idle
+
+executing
+interrupt or system call
+
+save state into PCB₁
+•
+•
+•
+reload state from PCB₀
+
+idle
+
+executing
+
+idle
+
+Operating Systems 20

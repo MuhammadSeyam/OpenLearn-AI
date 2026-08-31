@@ -1,0 +1,28 @@
+6. Truth Table
+
+• Following are the truth table for all logical connectives:
+
+For Negation:
+
+| P | ¬ P |
+| :--- | :--- |
+| True | False |
+| False | True |
+
+For Conjunction:
+
+| P | Q | P ∧ Q |
+| :--- | :--- | :--- |
+| True | True | True |
+| True | False | False |
+| False | True | False |
+| False | False | False |
+
+For disjunction:
+
+| P | Q | P ∨ Q. |
+| :--- | :--- | :--- |
+| True | True | True |
+| False | True | True |
+| True | False | True |
+| False | False | False |

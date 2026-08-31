@@ -1,0 +1,5 @@
+assignment 1 :-
+The Prob of a succesful connection to
+call center is 0.8 , You decided to try at
+most four time trails are independant. Let
+x be the num of trails . Find PMF of x

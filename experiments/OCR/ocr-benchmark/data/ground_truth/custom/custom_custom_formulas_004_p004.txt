@@ -1,0 +1,19 @@
+$$\frac{\partial}{\partial v_c} \log (p(o \mid c)) = u_o - \frac{1}{\sum_{w=1}^{V} \exp(u_w^T v_c)} \cdot \left( \sum_{x=1}^{V} \exp(u_x^T v_c) u_x \right)$$
+
+$$= u_o - \sum_{x=1}^{V} \frac{\exp(u_x^T v_c)}{\sum_{w=1}^{V} \exp(u_w^T v_c)} u_x$$
+Distribute
+term
+across sum
+
+$$= u_o - \sum_{x=1}^{V} p(x \mid c) u_x$$
+this an expectation:
+average over all
+context vectors weighted
+by their probability
+
+$$= \text{observed} - \text{expected}$$
+
+This is just the derivatives for the center vector parameters
+Also need derivatives for output vector parameters
+(they're similar)
+Then we have derivative w.r.t. all parameters and can minimize

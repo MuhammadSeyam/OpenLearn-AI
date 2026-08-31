@@ -1,0 +1,33 @@
+* Delay scheduling :
+
+أحيانا بنكون محتاجين نعمل Scheduling لـ Task
+والـ Task بيكون محتاج Requirements معينه فى الحالات العادية بيكون
+Data locality يعنى الـ execution يكون على نفس مساحة الـ Data
+عمل الـ Data ده أفضل حل يوفر Data لكن لو مش متاح
+Transfer
+بلجأ لـ Delay schedusal
+
+NodeMange بيبعت Status عن كل Node  للـ Resource وناخد
+Manager
+Delay 5 sec لو مفيش اى Node بلغت انه عندها Data locality خلاص
+هاخد اى Node .
+↳ الفكرة هنا إنه ممكن ينتظر لما تتوافر node
+وبالتالى بيوفر Network
+Trasfer
+
+* عادة الـ YARN بيشتغل فى عملية
+RAM على Resource 
+mesurement
+
+لو كنت محتاج إنى احسب كمان CPU ← عن طريق
+Dominant Resource fairness
+CPU 300 Gb Ram
+20% 3% Dominant
+6% 1%
+↳ Dominant
+
+وهنا الـ YARN بيعمل إية
+بينزل الـ Resource Consumption لـ Task الأولى
+ويسيب لـ Task 2 .
+
+CS CamScanner

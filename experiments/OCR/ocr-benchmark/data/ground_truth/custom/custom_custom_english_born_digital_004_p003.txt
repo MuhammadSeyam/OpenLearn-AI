@@ -1,0 +1,9 @@
+What's the Simplest IR System?
+Given a collection of documents and a "free text" query
+How can we get some search results in a simple way?
+ grep-like: a "sequential scan"
+ Simple but …
+● very inefficient
+ Is it effective?
+How can we make it more effective AND efficient?
+56

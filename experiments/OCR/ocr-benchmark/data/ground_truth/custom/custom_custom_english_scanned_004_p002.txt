@@ -1,0 +1,18 @@
+WordNet 2.1 Browser
+File History Options Help
+Search Word dog
+X
+Searches for dog: Noun Verb
+The noun dog has 7 senses (first 1 from tagged texts)
+Senses:
+1. (42) dog, domestic dog, Canis familiaris -- (a member of the genus Canis (probably descended from the common wolf) that has been domesticated by man since prehistoric times; occurs in many breeds; "the
+dog barked all night")
+2. frump, dog -- (a dull unattractive unpleasant girl or woman; "she got a reputation as a frump"; "she's a real dog")
+3. dog -- (informal term for a man; "you lucky dog")
+4. cad, bounder, blackguard, dog, hound, heel -- (someone who is morally reprehensible; "you dirty dog")
+5. frank, frankfurter, hotdog, hot dog, dog, wiener, wienerwurst, weenie -- (a smooth-textured sausage of minced beef or pork usually smoked; often served on a bread roll)
+6. pawl, detent, click, dog -- (a hinged catch that fits into a notch of a ratchet to move a wheel forward or prevent it from moving backward)
+7. andiron, firedog, dog, dog-iron -- (metal supports for logs in a fireplace; "the andirons were too hot to touch")
+The verb dog has 1 sense (first 1 from tagged texts)
+1. (2) chase, chase after, trail, tail, tag, give chase, dog, go after, track -- (go after with the intent to catch; "The policeman chased the mugger down the alley"; "the dog chased the rabbit")
+Overview of dog

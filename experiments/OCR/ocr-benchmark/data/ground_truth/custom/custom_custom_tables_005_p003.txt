@@ -1,0 +1,14 @@
+7. Precedence of Connectives
+
+• Just like arithmetic operators, there is a precedence order for propositional connectors or logical operators.
+• This order should be followed while evaluating a propositional problem.
+• Following is the list of the precedence order for operators:
+
+| Precedence | Operators |
+| :--- | :--- |
+| First Precedence | Parenthesis |
+| Second Precedence | Negation |
+| Third Precedence | Conjunction(AND) |
+| Fourth Precedence | Disjunction(OR) |
+| Fifth Precedence | Implication |
+| Six Precedence | Biconditional |

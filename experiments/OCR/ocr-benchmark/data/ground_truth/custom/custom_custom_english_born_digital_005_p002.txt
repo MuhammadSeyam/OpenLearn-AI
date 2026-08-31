@@ -1,0 +1,61 @@
+3.3 Local Response Normalization
+
+ReLUs have the desirable property that they do not require input normalization to prevent them
+from saturating. If at least some training examples produce a positive input to a ReLU, learning will
+happen in that neuron. However, we still find that the following local normalization scheme aids
+generalization. Denoting by a^i_{x,y} the activity of a neuron computed by applying kernel i at position
+(x, y) and then applying the ReLU nonlinearity, the response-normalized activity b^i_{x,y} is given by
+the expression
+
+b^i_{x,y} = a^i_{x,y} / (k + α ∑_{j=max(0,i−n/2)}^{min(N−1,i+n/2)} (a^j_{x,y})^2)^β
+
+where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total
+number of kernels in the layer. The ordering of the kernel maps is of course arbitrary and determined
+before training begins. This sort of response normalization implements a form of lateral inhibition
+inspired by the type found in real neurons, creating competition for big activities amongst neuron
+outputs computed using different kernels. The constants k, n, α, and β are hyper-parameters whose
+values are determined using a validation set; we used k = 2, n = 5, α = 10^−4, and β = 0.75. We
+applied this normalization after applying the ReLU nonlinearity in certain layers (see Section 3.5).
+This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al. [11],
+but ours would be more correctly termed “brightness normalization”, since we do not subtract the
+mean activity. Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%,
+respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer
+CNN achieved a 13% test error rate without normalization and 11% with normalization3.
+
+3.4 Overlapping Pooling
+
+Pooling layers in CNNs summarize the outputs of neighboring groups of neurons in the same kernel
+map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g.,
+[17, 11, 4]). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling
+units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location
+of the pooling unit. If we set s = z, we obtain traditional local pooling as commonly employed
+in CNNs. If we set s < z, we obtain overlapping pooling. This is what we use throughout our
+network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and
+0.3%, respectively, as compared with the non-overlapping scheme s = 2, z = 2, which produces
+output of equivalent dimensions. We generally observe during training that models with overlapping
+pooling find it slightly more difficult to overfit.
+
+3.5 Overall Architecture
+
+Now we are ready to describe the overall architecture of our CNN. As depicted in Figure 2, the net
+contains eight layers with weights; the first five are convolutional and the remaining three are fully-
+connected. The output of the last fully-connected layer is fed to a 1000-way softmax which produces
+a distribution over the 1000 class labels. Our network maximizes the multinomial logistic regression
+objective, which is equivalent to maximizing the average across training cases of the log-probability
+of the correct label under the prediction distribution.
+
+The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel
+maps in the previous layer which reside on the same GPU (see Figure 2). The kernels of the third
+convolutional layer are connected to all kernel maps in the second layer. The neurons in the fully-
+connected layers are connected to all neurons in the previous layer. Response-normalization layers
+follow the first and second convolutional layers. Max-pooling layers, of the kind described in Section
+3.4, follow both response-normalization layers as well as the fifth convolutional layer. The ReLU
+non-linearity is applied to the output of every convolutional and fully-connected layer.
+
+The first convolutional layer filters the 224×224×3 input image with 96 kernels of size 11×11×3
+with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring
+
+3We cannot describe this network in detail due to space constraints, but it is specified precisely by the code
+and parameter files provided here: http://code.google.com/p/cuda-convnet/.
+
+4

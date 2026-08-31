@@ -1,0 +1,11 @@
+* Distributed Transparency:
+
+| Transparency | Description |
+| :--- | :--- |
+| Access | Hide differences in data representation and how a resource is accessed |
+| Location | Hide where a resource is located |
+| Migration | Hide that a resource may move to another location |
+| Relocation | Hide that a resource may be moved to another location while in use |
+| Replication | Hide that a resource is replicated |
+| Concurrency | Hide that a resource may be shared by several competitive users |
+| Failure | Hide the failure and recovery of a resource |

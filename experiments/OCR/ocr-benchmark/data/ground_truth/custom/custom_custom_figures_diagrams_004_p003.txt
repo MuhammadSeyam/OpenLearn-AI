@@ -1,0 +1,18 @@
+Dr. AHMED HAGAG Process Scheduling (2/2)
+
+ready queue
+CPU
+
+I/O request
+I/O queue
+I/O
+
+time slice expired
+
+fork a child
+child executes
+
+wait for an interrupt
+interrupt occurs
+
+Operating Systems 22

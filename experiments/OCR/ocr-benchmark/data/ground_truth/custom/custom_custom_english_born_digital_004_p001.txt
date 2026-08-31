@@ -1,0 +1,14 @@
+
+Bag-of-Words trick
+
+Can you guess what this is about:
+● per is salary hour £5,594 Neymar’s
+Neymar’s salary per hour is £5,594
+● obesity French is of full cause and fat fries
+French fries is full of fat and cause obesity
+
+Main idea: Re-ordering doesn’t destroy the topic
+● individual words are “building blocks”
+● “bag” of words: a “composition” of “meanings”
+
+53

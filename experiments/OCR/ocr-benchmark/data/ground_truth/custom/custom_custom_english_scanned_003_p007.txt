@@ -1,0 +1,16 @@
+Register Transfer &  -operations
+7
+SIMPLE DIGITAL SYSTEMS
+Combinational and sequential circuits (learned in Chapters 1 and 2)
+can be used to create simple digital systems.
+. These are the low-level building blocks of a digital computer.
+. Simple digital systems are frequently characterized in terms of
+- the registers they contain, and
+- the operations that they perform.
+
+Typically,
+- What operations are performed on the data in the registers
+What information is passed between registers
+
+Computer Organization
+Computer Architecture

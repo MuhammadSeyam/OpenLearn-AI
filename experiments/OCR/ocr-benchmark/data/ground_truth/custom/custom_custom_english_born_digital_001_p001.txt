@@ -1,0 +1,11 @@
+Documents
+Document = the element to be retrieved
+• Unstructured nature
+• Unique ID
+• N documents --> Collection
+web-pages, emails, book, page, sentence, tweets
+photos, videos, musical pieces, code
+answers to questions
+product descriptions, advertisements
+people
+36

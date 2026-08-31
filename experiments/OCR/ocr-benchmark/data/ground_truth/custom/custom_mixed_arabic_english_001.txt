@@ -1,0 +1,8 @@
+random sample = normal sample = (M, \frac{\sigma^2}{2})
+
+(Standaraization) [
+\bar{X} \Rightarrow Normal (M, \frac{\sigma^2}{n})
+Z = \frac{\bar{X} - M}{\sigma / \sqrt{n}}
+
+Cumulative distribution function (CDF)
+دالة التوزيع التراكمي

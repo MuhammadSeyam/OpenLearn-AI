@@ -1,0 +1,12 @@
+Relevance
+ At an abstract level, IR is about:
+● does item d match query q? … or …
+● is item d relevant to query q?
+ Relevance is a tricky notion
+● will the user like it / click on it?
+● will it help the user achieve a task? (satisfy information need)
+● is it novel (not redundant)?
+ Relevance ➔ similarity
+● i.e. d,q share similar “meaning”
+● about the same topic / subject / issue}
+39

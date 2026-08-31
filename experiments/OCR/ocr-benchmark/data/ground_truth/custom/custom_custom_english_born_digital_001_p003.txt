@@ -1,0 +1,13 @@
+
+Queries – different forms
+Web search → keywords, narrative …
+Image search → keywords, sample image
+QA → question
+Music search → humming a tune
+Filtering/recommendation → user’s interest/history
+Scholar search → structured (author, title ..)
+Advanced search
+#wsyn(0.9 #field (title, #phrase (homer,simpson)) 0.7 #and (#> (pagerank,3),
+#ow3 (homer,simpson)) 0.4 #passage (homer, simpson, dan, castellaneta))
+
+38
