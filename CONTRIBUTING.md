@@ -5,11 +5,11 @@ keep each change small, reviewable, and safe to integrate.
 
 ## Sources of truth
 
-1. [`AI_CONTEXT.md`](AI_CONTEXT.md) describes the current repository state.
-2. The [44-week execution plan](planning/Roadmap/44-WEEK-EXECUTION-PLAN.md)
+1. The [44-week execution plan](planning/Roadmap/44-WEEK-EXECUTION-PLAN.md)
    is the schedule and scope authority.
-3. [`docs/README.md`](docs/README.md) identifies authoritative documents.
-4. The [ADR index](docs/adr/README.md) records accepted architecture
+2. [`docs/README.md`](docs/README.md) identifies which document is
+   authoritative for what.
+3. The [ADR index](docs/adr/README.md) records accepted architecture
    decisions. Add or update an ADR when a change affects architecture or a
    cross-pod contract.
 
