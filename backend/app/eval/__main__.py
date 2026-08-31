@@ -1,1 +1,4 @@
-import sys; print("Dummy Evaluation Passed Successfully ✅"); sys.exit(0)
+import sys
+
+print("Dummy Evaluation Passed Successfully ✅")
+sys.exit(0)
