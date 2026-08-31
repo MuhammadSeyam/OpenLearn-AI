@@ -1,6 +1,7 @@
 <div align="center">
 
-# OpenLearn  AI
+<img src="docs/assets/OpenLearn-AI-logo.png" alt="OpenLearn AI" width="600">
+
 
 **Open-source adaptive learning, without the vendor lock-in.**
 
