@@ -18,8 +18,22 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd ~/OpenLearn-AI || exit 1
+
             git fetch origin
             git checkout staging
             git pull origin staging
+
             cd infra
-            docker compose -f docker-compose.staging.yml up -d --build
+
+            cat > .env.runtime <<EOF
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            ENVIRONMENT=staging
+            EOF
+
+            chmod 600 .env.runtime
+
+            docker compose --env-file .env.runtime -f docker-compose.staging.yml up -d --build
