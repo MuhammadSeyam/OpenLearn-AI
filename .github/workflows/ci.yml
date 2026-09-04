@@ -51,8 +51,8 @@ jobs:
       - name: Lint with ruff
         run: python -m ruff check .
 
-      - name: Run Alembic migrations
-        run: python -m alembic upgrade head
+      - name: Run migrations
+        run: python -m alembic -c alembic.ini upgrade head
 
       - name: Run pytest
         run: python -m pytest
