@@ -52,6 +52,7 @@ jobs:
         run: python -m ruff check .
 
       - name: Run migrations
+        working-directory: .
         run: python -m alembic -c alembic.ini upgrade head
 
       - name: Run pytest
