@@ -5,7 +5,7 @@ database schema migrations.
 
 ## Migration Structure
 
-* `alembic.ini` - Alembic configuration.
+* `backend/alembic.ini` - Alembic configuration.
 * `backend/alembic/env.py` - migration environment and database configuration.
 * `backend/alembic/versions/` - database migration files.
 * `backend/app/models/` - SQLAlchemy ORM models.
@@ -22,7 +22,7 @@ Never commit `.env` or real database credentials.
 
 ## Common Commands
 
-Run these commands from the repository root.
+Run these commands from the `backend/` directory.
 
 ### Check the current migration
 
