@@ -1,6 +1,7 @@
 import uuid
+from typing import Any
 
-from sqlalchemy import String, Text
+from sqlalchemy import String, Text, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -23,14 +24,15 @@ class User(Base):
         index=True,
     )
 
-    password_hash: Mapped[str | None] = mapped_column(
+    password_hash: Mapped[str] = mapped_column(
         Text,
-        nullable=True,
+        nullable=False,
     )
 
     preferred_lang: Mapped[str] = mapped_column(
         String(10),
         default="en",
+        server_default="en",
         nullable=False,
     )
 
@@ -40,8 +42,9 @@ class User(Base):
         nullable=False,
     )
 
-    settings: Mapped[dict] = mapped_column(
+    settings: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         default=dict,
+        server_default=text("'{}'::jsonb"),
         nullable=False,
     )

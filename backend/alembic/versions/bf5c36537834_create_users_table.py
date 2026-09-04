@@ -24,10 +24,10 @@ def upgrade() -> None:
     op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('password_hash', sa.Text(), nullable=True),
-    sa.Column('preferred_lang', sa.String(length=10), nullable=False),
+    sa.Column('password_hash', sa.Text(), nullable=False),
+    sa.Column('preferred_lang', sa.String(length=10), server_default='en', nullable=False),
     sa.Column('role', sa.String(length=20), nullable=False),
-    sa.Column('settings', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('settings', postgresql.JSONB(astext_type=sa.Text()), server_default=sa.text("'{}'::jsonb"), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
